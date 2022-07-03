@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import { useTheHydraContractRead } from "../../contracts";
 import { Gallery } from "../../Gallery";
 import { useIsMounted } from "../../useIsMounted";
+import { theHydraCollection } from "./data";
 
 const TheHydraPage: NextPage = () => {
   const isMounted = useIsMounted();
@@ -25,7 +26,7 @@ const TheHydraPage: NextPage = () => {
           intricate skin texture and tone.
         </h6>
 
-        <Gallery />
+        <Gallery collection={theHydraCollection} />
 
         {/* <p>
           {(isMounted ? totalSupply.data?.toNumber().toLocaleString() : null) ??

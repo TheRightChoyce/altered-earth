@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import { GalleryDetail } from "../../GalleryDetail";
 import { useIsMounted } from "../../useIsMounted";
+import { theHydraCollection } from "./data";
 
 const TheHydraDetailPage: NextPage = () => {
   const isMounted = useIsMounted();
@@ -16,7 +17,7 @@ const TheHydraDetailPage: NextPage = () => {
         <ConnectButton />
       </div>
       <div className="flex-grow flex flex-col gap-4 items-center justify-center p-8 pb-[50vh]">
-        <GalleryDetail photoId={photoId} />
+        <GalleryDetail collection={theHydraCollection} photoId={photoId} />
       </div>
     </div>
   );

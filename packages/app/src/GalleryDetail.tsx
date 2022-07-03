@@ -7,22 +7,29 @@ const notFound = (
   </div>
 );
 
-export const GalleryDetail = ({ photoId }: { photoId: number }) => {
+export const GalleryDetail = ({
+  collection,
+  photoId,
+}: {
+  collection: Array<Photo>;
+  photoId: number;
+}) => {
   const isMounted = useIsMounted();
 
   if (!isMounted) {
     return null;
   }
 
-  if (isNaN(photoId) || photoId < 0 || photoId > 49) {
+  if (isNaN(photoId) || photoId < 0 || photoId > collection.length) {
     return notFound;
   }
 
-  const photo = PhotoCollection.find((photo: Photo) => photo.id === photoId);
+  const photo = collection[photoId];
 
   if (!photo) {
     return notFound;
   }
+
   return (
     <div className="flex flex-col">
       <div className="grid grid-cols-3 w-1">

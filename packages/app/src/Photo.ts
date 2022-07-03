@@ -11,9 +11,3 @@ export class Photo {
     this.price = price || this.price;
   }
 }
-
-export const PhotoCollection = [
-  new Photo(0, "The Hydra", ""),
-  new Photo(1, "The Hydra 1", ""),
-  new Photo(2, "The Hydra 2", ""),
-];
