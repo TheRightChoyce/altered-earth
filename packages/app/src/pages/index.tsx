@@ -1,39 +1,20 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
-
-import { useTheHydraContractRead } from "../contracts";
-import { Inventory } from "../Inventory";
-import { MintButton } from "../MintButton";
-import { useIsMounted } from "../useIsMounted";
+import Link from "next/link";
 
 const HomePage: NextPage = () => {
-  const totalSupply = useTheHydraContractRead({
-    functionName: "totalSupply",
-    watch: true,
-  });
-  const maxSupply = { data: "50" }; // useTheHydraContractRead({ functionName: "MAX_SUPPLY" });
-
-  const isMounted = useIsMounted();
-
   return (
     <div className="min-h-screen flex flex-col">
       <div className="self-end p-2">
         <ConnectButton />
       </div>
       <div className="flex-grow flex flex-col gap-4 items-center justify-center p-8 pb-[50vh]">
-        <h1 className="text-4xl">Altered Earth</h1>
+        <h1 className="text-4xl">ALTERED EARTH</h1>
+        <h6>Exploring the earth in unseen ways</h6>
 
-        {/* Use isMounted to temporarily workaround hydration issues where
-        server-rendered markup doesn't match the client due to localStorage
-        caching in wagmi. See https://github.com/holic/web3-scaffold/pull/26 */}
-        <p>
-          {(isMounted ? totalSupply.data?.toNumber().toLocaleString() : null) ??
-            "??"}
-          /{(isMounted ? maxSupply.data : null) ?? "??"} minted
-        </p>
-
-        <MintButton />
-        <Inventory />
+        <h2 className="text-3xl">
+          <Link href="./the-hydra">The Hydra Collection</Link>
+        </h2>
       </div>
     </div>
   );
