@@ -1,26 +1,22 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import type { ReactElement } from "react";
 
 import { GalleryDetail } from "../../GalleryDetail";
+import Layout from "../../layout/layout";
 import { useIsMounted } from "../../useIsMounted";
+import type { NextPageWithLayout } from "../_app";
 import { theHydraCollection } from "./data";
 
-const TheHydraDetailPage: NextPage = () => {
+const TheHydraDetailPage: NextPageWithLayout = () => {
   const isMounted = useIsMounted();
   const router = useRouter();
   const photoId = parseInt(router.query.photoId as string, 10);
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <div className="self-end p-2">
-        <ConnectButton />
-      </div>
-      <div className="flex-grow flex flex-col gap-4 items-center justify-center p-8 pb-[50vh]">
-        <GalleryDetail collection={theHydraCollection} photoId={photoId} />
-      </div>
-    </div>
-  );
+  return <GalleryDetail collection={theHydraCollection} photoId={photoId} />;
+};
+
+TheHydraDetailPage.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
 };
 
 export default TheHydraDetailPage;

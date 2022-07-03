@@ -1,23 +1,30 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import type { NextPage } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import type { ReactElement } from "react";
 
-const HomePage: NextPage = () => {
+import Layout from "../layout/layout";
+import type { NextPageWithLayout } from "./_app";
+
+const HomePage: NextPageWithLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="self-end p-2">
-        <ConnectButton />
-      </div>
-      <div className="flex-grow flex flex-col gap-4 items-center justify-center p-8 pb-[50vh]">
-        <h1 className="text-4xl">ALTERED EARTH</h1>
-        <h6>Exploring the earth in unseen ways</h6>
+    <>
+      <Image
+        src="/altered-earth.svg"
+        width={1500}
+        height={155}
+        alt="Altered Earth"
+      />
+      <h6>Exploring the earth in unseen ways</h6>
 
-        <h2 className="text-3xl">
-          <Link href="./the-hydra">The Hydra Collection</Link>
-        </h2>
-      </div>
-    </div>
+      <h2 className="text-3xl">
+        <Link href="/the-hydra">The Hydra Collection</Link>
+      </h2>
+    </>
   );
+};
+
+HomePage.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
 };
 
 export default HomePage;
