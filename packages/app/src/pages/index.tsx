@@ -15,23 +15,27 @@ const HomePage: NextPageWithLayout = () => {
         alt="Altered Earth"
       />
 
-      <h6 className="mb-32">Exploring the earth in unseen ways</h6>
+      <h5 className="mb-32 text-lg">Exploring the earth in unseen ways</h5>
 
-      <div>
+      <div className="relative">
         <Link href="/the-hydra">
-          <Image
-            src="/the-hydra/hydra-hero.png"
-            alt="The Hydra Collection"
-            width={1300}
-            height={512}
-            className="cursor-pointer"
-          />
+          <a>
+            <Image
+              src="/the-hydra/hydra-hero.png"
+              alt="The Hydra Collection"
+              width={1443}
+              height={658}
+            />
+          </a>
         </Link>
-      </div>
 
-      <h2 className="text-3xl uppercase">
-        <Link href="/the-hydra">The Hydra Collection</Link>
-      </h2>
+        <h2 className="invisible md:visible text-4xl uppercase absolute right-16 bottom-16 backdrop-blur-sm hover:underline">
+          <Link href="/the-hydra">The Hydra Collection</Link>
+        </h2>
+        <h2 className="visible md:invisible text-xl uppercase hover:underline text-center">
+          <Link href="/the-hydra">The Hydra Collection</Link>
+        </h2>
+      </div>
     </>
   );
 };

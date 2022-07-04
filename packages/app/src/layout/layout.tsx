@@ -1,6 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import {
@@ -41,13 +42,17 @@ const Layout: React.FC = ({ children }) => {
         <EthereumProviders>
           <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100">
             <div className="flex flex-cols justify-between align-middle w-full">
-              <div className="p-2">
-                <Image
-                  src="/trc-logo.svg"
-                  width={330}
-                  height={65}
-                  alt="TheRightChoyce.eth"
-                />
+              <div className="p-6">
+                <Link href="/">
+                  <a>
+                    <Image
+                      src="/altered-earth.svg"
+                      width={200}
+                      height={20}
+                      alt="Altered Earth"
+                    />
+                  </a>
+                </Link>
               </div>
               <div className="p-2">
                 <div className="self-end p-2">
