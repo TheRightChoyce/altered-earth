@@ -1,4 +1,4 @@
-import "tailwindcss/tailwind.css";
+import "../../styles/global.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import type { NextPage } from "next";
