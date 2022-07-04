@@ -1,10 +1,11 @@
-import Image from "next/future/image";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Photo } from "./Photo";
+import { PhotoCollection } from "./PhotoCollection";
 import { useIsMounted } from "./useIsMounted";
 
-export const Gallery = ({ collection }: { collection: Array<Photo> }) => {
+export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   const isMounted = useIsMounted();
 
   if (!isMounted) {
@@ -21,10 +22,19 @@ export const Gallery = ({ collection }: { collection: Array<Photo> }) => {
 
   return (
     <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center w-full">
-      {collection.map((photo: Photo) => (
+      {collection.photos.map((photo: Photo) => (
         <div key={photo.id} className="h-64">
           <h5>
-            <Link href={`./the-hydra/${photo.id}`}>{photo.name}</Link>
+            <Link href={`/the-hydra/${photo.id}`}>
+              <a>
+                <Image
+                  src={photo.previewImageUri}
+                  width={250}
+                  height={250}
+                  alt={photo.name}
+                />
+              </a>
+            </Link>
           </h5>
         </div>
       ))}

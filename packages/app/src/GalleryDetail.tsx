@@ -1,4 +1,8 @@
-import { Photo, PhotoCollection } from "./Photo";
+import Image from "next/image";
+import Link from "next/link";
+
+import { Photo } from "./Photo";
+import { PhotoCollection } from "./PhotoCollection";
 import { useIsMounted } from "./useIsMounted";
 
 const notFound = (
@@ -11,7 +15,7 @@ export const GalleryDetail = ({
   collection,
   photoId,
 }: {
-  collection: Array<Photo>;
+  collection: PhotoCollection;
   photoId: number;
 }) => {
   const isMounted = useIsMounted();
@@ -20,11 +24,11 @@ export const GalleryDetail = ({
     return null;
   }
 
-  if (isNaN(photoId) || photoId < 0 || photoId > collection.length) {
+  if (isNaN(photoId) || photoId < 0 || photoId > collection.photos.length) {
     return notFound;
   }
 
-  const photo = collection[photoId];
+  const photo = collection.photos[photoId];
 
   if (!photo) {
     return notFound;
@@ -32,9 +36,13 @@ export const GalleryDetail = ({
 
   return (
     <div className="flex flex-col">
-      <div className="grid grid-cols-3 w-1">
-        <h2>{photo.name}</h2>
-      </div>
+      <h2 className="text-3xl">{photo.name}</h2>
+      <Image
+        src={photo.previewImageUri}
+        width={512}
+        height={512}
+        alt={photo.name}
+      />
     </div>
   );
 };
