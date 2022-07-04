@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { useIsMounted } from "../useIsMounted";
 import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
-import { useIsMounted } from "./useIsMounted";
 
 export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   const isMounted = useIsMounted();

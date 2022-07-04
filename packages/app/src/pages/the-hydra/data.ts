@@ -1,5 +1,5 @@
-import { Photo } from "../../Photo";
-import { PhotoCollection } from "../../PhotoCollection";
+import { Photo } from "../../components/Photo";
+import { PhotoCollection } from "../../components/PhotoCollection";
 
 const collection = new PhotoCollection(
   0,

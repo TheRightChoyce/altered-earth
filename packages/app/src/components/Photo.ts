@@ -1,7 +1,5 @@
 import slugify from "slugify";
 
-import { PhotoCollection } from "./PhotoCollection";
-
 export class Photo {
   collection = "";
   id = 0;

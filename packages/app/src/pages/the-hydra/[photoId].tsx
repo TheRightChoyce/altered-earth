@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import type { ReactElement } from "react";
 
-import { GalleryDetail } from "../../GalleryDetail";
+import { GalleryDetail } from "../../components/GalleryDetail";
 import Layout from "../../layout/layout";
 import { useIsMounted } from "../../useIsMounted";
 import type { NextPageWithLayout } from "../_app";

@@ -1,15 +1,13 @@
-import Image from "next/image";
 import type { ReactElement } from "react";
 
-import { useTheHydraContractRead } from "../../contracts";
-import { Gallery } from "../../Gallery";
+import { Gallery } from "../../components/Gallery";
 import Layout from "../../layout/layout";
 import { useIsMounted } from "../../useIsMounted";
 import type { NextPageWithLayout } from "../_app";
 import { theHydraCollection } from "./data";
 
 const TheHydraPage: NextPageWithLayout = () => {
-  const isMounted = useIsMounted();
+  // const isMounted = useIsMounted();
 
   return (
     <>

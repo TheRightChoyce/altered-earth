@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { useIsMounted } from "../useIsMounted";
 import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
-import { useIsMounted } from "./useIsMounted";
 
 const notFound = (
   <div className="flex flex-col w-full text-center">
