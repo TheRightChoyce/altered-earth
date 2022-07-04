@@ -15,11 +15,11 @@ const TheHydraPage: NextPageWithLayout = () => {
     <>
       <Image
         src="/altered-earth.svg"
-        width={1500}
-        height={155}
+        width={250}
+        height={25}
         alt="Altered Earth"
       />
-      <h1 className="text-4xl">THE HYDRA COLLECTION</h1>
+      <h1 className="text-6xl font-extralight">THE HYDRA COLLECTION</h1>
       <h6>
         The hydra exists where the river meets the woods. The journey is forever
         changing, but The Hydra is always the destination. A tree that holds
