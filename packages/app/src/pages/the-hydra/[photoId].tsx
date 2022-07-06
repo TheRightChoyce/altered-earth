@@ -3,12 +3,10 @@ import type { ReactElement } from "react";
 
 import { GalleryDetail } from "../../components/GalleryDetail";
 import Layout from "../../layout/layout";
-import { useIsMounted } from "../../useIsMounted";
 import type { NextPageWithLayout } from "../_app";
 import { theHydraCollection } from "./data";
 
 const TheHydraDetailPage: NextPageWithLayout = () => {
-  const isMounted = useIsMounted();
   const router = useRouter();
   const photoId = parseInt(router.query.photoId as string, 10);
 

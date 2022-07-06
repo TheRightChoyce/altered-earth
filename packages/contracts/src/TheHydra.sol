@@ -77,10 +77,12 @@ contract TheHydra is Owned, ERC721 {
 
     /// @param _owner The owner of the contract, when deployed
     /// @param _baseURI The base url for any assets in this collection, i.e. an IPFS link
+    /// @param _mintPrice The mint price for a single NFT, in ether
     constructor(
 
         address _owner,
-        string memory _baseURI
+        string memory _baseURI,
+        uint256 _mintPrice
     
     ) ERC721('Altered Earth: The Hydra Collection', 'ALTERED') Owned(_owner) {
 
@@ -95,7 +97,7 @@ contract TheHydra is Owned, ERC721 {
         totalSupply = 50;
         
         // price, TODO -- change on launch : ) 
-        mintPrice = 0.5 ether;
+        mintPrice = _mintPrice;
 
         /// @dev Use this to compare 0-based counters to for slight gas savings
         _maxMintId = 49;

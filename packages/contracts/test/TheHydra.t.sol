@@ -22,7 +22,7 @@ contract TheHydraTest is DSTest {
 
     // state variables
     uint256 totalSupply = 50;
-    uint256 mintPrice = 0.5 ether;
+    uint256 mintPrice = 0.001 ether;
     uint256 royaltyAmount = 1000; // 1000 / 10_000 => 10%
     address royaltyReceiver = 0x18836acedeF35D4A6C00Aae46a36fAdE12ee5FF7;
 
@@ -33,13 +33,15 @@ contract TheHydraTest is DSTest {
     function getNewContract() public returns (TheHydra) {
         return new TheHydra(
             owner,
-            'baseUri'
+            'baseUri',
+            mintPrice
         );
     }
     function setUp() public {
         testContract = new TheHydra(
             owner,
-            'ipfs://test'
+            'ipfs://test',
+            mintPrice
         );
 
         vm.deal(owner, 10 ether);

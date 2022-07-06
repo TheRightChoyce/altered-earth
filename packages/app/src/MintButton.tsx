@@ -2,18 +2,17 @@ import { toast } from "react-toastify";
 import { useAccount } from "wagmi";
 
 import { Button } from "./Button";
-import { exampleNFTContract } from "./contracts";
+import { theHydraContract } from "./contracts";
 import { extractContractError } from "./extractContractError";
-import { pluralize } from "./pluralize";
 import { promiseNotify } from "./promiseNotify";
 import { switchChain } from "./switchChain";
 import { usePromiseFn } from "./usePromiseFn";
 
-export const MintButton = () => {
+export const MintButton = ({ tokenId }: { tokenId: number }) => {
   const { connector } = useAccount();
 
-  const [mintResult, mint] = usePromiseFn(
-    async (quantity: number, onProgress: (message: string) => void) => {
+  const [alterRealityResult, alterReality] = usePromiseFn(
+    async (id: number, onProgress: (message: string) => void) => {
       if (!connector) {
         throw new Error("Wallet not connected");
       }
@@ -21,14 +20,14 @@ export const MintButton = () => {
       onProgress("Preparing wallet…");
       await switchChain(connector);
       const signer = await connector.getSigner();
-      const contract = exampleNFTContract.connect(signer);
-      const price = await contract.PRICE();
+      const contract = theHydraContract.connect(signer);
+      const price = await contract.mintPrice();
 
       try {
-        onProgress(`Minting ${pluralize(quantity, "token", "tokens")}…`);
+        onProgress(`Minting token #${id}…`);
 
         const tx = await promiseNotify(
-          contract.mint(quantity, { value: price.mul(quantity) })
+          contract.alterReality(id, { value: price })
         ).after(1000 * 5, () =>
           onProgress("Please confirm transaction in your wallet…")
         );
@@ -56,11 +55,12 @@ export const MintButton = () => {
 
   return (
     <Button
-      pending={mintResult.type === "pending"}
+      pending={alterRealityResult.type === "pending"}
+      className="w-10/12 bg-pink-700 hover:bg-pink-500"
       onClick={(event) => {
         event.preventDefault();
         const toastId = toast.loading("Starting…");
-        mint(1, (message) => {
+        alterReality(tokenId, (message) => {
           toast.update(toastId, { render: message });
         }).then(
           ({ receipt }) => {
@@ -72,6 +72,7 @@ export const MintButton = () => {
               autoClose: 5000,
               closeButton: true,
             });
+            console.log(receipt);
           },
           (error) => {
             toast.update(toastId, {
@@ -85,7 +86,7 @@ export const MintButton = () => {
         );
       }}
     >
-      Mint a token
+      <div className="m-0 w-full">Alter your reality</div>
     </Button>
   );
 };

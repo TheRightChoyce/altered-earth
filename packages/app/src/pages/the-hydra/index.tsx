@@ -12,7 +12,7 @@ const TheHydraPage: NextPageWithLayout = () => {
   return (
     <>
       <h1 className="text-6xl mb-8">THE HYDRA COLLECTION</h1>
-      <h6 className="text-sm mb-16">
+      <h6 className="mb-16 tracking-wide">
         The hydra exists where the river meets the woods. The journey is forever
         changing, but The Hydra is always the destination. A tree that holds
         anchor as everything around it is in motion. The Hydra Collection

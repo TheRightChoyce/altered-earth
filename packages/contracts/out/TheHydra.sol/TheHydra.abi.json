@@ -10,6 +10,11 @@
         "internalType": "string",
         "name": "_baseURI",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_mintPrice",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
