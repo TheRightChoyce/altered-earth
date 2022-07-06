@@ -21,18 +21,21 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   }
 
   return (
-    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center w-full">
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-8 justify-items-center">
       {collection.photos.map((photo: Photo) => (
-        <div key={photo.id} className="h-64">
+        <div
+          key={photo.id}
+          className="md:h-64 md:w-64 hover:scale-110 ease-linear"
+        >
           <h5>
             <Link href={`/the-hydra/${photo.id}`}>
               <a>
                 <Image
                   src={photo.previewImageUri}
-                  width={250}
-                  height={250}
+                  width={512}
+                  height={512}
                   alt={photo.name}
-                  className="opacity-80 hover:opacity-100 ease-linear"
+                  className="opacity-90 hover:opacity-100 ease-linear"
                 />
               </a>
             </Link>
