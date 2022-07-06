@@ -1,3 +1,5 @@
+ERC721A/=packages/contracts/lib/ERC721A/contracts/
+ds-test/=packages/contracts/lib/solmate/lib/ds-test/src/
 forge-std/=packages/contracts/lib/forge-std/src/
-@openzeppelin/=packages/contracts/lib/openzeppelin-contracts/
-erc721a/=packages/contracts/lib/ERC721A/
+openzeppelin-contracts/=packages/contracts/lib/openzeppelin-contracts/
+solmate/=packages/contracts/lib/solmate/src/

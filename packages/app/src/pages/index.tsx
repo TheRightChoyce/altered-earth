@@ -17,7 +17,7 @@ const HomePage: NextPageWithLayout = () => {
 
       <h5 className="mb-32 text-lg">Exploring the earth in unseen ways</h5>
 
-      <div className="relative">
+      <div className="relative mb-16">
         <Link href="/the-hydra">
           <a>
             <Image
@@ -34,6 +34,22 @@ const HomePage: NextPageWithLayout = () => {
         </h2>
         <h2 className="visible md:invisible text-xl uppercase hover:underline text-center">
           <Link href="/the-hydra">The Hydra Collection</Link>
+        </h2>
+      </div>
+
+      <div className="relative">
+        <Image
+          src="/crystalixed/crystalixed-hero.png"
+          alt="CRYSTALIXED"
+          width={1443}
+          height={658}
+        />
+
+        <h2 className="invisible md:visible text-4xl uppercase absolute right-16 bottom-16 backdrop-blur-sm hover:underline">
+          CRYSTALIXED - Coming soon
+        </h2>
+        <h2 className="visible md:invisible text-xl uppercase hover:underline text-center">
+          CRYSTALIXED - Comming soon
         </h2>
       </div>
     </>

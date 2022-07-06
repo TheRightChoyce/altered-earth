@@ -25,6 +25,11 @@ export class Photo {
 
     this.slug = slugify(this.name.toLowerCase());
 
-    this.previewImage = `${id}.jpg`;
+    let imageId = id + 1 + "";
+    if (id < 9) {
+      imageId = `0${imageId}`;
+    }
+
+    this.previewImage = `ALTERED-EARTH-${imageId}.jpg`;
   }
 }

@@ -32,6 +32,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
                   width={250}
                   height={250}
                   alt={photo.name}
+                  className="opacity-80 hover:opacity-100 ease-linear"
                 />
               </a>
             </Link>

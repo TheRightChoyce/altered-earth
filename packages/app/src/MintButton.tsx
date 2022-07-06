@@ -56,7 +56,6 @@ export const MintButton = ({ tokenId }: { tokenId: number }) => {
   return (
     <Button
       pending={alterRealityResult.type === "pending"}
-      className="w-10/12 bg-pink-700 hover:bg-pink-500"
       onClick={(event) => {
         event.preventDefault();
         const toastId = toast.loading("Starting…");

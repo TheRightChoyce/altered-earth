@@ -61,7 +61,7 @@ const Layout: React.FC = ({ children }) => {
               </div>
             </div>
 
-            <div className="flex-grow flex flex-col gap-4 items-center justify-center p-8 pb-[50vh]">
+            <div className="flex-grow flex flex-col gap-4 items-center justify-center p-16 pb-[10vh]">
               {children}
             </div>
           </div>
