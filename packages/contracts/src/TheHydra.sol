@@ -66,8 +66,8 @@ contract TheHydra is Owned, ERC721 {
         _;
     }
 
+    /// @dev Defer this to the Solmate contract's _mint function to save gas, since it already has an ownership check built in -- in theory this checks to ensure this token is not already owned
     modifier RealityNotAlreadyAltered(uint256 id) {
-        /// @dev Defer this to the Solmate contract's _mint function to save gas, since it already has an ownership check built in
         _;
     }
 

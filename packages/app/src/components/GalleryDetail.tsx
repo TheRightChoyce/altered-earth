@@ -57,6 +57,28 @@ export const GalleryDetail = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
       <div className="col-span-3">
+        {/* <!-- photo --> */}
+        <div>
+          <div style={{ width: "100%", height: "100%", position: "relative" }}>
+            <div
+              className={`${
+                address ? "grayscale-0" : "grayscale"
+              } transition-all ease-in-out duration-5000 border-8 border-white`}
+            >
+              <Image
+                src={photo.previewImageUri}
+                layout="responsive"
+                width="75%"
+                height="100%"
+                objectFit="contain"
+                alt={photo.name}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Right column */}
+      <div className="col-span-2 text-sm">
         {/* <!-- nav --> */}
         <div className="flex justify-between">
           <div>
@@ -90,70 +112,56 @@ export const GalleryDetail = ({
             </Link>
           </div>
         </div>
-        {/* <!-- photo --> */}
-        <div>
-          <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <div
-              className={`${
-                address ? "grayscale-0" : "grayscale"
-              } transition-all ease-in-out duration-5000 border-8 border-white`}
-            >
-              <Image
-                src={photo.previewImageUri}
-                layout="responsive"
-                width="75%"
-                height="100%"
-                objectFit="contain"
-                alt={photo.name}
+
+        {/* <!-- Info --> */}
+        <div className="pt-8">
+          <h2 className="text-3xl">{photo.name}</h2>
+          <OwnerName address={owner.data?.toString()} className="mt-4" />
+          {!hasOwner && (
+            <div className="mt-4">
+              <MintButton
+                tokenId={photo.id}
+                disabled={address ? false : true}
+                label={address ? "Alter your Reality" : "Dream state required"}
               />
+              <div className="text-center py-4 bg-slate-800">0.25 ETH</div>
+              {address ? null : (
+                <div className="mt-2 italic text-center">
+                  (Connect your wallet to enter a dream state)
+                </div>
+              )}
             </div>
+          )}
+
+          <div className="mt-8 mb-8">
+            <p className="mb-4">{photo.description}</p>
+            <p className="mb-4">
+              Each photo comes with a high-res immutable imoage stored on IPFS
+              (and maybe an on-chain SVG version)
+            </p>
           </div>
-        </div>
-      </div>
-      {/* Right column */}
-      <div className="col-span-2 pt-8 text-sm">
-        <h2 className="text-3xl">{photo.name}</h2>
-        <OwnerName address={owner.data?.toString()} className="mt-4" />
-        {!hasOwner && (
-          <div className="mt-4">
-            <MintButton tokenId={photo.id} disabled={address ? false : true} />
-            {address ? null : (
-              <div className="mt-8 italic text-center">
-                Connect your wallet first
-              </div>
-            )}
-            <div className="text-center py-4 bg-slate-800">0.25 ETH</div>
+
+          <div className="grid grid-cols-2 uppercase text-xs mb-8">
+            <div>Token ID</div>
+            <div>{photo.id}</div>
+
+            <div>Token standard</div>
+            <div>ERC-721</div>
+
+            <div>Contract</div>
+            <div>0x1234...0987</div>
+
+            <div>Metadata</div>
+            <div>IPFS</div>
+
+            <div>Roylaties</div>
+            <div>7.5%</div>
           </div>
-        )}
 
-        <div className="mt-8 mb-8">
-          <p className="mb-4">{photo.description}</p>
-          <p className="mb-4">
-            Each photo comes with a high-res immutable imoage stored on IPFS
-            (and maybe an on-chain SVG version)
-          </p>
+          {/* <div className="uppercase mb-8">OpenSea | LooksRare</div> */}
+
+          {hasOwner && <OpenSeaButton tokenId={photo.id} />}
         </div>
-
-        <div className="grid grid-cols-2 uppercase text-xs mb-8">
-          <div>Token ID</div>
-          <div>{photo.id}</div>
-
-          <div>Token standard</div>
-          <div>ERC-721</div>
-
-          <div>Contract</div>
-          <div>0x1234...0987</div>
-
-          <div>Metadata</div>
-          <div>IPFS</div>
-
-          <div>Roylaties</div>
-          <div>7.5%</div>
-        </div>
-
-        {/* <div className="uppercase mb-8">OpenSea | LooksRare</div> */}
-
-        {hasOwner && <OpenSeaButton tokenId={photo.id} />}
       </div>
     </div>
   );

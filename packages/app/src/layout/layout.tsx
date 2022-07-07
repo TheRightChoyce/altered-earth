@@ -56,7 +56,7 @@ const Layout: React.FC = ({ children }) => {
               </div>
               <div className="p-2">
                 <div className="self-end p-2">
-                  <ConnectButton />
+                  <ConnectButton label="Enter Dream State" />
                 </div>
               </div>
             </div>

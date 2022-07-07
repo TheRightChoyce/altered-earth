@@ -11,9 +11,11 @@ import { usePromiseFn } from "./usePromiseFn";
 export const MintButton = ({
   tokenId,
   disabled,
+  label,
 }: {
   tokenId: number;
   disabled: boolean;
+  label: string | undefined;
 }) => {
   const { connector } = useAccount();
 
@@ -92,7 +94,7 @@ export const MintButton = ({
         );
       }}
     >
-      <div className="m-0 w-full">Alter your reality</div>
+      <div className="m-0 w-full">{label || "Alter your reality"}</div>
     </Button>
   );
 };
