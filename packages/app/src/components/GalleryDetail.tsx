@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useTheHydraContractRead } from "../contracts";
+import { extractContractError } from "../extractContractError";
 import { MintButton } from "../MintButton";
 import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
@@ -27,16 +28,26 @@ export const GalleryDetail = ({
   const { address } = useAccount();
   const [hasOwner, setHasOwner] = useState(false);
   const owner = useTheHydraContractRead({
-    functionName: "ownerOfOrNull",
+    functionName: "ownerOf",
     args: photoId?.toString(),
     watch: true,
     onError(error) {
-      console.log("Error", error);
+      const contractError = extractContractError(error);
+      if (contractError !== "NOT_MINTED") {
+        throw error;
+      }
+    },
+    onSettled(data, error) {
+      if (error) {
+        const contractError = extractContractError(error);
+        if (contractError !== "NOT_MINTED") {
+          throw error;
+        }
+      }
+      setHasOwner(data ? true : false);
     },
     onSuccess(data) {
-      setHasOwner(
-        data && data?.toString() != "0x0000000000000000000000000000000000000000"
-      );
+      setHasOwner(data ? true : false);
     },
   });
 
