@@ -33,8 +33,8 @@ export const Gallery = ({
       {!address && (
         <div className="mb-16">
           <h4 className="text-xl md:text-2xl mb-8 text-center text-pink-300 font-semibold">
-            Only in a dream state can you fully experience The Hydra's Altered
-            Reality.
+            Only in a dream state can you fully experience The Hydra&#39s
+            Altered Reality.
           </h4>
           <div className="flex justify-center">
             <ConnectButton label="Enter Dream State" />
