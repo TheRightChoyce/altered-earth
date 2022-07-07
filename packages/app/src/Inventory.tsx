@@ -50,7 +50,7 @@ export const Inventory = () => {
         {query.data.tokens.map((token) => (
           <a
             key={token.id}
-            href={`https://testnets.opensea.io/goerli/${exampleNFTContract.address}/${token.id}`}
+            href={`https://testnets.opensea.io/goerli/${theHydraContract.address}/${token.id}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sky-700 border-2 border-slate-200 hover:border-sky-400 p-2 leading-none rounded-md"
