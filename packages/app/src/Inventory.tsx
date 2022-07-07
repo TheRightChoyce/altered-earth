@@ -2,7 +2,7 @@ import { gql } from "urql";
 import { useAccount, useNetwork } from "wagmi";
 
 import { useInventoryQuery } from "./codegen/subgraph";
-import { exampleNFTContract } from "./contracts";
+import { theHydraContract } from "./contracts";
 import { PendingIcon } from "./PendingIcon";
 import { useIsMounted } from "./useIsMounted";
 
