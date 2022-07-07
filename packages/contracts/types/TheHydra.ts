@@ -40,6 +40,7 @@ export interface TheHydraInterface extends utils.Interface {
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
+    "ownerOfOrNull(uint256)": FunctionFragment;
     "returnToReality(uint256)": FunctionFragment;
     "royaltyInfo(uint256,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
@@ -67,6 +68,7 @@ export interface TheHydraInterface extends utils.Interface {
       | "name"
       | "owner"
       | "ownerOf"
+      | "ownerOfOrNull"
       | "returnToReality"
       | "royaltyInfo"
       | "safeTransferFrom(address,address,uint256)"
@@ -108,6 +110,10 @@ export interface TheHydraInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "ownerOfOrNull",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -192,6 +198,10 @@ export interface TheHydraInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "ownerOfOrNull",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "returnToReality",
     data: BytesLike
@@ -376,6 +386,11 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string] & { owner: string }>;
 
+    ownerOfOrNull(
+      id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string] & { owner: string }>;
+
     returnToReality(
       id: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -488,6 +503,11 @@ export interface TheHydra extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  ownerOfOrNull(
+    id: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   returnToReality(
     id: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -596,6 +616,11 @@ export interface TheHydra extends BaseContract {
     owner(overrides?: CallOverrides): Promise<string>;
 
     ownerOf(
+      id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    ownerOfOrNull(
       id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
@@ -766,6 +791,11 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    ownerOfOrNull(
+      id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     returnToReality(
       id: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -873,6 +903,11 @@ export interface TheHydra extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ownerOf(
+      id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    ownerOfOrNull(
       id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

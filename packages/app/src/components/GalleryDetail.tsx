@@ -7,6 +7,7 @@ import { useTheHydraContractRead } from "../contracts";
 import { MintButton } from "../MintButton";
 import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
+import { OwnerName } from "./OwnerName";
 import { PhotoCollection } from "./PhotoCollection";
 
 const notFound = (
@@ -25,20 +26,19 @@ export const GalleryDetail = ({
   const isMounted = useIsMounted();
   const { address } = useAccount();
   const [hasOwner, setHasOwner] = useState(false);
-  const owner = { data: null };
-  // const owner = useTheHydraContractRead({
-  //   functionName: "ownerOf",
-  //   args: photoId?.toString(),
-  //   watch: true,
-  //   onError(error) {
-  //     console.log("Error", error);
-  //     setHasOwner(false);
-  //   },
-  //   onSuccess(data) {
-  //     console.log("Data", data);
-  //     setHasOwner(true);
-  //   },
-  // });
+  const owner = useTheHydraContractRead({
+    functionName: "ownerOfOrNull",
+    args: photoId?.toString(),
+    watch: true,
+    onError(error) {
+      console.log("Error", error);
+    },
+    onSuccess(data) {
+      setHasOwner(
+        data && data?.toString() != "0x0000000000000000000000000000000000000000"
+      );
+    },
+  });
 
   if (!isMounted) {
     return null;
@@ -113,7 +113,18 @@ export const GalleryDetail = ({
       {/* Right column */}
       <div className="col-span-2 pt-8 text-sm">
         <h2 className="text-3xl">{photo.name}</h2>
-        <h4>Owned by: {hasOwner ? owner.data : "--"}</h4>
+        <OwnerName address={owner.data?.toString()} className="mt-4" />
+        {!hasOwner && (
+          <div className="mt-4">
+            <MintButton tokenId={photo.id} disabled={address ? false : true} />
+            {address ? null : (
+              <div className="mt-8 italic text-center">
+                Connect your wallet first
+              </div>
+            )}
+            <div className="text-center py-4 bg-slate-800">0.25 ETH</div>
+          </div>
+        )}
 
         <div className="mt-8 mb-8">
           <p className="mb-4">{photo.description}</p>
@@ -142,16 +153,7 @@ export const GalleryDetail = ({
 
         {/* <div className="uppercase mb-8">OpenSea | LooksRare</div> */}
 
-        {hasOwner ? (
-          <OpenSeaButton tokenId={photo.id} />
-        ) : (
-          <div>
-            <MintButton tokenId={photo.id} disabled={address ? false : true} />
-            {address ? null : (
-              <div className="mt-8 italic">Connect your wallet first</div>
-            )}
-          </div>
-        )}
+        {hasOwner && <OpenSeaButton tokenId={photo.id} />}
       </div>
     </div>
   );

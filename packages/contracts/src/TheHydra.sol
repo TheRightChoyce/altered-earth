@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 // third party includes
 import "solmate/tokens/ERC721.sol";
 import "solmate/auth/Owned.sol";
-import "openzeppelin-contracts/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 /// @title TheHydra is the genesis collection of the Altered Earth NFT series
 /// @author Chris Choyce (therightchoyce.eth)
@@ -195,7 +195,18 @@ contract TheHydra is Owned, ERC721 {
     {
         _royaltyInfo = RoyaltyInfo(receiver, uint24(amount));
     }
-    
+
+    // --------------------------------------------------------
+    // ~~ Helper functions ~~
+    // --------------------------------------------------------
+    /// @notice Returns the owner of a token, or the zero address if unowned
+    /// @dev This is implemented as a helper for the dapp -- this funtion will not revert when a token is unowned, making it easier to check ownership from the front-end
+    /// @param id The id of the token
+    /// @return owner address Either the current owner or address(0)
+    function ownerOfOrNull(uint256 id) public view returns (address owner)
+    {
+        return _ownerOf[id];
+    }
 
     // Upload
 
