@@ -3,9 +3,9 @@ import type { ReactElement } from "react";
 import { useAccount } from "wagmi";
 
 import { Gallery } from "../../components/Gallery";
+import { theHydraCollection } from "../../data/the-hydra";
 import Layout from "../../layout/layout";
 import type { NextPageWithLayout } from "../_app";
-import { theHydraCollection } from "./data";
 
 const TheHydraPage: NextPageWithLayout = () => {
   // const isMounted = useIsMounted();

@@ -2,9 +2,9 @@ import { useRouter } from "next/router";
 import type { ReactElement } from "react";
 
 import { GalleryDetail } from "../../components/GalleryDetail";
+import { theHydraCollection } from "../../data/the-hydra";
 import Layout from "../../layout/layout";
 import type { NextPageWithLayout } from "../_app";
-import { theHydraCollection } from "./data";
 
 const TheHydraDetailPage: NextPageWithLayout = () => {
   const router = useRouter();
