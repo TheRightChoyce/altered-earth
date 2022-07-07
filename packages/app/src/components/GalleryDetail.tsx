@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useAccount } from "wagmi";
 
 import { useTheHydraContractRead } from "../contracts";
 import { MintButton } from "../MintButton";
@@ -22,6 +23,7 @@ export const GalleryDetail = ({
   photoId: number;
 }) => {
   const isMounted = useIsMounted();
+  const { address } = useAccount();
   const [hasOwner, setHasOwner] = useState(false);
   const owner = { data: null };
   // const owner = useTheHydraContractRead({
@@ -51,8 +53,6 @@ export const GalleryDetail = ({
   if (!photo) {
     return notFound;
   }
-
-  console.log(owner);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
@@ -93,7 +93,11 @@ export const GalleryDetail = ({
         {/* <!-- photo --> */}
         <div>
           <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <div className="border-8 border-white">
+            <div
+              className={`${
+                address ? "grayscale-0" : "grayscale"
+              } transition-all ease-in-out duration-5000 border-8 border-white`}
+            >
               <Image
                 src={photo.previewImageUri}
                 layout="responsive"
@@ -141,7 +145,12 @@ export const GalleryDetail = ({
         {hasOwner ? (
           <OpenSeaButton tokenId={photo.id} />
         ) : (
-          <MintButton tokenId={photo.id} />
+          <div>
+            <MintButton tokenId={photo.id} disabled={address ? false : true} />
+            {address ? null : (
+              <div className="mt-8 italic">Connect your wallet first</div>
+            )}
+          </div>
         )}
       </div>
     </div>

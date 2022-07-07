@@ -8,7 +8,13 @@ import { promiseNotify } from "./promiseNotify";
 import { switchChain } from "./switchChain";
 import { usePromiseFn } from "./usePromiseFn";
 
-export const MintButton = ({ tokenId }: { tokenId: number }) => {
+export const MintButton = ({
+  tokenId,
+  disabled,
+}: {
+  tokenId: number;
+  disabled: boolean;
+}) => {
   const { connector } = useAccount();
 
   const [alterRealityResult, alterReality] = usePromiseFn(
@@ -55,6 +61,7 @@ export const MintButton = ({ tokenId }: { tokenId: number }) => {
 
   return (
     <Button
+      disabled={disabled}
       pending={alterRealityResult.type === "pending"}
       onClick={(event) => {
         event.preventDefault();
