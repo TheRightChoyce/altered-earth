@@ -1,7 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
-import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../useIsMounted";
 import { Photo } from "./Photo";
