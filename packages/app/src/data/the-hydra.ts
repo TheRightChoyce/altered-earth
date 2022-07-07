@@ -1,28 +1,28 @@
-import { Photo } from "../../components/Photo";
-import { PhotoCollection } from "../../components/PhotoCollection";
+import { Photo } from "../components/Photo";
+import { PhotoCollection } from "../components/PhotoCollection";
 
-const theHydraCollection = new PhotoCollection(
+const collection = new PhotoCollection(
   0,
   "The Hydra",
   "The hydra exists where the river meets the woods."
 );
 
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo("The Hydra", 0, "The Hydra", "This is The Hyrdra")
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo("The Hydra", 1, "The Hydra 1", "Core trunk, close up")
 );
-theHydraCollection.addPhoto(new Photo("The Hydra", 2, "The Hydra 2", "Core trunk"));
-theHydraCollection.addPhoto(
+collection.addPhoto(new Photo("The Hydra", 2, "The Hydra 2", "Core trunk"));
+collection.addPhoto(
   new Photo("The Hydra", 3, "The Hydra 3", "Branching of heads 1 and 2")
 );
-theHydraCollection.addPhoto(new Photo("The Hydra", 4, "The Hydra 4", "Neck of head 2"));
-theHydraCollection.addPhoto(
+collection.addPhoto(new Photo("The Hydra", 4, "The Hydra 4", "Neck of head 2"));
+collection.addPhoto(
   new Photo("The Hydra", 5, "The Hydra 5", "The heart of the Hyrda")
 );
 
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     6,
@@ -30,7 +30,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     7,
@@ -38,7 +38,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     8,
@@ -46,7 +46,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     9,
@@ -54,7 +54,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     10,
@@ -63,7 +63,7 @@ theHydraCollection.addPhoto(
   )
 );
 
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     11,
@@ -71,7 +71,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     12,
@@ -79,7 +79,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     13,
@@ -87,7 +87,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     14,
@@ -95,7 +95,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     15,
@@ -103,7 +103,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     16,
@@ -111,7 +111,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     17,
@@ -119,7 +119,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     18,
@@ -127,7 +127,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     19,
@@ -135,7 +135,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     20,
@@ -144,7 +144,7 @@ theHydraCollection.addPhoto(
   )
 );
 
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     21,
@@ -152,7 +152,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     22,
@@ -160,7 +160,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     23,
@@ -168,7 +168,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     24,
@@ -176,7 +176,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     25,
@@ -184,7 +184,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     26,
@@ -192,7 +192,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     27,
@@ -200,7 +200,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     28,
@@ -208,7 +208,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     29,
@@ -216,7 +216,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     30,
@@ -225,7 +225,7 @@ theHydraCollection.addPhoto(
   )
 );
 
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     31,
@@ -233,7 +233,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     32,
@@ -241,7 +241,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     33,
@@ -249,7 +249,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     34,
@@ -257,7 +257,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     35,
@@ -265,7 +265,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     36,
@@ -273,7 +273,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     37,
@@ -281,7 +281,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     38,
@@ -289,7 +289,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     39,
@@ -297,7 +297,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     40,
@@ -306,7 +306,7 @@ theHydraCollection.addPhoto(
   )
 );
 
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     41,
@@ -314,7 +314,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     42,
@@ -322,7 +322,7 @@ theHydraCollection.addPhoto(
     "This is a description that will be written later"
   )
 );
-theHydraCollection.addPhoto(
+collection.addPhoto(
   new Photo(
     "The Hydra",
     43,
@@ -331,4 +331,4 @@ theHydraCollection.addPhoto(
   )
 );
 
-export theHydraCollection;
+export const theHydraCollection = collection;
