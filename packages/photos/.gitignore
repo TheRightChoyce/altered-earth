@@ -4,7 +4,7 @@
 /data/raw/*.jpg
 /data/pixel-png/*.png
 /data/svg/*.svg
-/data/svg-hash/*.txt
+/data/svg-storage/*.txt
 
 # dependencies
 /node_modules

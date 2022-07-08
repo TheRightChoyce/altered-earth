@@ -20,7 +20,7 @@ const main = async () => {
       const file = fs.readFileSync(path.join(inputDir, fileName));
       sharp(file)
         .resize(64, 64, { fits: "inside", kernel: sharp.kernel.nearest })
-        .png({ colors: 64, palette: true })
+        .png({ colors: 256, palette: true, quality: 75 })
         .toFile(path.join(outputDir, fileName.replace("jpg", "png")))
         .then(() => {
           resolve(fileName);
