@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "./ITheHydraDataStore.sol";
+import "./interfaces/ITheHydraDataStore.sol";
 import "solmate/auth/Owned.sol";
 import "solmate/utils/SSTORE2.sol";
 

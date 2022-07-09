@@ -5,7 +5,7 @@ pragma solidity ^0.8.13;
 import "solmate/tokens/ERC721.sol";
 import "solmate/auth/Owned.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "./ITheHydra.sol";
+import "./interfaces/ITheHydra.sol";
 
 /// @title TheHydra is the genesis collection of the Altered Earth NFT series
 /// @author therightchoyce.eth

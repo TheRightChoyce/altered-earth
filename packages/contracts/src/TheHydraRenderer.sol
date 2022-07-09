@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "./ITheHydra.sol";
-import "./ITheHydraDataStore.sol";
-import "./ITheHydraRenderer.sol";
-import "./IExquisiteGraphics.sol";
+import "./interfaces/ITheHydra.sol";
+import "./interfaces/ITheHydraDataStore.sol";
+import "./interfaces/ITheHydraRenderer.sol";
+import "./interfaces/IExquisiteGraphics.sol";
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 
