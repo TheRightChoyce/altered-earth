@@ -5,12 +5,13 @@ pragma solidity ^0.8.13;
 import "solmate/tokens/ERC721.sol";
 import "solmate/auth/Owned.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "./ITheHydra.sol";
 
 /// @title TheHydra is the genesis collection of the Altered Earth NFT series
-/// @author Chris Choyce (therightchoyce.eth)
+/// @author therightchoyce.eth
 /// @notice This implemeints the ERC721 standard
 /// @dev Modified ERC721 for minting and managing tokens
-contract TheHydra is Owned, ERC721 {
+contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @dev Enable toString and other string functions on uint256
     using Strings for uint256;
