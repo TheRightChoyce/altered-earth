@@ -104,7 +104,7 @@ contract TheHydraRender is ITheHydraRenderer {
     ) external view returns (
         string memory
     ) {
-        bytes memory data = dataStore.getRawPhotoData(id);
+        bytes memory data = dataStore.getPhotoData(id);
         bytes memory svg = drawSVGToBytes(data);
 
         // TODO -- need to add in Base64 header string

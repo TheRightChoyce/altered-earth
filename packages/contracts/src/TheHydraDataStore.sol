@@ -67,7 +67,7 @@ contract TheHydraDataStore is ITheHydraDataStore, Owned {
     /// @param photoId The id of the photo -- TODO: This may have to change!
     /// @param data The raw data in the .xqst formar
     function storePhotoData(
-        uint32 photoId,
+        uint256 photoId,
         bytes calldata data
     ) external onlyOwner {
 
@@ -81,7 +81,7 @@ contract TheHydraDataStore is ITheHydraDataStore, Owned {
     /// @dev Our renderer contract will uses this when generating the metadata
     /// @param photoId The id of the photo -- TODO: This may have to change!
     function getPhotoData(
-        uint32 photoId
+        uint256 photoId
     ) external view returns (
         bytes memory
     )
