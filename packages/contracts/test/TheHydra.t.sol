@@ -8,6 +8,8 @@ import "forge-std/Vm.sol";
 
 // local includes
 import "../src/TheHydra.sol";
+import "../src/TheHydraRenderer.sol";
+import "../src/TheHydraDataStore.sol";
 
 contract TheHydraTest is DSTest {
     Vm private vm = Vm(HEVM_ADDRESS);
@@ -26,17 +28,23 @@ contract TheHydraTest is DSTest {
     uint256 royaltyAmount = 1000; // 1000 / 10_000 => 10%
     address royaltyReceiver = 0x18836acedeF35D4A6C00Aae46a36fAdE12ee5FF7;
 
+    // external addresses
+    address xqstgfx = 0xDf01A4040493B514605392620B3a0a05Eb8Cd295;
+
     // Redfine any events
     event Transfer(address indexed from, address indexed to, uint256 indexed id);
     event RealityAltered(address indexed from, uint256 tokenId);
 
     function getNewContract() public returns (TheHydra) {
-        return new TheHydra(
-            owner,
-            'baseUri',
-            mintPrice
-        );
+        return new TheHydra(owner, 'baseUri', mintPrice);
     }
+    function getNewDataStore() public returns (TheHydraDataStore) {
+        return new TheHydraDataStore(owner, "ipfs://test/");
+    }
+    function getNewRenderer(TheHydra _c, TheHydraDataStore _d, address _xqstgfx) public returns (TheHydraRenderer) {
+        return new TheHydraRenderer(address(_c), address(_d), _xqstgfx);
+    }
+
     function setUp() public {
         testContract = new TheHydra(
             owner,
@@ -159,12 +167,36 @@ contract TheHydraTest is DSTest {
         _c.tokenURI(0);
     }
     function testTokenURIForExistingToken() public {
+        // TheHydraRenderer _r = getNewRenderer();
         TheHydra _c = getNewContract();
         vm.prank(minter);
         _c.alterReality{value: mintPrice}(0);
         string memory uri = _c.tokenURI(0);
 
         assertEq(uri, "baseUri0");
+    }
+
+    function testSetRenderer() public {
+        vm.startPrank(owner);
+        TheHydra _c = getNewContract();
+        assertEq(address(_c.renderer()), address(0x0));
+        TheHydraDataStore _dataStore = getNewDataStore();
+        TheHydraRenderer _renderer = getNewRenderer(_c, _dataStore, xqstgfx);
+
+        _c.setRenderer(_renderer);
+        assertEq(address(_c.renderer()), address(_renderer));
+        assertTrue(address(_c.renderer()) != address(_dataStore));
+        vm.stopPrank();
+    }
+    function testSetRendererOnlyOwner() public {
+        TheHydra _c = getNewContract();
+        TheHydraDataStore _dataStore = getNewDataStore();
+        TheHydraRenderer _renderer = getNewRenderer(_c, _dataStore, xqstgfx);
+
+        vm.startPrank(minter);
+        vm.expectRevert('UNAUTHORIZED');
+        _c.setRenderer(_renderer);
+        vm.stopPrank();        
     }
 
     // --------------------------------------------------------

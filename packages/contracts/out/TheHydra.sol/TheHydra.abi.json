@@ -101,6 +101,19 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "renderer",
+        "type": "address"
+      }
+    ],
+    "name": "NewRealityIsVisualized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "user",
         "type": "address"
       },
@@ -342,6 +355,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "renderer",
+    "outputs": [
+      {
+        "internalType": "contract ITheHydraRenderer",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -461,6 +487,19 @@
       }
     ],
     "name": "setOwner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract ITheHydraRenderer",
+        "name": "_renderer",
+        "type": "address"
+      }
+    ],
+    "name": "setRenderer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -5,7 +5,10 @@ pragma solidity ^0.8.13;
 import "solmate/tokens/ERC721.sol";
 import "solmate/auth/Owned.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+
+// local includes
 import "./interfaces/ITheHydra.sol";
+import "./interfaces/ITheHydraRenderer.sol";
 
 /// @title TheHydra is the genesis collection of the Altered Earth NFT series
 /// @author therightchoyce.eth
@@ -19,7 +22,10 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
     // ~~ Core state variables ~~
     // --------------------------------------------------------
-    
+
+    /// @dev Renderer contract for metadata * on-chain artwork
+    ITheHydraRenderer public renderer;
+
     /// @dev Track the total supply available to mint in this collection
     uint256 public totalSupply;
     
@@ -36,7 +42,11 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // ~~ Events ~~
     // --------------------------------------------------------
 
+    /// @dev When a new Hydra artwork is acquired, reality becomes altered
     event RealityAltered(address indexed from, uint256 tokenId);
+
+    /// @dev When the renderer contract is set and available
+    event NewRealityIsVisualized(address indexed renderer);
 
     // --------------------------------------------------------
     // ~~ Errors ~~
@@ -107,6 +117,14 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
     // ~~ MetaData ~~
     // --------------------------------------------------------
+
+    /// @notice Sets the rendering/metadata contract address
+    /// @dev The metadata address handles off-chain metadata and on-chain artwork
+    /// @param _renderer The address of the metadata contract
+    function setRenderer(ITheHydraRenderer _renderer) external onlyOwner {
+        renderer = _renderer;
+        emit NewRealityIsVisualized(address(_renderer));
+    }
 
     /// @notice Standard URI function to get the token metadata
     /// @param id Id of token requested
