@@ -38,56 +38,39 @@ contract TheHydraRendererTest is DSTest {
     function getNewDataStore() public returns (TheHydraDataStore) {
         return new TheHydraDataStore(owner, "ipfs://test/");
     }
-    function getNewRenderer() public returns (TheHydraRenderer) {
-        TheHydra _theHydra = getNewHydraContract();
-        TheHydraDataStore _dataStore = getNewDataStore();
-        return new TheHydraRenderer(address(_theHydra), address(_dataStore), xqstgfx);
-    }
 
-    function testConstructor() public {
-        TheHydra _theHydra = getNewHydraContract();
-        TheHydraDataStore _dataStore = getNewDataStore();
-        
-        TheHydraRenderer _renderer = new TheHydraRenderer(
-            address(_theHydra),
-            address(_dataStore),
-            xqstgfx
+    function testConstructor() public {        
+        TheHydraDataStore _dataStore = new TheHydraDataStore(
+            owner,
+            "ipfs://test/"
         );
 
-        assertEq(address(_renderer.theHydra()), address(_theHydra));
-        assertEq(address(_renderer.dataStore()), address(_dataStore));
-        assertEq(address(_renderer.xqstgfx()), xqstgfx);
+        assertEq(address(_dataStore.owner()), owner);
+        assertEq(_dataStore.getOffChainBaseURI(), "ipfs://test/");
     }
 
     // --------------------------------------------------------
-    // ~~ ERC721 TokenURI implementation  ~~
+    // ~~ Off Chain Storage I.E BaseURI logic ~~
     // --------------------------------------------------------
 
-    function testTokenURI() public {
-        TheHydra _theHydra = getNewHydraContract();
-        TheHydraDataStore _dataStore = getNewDataStore();
-        
-        TheHydraRenderer _r = new TheHydraRenderer(
-            address(_theHydra),
-            address(_dataStore),
-            xqstgfx
-        );
+    function testSetOffChainBaseURI() public {
+    }
+    function testSetOffChainBaseURIOnlyOwner() public {
+    }
 
-        string memory expected = string(abi.encodePacked(_dataStore.getOffChainBaseURI(), "0"));
-        assertEq(expected, _r.tokenURI(0));
+    function testGetOffChainBaseURI() public {
     }
 
     // --------------------------------------------------------
-    // ~~ Exquisite Graphics SVG Renderers  ~~
+    // ~~ On Chain Storage ~~
     // --------------------------------------------------------
 
-    // TODO
+    function testStorePhotoData() public {
+    }
+    function testStorePhotoDataOnlyOwner() public {
+    }
 
-    // --------------------------------------------------------
-    // ~~ User Friendly Renderers  ~~
-    // --------------------------------------------------------
+    function testGetPhotoData() public {
 
-    // TODO
-
-
+    }
 }

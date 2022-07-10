@@ -12,7 +12,7 @@ contract TheHydraDataStore is ITheHydraDataStore, Owned {
     // --------------------------------------------------------
 
     /// @dev Uri for off chain storage.. i.e. an IPFS link
-    string private offChainBaseURI;
+    string public offChainBaseURI;
     
     /// @dev Byte size of each on-chain photo
     uint256 private constant photoDataByteSize = 4360;
