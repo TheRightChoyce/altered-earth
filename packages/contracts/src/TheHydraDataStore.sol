@@ -15,7 +15,7 @@ contract TheHydraDataStore is ITheHydraDataStore, Owned {
     string private offChainBaseURI;
     
     /// @dev Byte size of each on-chain photo
-    uint256 private constant photoDataByteSize = 4360;
+    uint256 private constant photoDataByteSize = 5128;
 
     /// @dev Maps each photo to its on-chain storage address
     mapping(uint256 => address) private onChainStorage;
