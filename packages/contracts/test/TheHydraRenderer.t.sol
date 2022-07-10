@@ -38,7 +38,9 @@ contract TheHydraRendererTest is DSTest {
     function getNewDataStore() public returns (TheHydraDataStore) {
         return new TheHydraDataStore(owner, "ipfs://test/");
     }
-    function getNewRenderer(TheHydra _c, TheHydraDataStore _d, address _xqstgfx) public returns (TheHydraRenderer) {
+    function getNewRenderer() public returns (TheHydraRenderer) {
+        TheHydra _theHydra = getNewHydraContract();
+        TheHydraDataStore _dataStore = getNewDataStore();
         return new TheHydraRenderer(address(_c), address(_d), _xqstgfx);
     }
 
@@ -52,9 +54,32 @@ contract TheHydraRendererTest is DSTest {
             xqstgfx
         );
 
-        assertEq(_renderer.owner(), owner);
         assertEq(address(_renderer.theHydra()), address(_theHydra));
         assertEq(address(_renderer.dataStore()), address(_dataStore));
         assertEq(address(_renderer.xqstgfx()), xqstgfx);
     }
+
+    // --------------------------------------------------------
+    // ~~ ERC721 TokenURI implementation  ~~
+    // --------------------------------------------------------
+
+    function testTokenURI() public {
+        TheHydraRenderer _r = getNewRenderer();
+        string expected = abi.encodePacked(_r.dataStore.getOffChainBaseURI(), "0");
+        assertEq(expected, _r.tokenURI(0));
+    }
+
+    // --------------------------------------------------------
+    // ~~ Exquisite Graphics SVG Renderers  ~~
+    // --------------------------------------------------------
+
+    // TODO
+
+    // --------------------------------------------------------
+    // ~~ User Friendly Renderers  ~~
+    // --------------------------------------------------------
+
+    // TODO
+
+
 }
