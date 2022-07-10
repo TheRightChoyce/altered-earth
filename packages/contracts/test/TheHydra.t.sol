@@ -34,6 +34,7 @@ contract TheHydraTest is DSTest {
     // Redfine any events
     event Transfer(address indexed from, address indexed to, uint256 indexed id);
     event RealityAltered(address indexed from, uint256 tokenId);
+    event TheHydraAwakens();
 
     function getNewContract() public returns (TheHydra) {
         return new TheHydra(owner, 'baseUri', mintPrice);
@@ -67,6 +68,14 @@ contract TheHydraTest is DSTest {
         assertEq(_hydra.totalSupply(), totalSupply);
         assertEq(_hydra.mintPrice(), mintPrice);
     }
+    function testConstructorEmits() public {
+        vm.expectEmit(false, false, false, true);
+        emit TheHydraAwakens();
+
+        TheHydra _hydra = getNewContract();
+    }
+
+
     // --------------------------------------------------------
     // ~~ Interface support ~~
     // --------------------------------------------------------

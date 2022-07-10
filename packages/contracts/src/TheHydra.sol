@@ -42,6 +42,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // ~~ Events ~~
     // --------------------------------------------------------
 
+    /// @dev When this contract is created
+    event TheHydraAwakens(address indexed from, uint256 tokenId);
+    
     /// @dev When a new Hydra artwork is acquired, reality becomes altered
     event RealityAltered(address indexed from, uint256 tokenId);
 
