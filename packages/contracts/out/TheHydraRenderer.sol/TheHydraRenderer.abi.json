@@ -37,11 +37,11 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "id",
+        "name": "_id",
         "type": "uint256"
       }
     ],
-    "name": "getOnChainPhotoSVG",
+    "name": "getOnChainSVG",
     "outputs": [
       {
         "internalType": "string",
@@ -56,11 +56,11 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "id",
+        "name": "_id",
         "type": "uint256"
       }
     ],
-    "name": "getOnChainPhotoSVGAsBase64",
+    "name": "getOnChainSVG_AsBase64",
     "outputs": [
       {
         "internalType": "string",
@@ -98,7 +98,7 @@
         "type": "bytes"
       }
     ],
-    "name": "renderSVG_ToString",
+    "name": "renderSVG_AsString",
     "outputs": [
       {
         "internalType": "string",

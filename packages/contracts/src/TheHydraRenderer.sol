@@ -101,7 +101,7 @@ contract TheHydraRenderer is ITheHydraRenderer {
     /// @notice This takes in the raw byte data in .xqst format and renders a full SVG as an easy to understand string
     /// @dev Draws pixels using xqstgfx, allocates memory for the SVG data, and creates the svg
     /// @param _data The input data, in .xqst format
-    function renderSVG_ToString(bytes memory _data) public view returns (string memory) {
+    function renderSVG_AsString(bytes memory _data) public view returns (string memory) {
         return string(renderSVG(_data));
     }
 
@@ -109,21 +109,21 @@ contract TheHydraRenderer is ITheHydraRenderer {
     // ~~ User Friendly Renderers  ~~
     // --------------------------------------------------------
 
-    function getOnChainPhotoSVG(
-        uint256 id
+    function getOnChainSVG(
+        uint256 _id
     ) external view returns (
         string memory
     ) {
-        bytes memory data = dataStore.getPhotoData(id);
-        return renderSVG_ToString(data);
+        bytes memory data = dataStore.getPhotoData(_id);
+        return renderSVG_AsString(data);
     }
 
-    function getOnChainPhotoSVGAsBase64(
-        uint256 id
+    function getOnChainSVG_AsBase64(
+        uint256 _id
     ) external view returns (
         string memory
     ) {
-        bytes memory data = dataStore.getPhotoData(id);
+        bytes memory data = dataStore.getPhotoData(_id);
         bytes memory svg = renderSVG(data);
 
         // TODO -- need to add in Base64 header string
