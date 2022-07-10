@@ -8,7 +8,7 @@ import "./interfaces/IExquisiteGraphics.sol";
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract TheHydraRender is ITheHydraRenderer {
+contract TheHydraRenderer is ITheHydraRenderer {
     
     // --------------------------------------------------------
     // ~~ Utilities  ~~
