@@ -102,6 +102,8 @@ contract TheHydraRendererTest is DSTest {
     // ~~ Exquisite Graphics SVG Renderers  ~~
     // --------------------------------------------------------
     function testRenderSVG() public {
+        TheHydraRenderer _r = getNewRenderer();
+        // bytes memory result = r.renderSVG();
     }
     function testRenderSVGAsBytesIsPublic() public {
         // TODO -- need to implement xqstgfxMainNet in the testing env
