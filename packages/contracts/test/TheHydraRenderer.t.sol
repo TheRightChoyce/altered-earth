@@ -192,12 +192,32 @@ contract TheHydraRendererTest is DSTest {
     }
 
     function testGetOnChainSVG_AsBase64() public {
-        /// @dev TODO!
-        assertTrue(false);
+        TheHydra _theHydra = getNewHydraContract();
+        TheHydraDataStore _dataStore = getNewDataStore();
+        
+        TheHydraRenderer _r = new TheHydraRenderer(
+            address(_theHydra),
+            address(_dataStore),
+            address(xqstgfx)
+        );
+
+        vm.prank(owner);
+        _dataStore.storePhotoData(0, ArtworkHelper.getXQSTFile0());
+        
+        string memory result0 = _r.getOnChainSVG_AsBase64(0);
+        assertTrue(bytes(result0).length > 0);
+
+        vm.prank(owner);
+        _dataStore.storePhotoData(1, ArtworkHelper.getXQSTFile1());
+        
+        string memory result1 = _r.getOnChainSVG_AsBase64(1);
+        assertTrue(bytes(result1).length > 1);
     }
 
     function testGetOnChainSVG_AsBase64FailsWhenNoData() public {
-        /// @dev TODO!
-        assertTrue(false);
+        TheHydraRenderer _r = getNewRenderer();
+        
+        vm.expectRevert(stdError.arithmeticError);
+        _r.getOnChainSVG_AsBase64(0);
     }
 }

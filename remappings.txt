@@ -2,3 +2,4 @@ forge-std/=packages/contracts/lib/forge-std/src/
 @openzeppelin/=packages/contracts/lib/openzeppelin-contracts/
 erc721a/=packages/contracts/lib/ERC721A/
 solmate/=packages/contracts/lib/solmate/src/
+boringsolidity/=packages/contracts/lib/BoringSolidity/

@@ -9,6 +9,7 @@ import "./interfaces/IExquisiteGraphics.sol";
 import "./lib/DynamicBuffer.sol";
 
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "boringsolidity/contracts/libraries/Base64.sol";
 
 /// @author therightchoyce.eth
 /// @title  Upgradeable renderer interface
@@ -142,8 +143,11 @@ contract TheHydraRenderer is ITheHydraRenderer {
         bytes memory data = dataStore.getPhotoData(_id);
         bytes memory svg = renderSVG(data);
 
-        // TODO -- need to add in Base64 header string
+        bytes memory svgBase64 = DynamicBuffer.allocate(2**19);
 
-        return string(svg);
+        svgBase64.appendSafe("data:image/svg+xml;base64,");
+        svgBase64.appendSafe(bytes(Base64.encode(svg)));
+
+        return string(svgBase64);
     }
 }
