@@ -103,7 +103,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         baseURI = _baseURI;
 
         // therightchoyce.eth and 10% -- can be changed later
-        _royaltyInfo = RoyaltyInfo(
+        royalties = Royalties(
             address(0x18836acedeF35D4A6C00Aae46a36fAdE12ee5FF7),
             1000 // 1000 / 10_000 => 10%
         );
@@ -191,33 +191,33 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
 
     /// @dev Store info about token royalties
-    struct RoyaltyInfo {
+    struct Royalties {
         address receiver;
         uint24 amount;
     }
-    RoyaltyInfo private _royaltyInfo;
+    Royalties private royalties;
 
     /// @notice EIP-2981 royalty standard for on-chain royalties
-    function royaltyInfo(uint256, uint256 salePrice)
+    function royaltyInfo(uint256, uint256 _salePrice)
         external
         view
         returns (address receiver, uint256 royaltyAmount)
     {
-        receiver = _royaltyInfo.receiver;
-        royaltyAmount = (salePrice * _royaltyInfo.amount) / 10_000;
+        receiver = royalties.receiver;
+        royaltyAmount = (_salePrice * royalties.amount) / 10_000;
     }
     
     /// @notice Update royalty information
-    /// @param receiver The receiver of royalty payments
-    /// @param amount The royalty percentage with two decimals (10000 = 100)
+    /// @param _receiver The receiver of royalty payments
+    /// @param _amount The royalty percentage with two decimals (10000 = 100)
     function setRoyaltyInfo(
-        address receiver,
-        uint256 amount
+        address _receiver,
+        uint256 _amount
     )
         external
         onlyOwner
     {
-        _royaltyInfo = RoyaltyInfo(receiver, uint24(amount));
+        royalties = Royalties(_receiver, uint24(_amount));
     }
 
     // --------------------------------------------------------

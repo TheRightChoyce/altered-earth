@@ -395,7 +395,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "salePrice",
+        "name": "_salePrice",
         "type": "uint256"
       }
     ],
@@ -514,12 +514,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "receiver",
+        "name": "_receiver",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "_amount",
         "type": "uint256"
       }
     ],

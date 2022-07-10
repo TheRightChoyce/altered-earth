@@ -98,8 +98,10 @@ contract TheHydraTest is DSTest {
     // --------------------------------------------------------
     function testRoyaltiesAreSetWhenCreated() public {
 
-        uint expectedRoyalty = (mintPrice * royaltyAmount) / 10_000;
+        TheHydra _c = getNewContract();
+        // Don't set anything and use the default royalties
 
+        uint expectedRoyalty = (100 * royaltyAmount) / 10_000;
         (address receiver, uint256 amount) = testContract.royaltyInfo(0, 100);
 
         console.log(receiver, amount);
@@ -116,10 +118,10 @@ contract TheHydraTest is DSTest {
 
     function testSetRoyaltyInfo() public {
         TheHydra _c = getNewContract();
-        uint expectedRoyalty = 1;
-
         vm.prank(owner);
-        _c.setRoyaltyInfo(other, 111);
+        _c.setRoyaltyInfo(other, 500); // 5%
+        
+        uint expectedRoyalty = (100 * 500) / 10_000;
 
         (address receiver, uint256 amount) = _c.royaltyInfo(0, 100);
         assertEq(receiver, other);
