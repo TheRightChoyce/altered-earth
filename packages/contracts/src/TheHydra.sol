@@ -43,7 +43,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
 
     /// @dev When this contract is created
-    event TheHydraAwakens(address indexed from, uint256 tokenId);
+    event TheHydraAwakens();
     
     /// @dev When a new Hydra artwork is acquired, reality becomes altered
     event RealityAltered(address indexed from, uint256 tokenId);
@@ -115,6 +115,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
         /// @dev Use this to compare 0-based counters to for slight gas savings
         _maxMintId = 49;
+
+        emit TheHydraAwakens();
     }
 
     // --------------------------------------------------------
