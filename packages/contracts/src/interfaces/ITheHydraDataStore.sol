@@ -9,6 +9,6 @@ interface ITheHydraDataStore {
     function setOffChainBaseURI(string memory _baseURI) external;
     function getOffChainBaseURI() external view returns (string memory);
 
-    function storePhotoData(uint256 photoId, bytes calldata data) external;
-    function getPhotoData(uint256 photoId) external view returns (bytes memory);
+    function storePhotoData(uint256 _photoId, bytes calldata _data) external;
+    function getPhotoData(uint256 _photoId) external view returns (bytes memory);
 }

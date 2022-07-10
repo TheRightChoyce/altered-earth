@@ -11,8 +11,8 @@ contract TheHydraDataStore is ITheHydraDataStore, Owned {
     // ~~ Internal storage  ~~
     // --------------------------------------------------------
 
-    /// @dev Uri for off chain storage.. i.e. an IPFS link
-    string public offChainBaseURI;
+    /// @dev Uri for off chain storage.. i.e. an IPFS link -- This is private since we need to expose the function in the interface in order to allow for cross-contract interaction
+    string private offChainBaseURI;
     
     /// @dev Byte size of each on-chain photo
     uint256 private constant photoDataByteSize = 4360;
@@ -64,28 +64,28 @@ contract TheHydraDataStore is ITheHydraDataStore, Owned {
 
     /// @notice Admin function to store the on-chain data for a particular photo
     /// @dev Uses SSTORE2 to store bytes data as a stand-alone contract
-    /// @param photoId The id of the photo -- TODO: This may have to change!
-    /// @param data The raw data in the .xqst formar
+    /// @param _photoId The id of the photo -- TODO: This may have to change!
+    /// @param _data The raw data in the .xqst formar
     function storePhotoData(
-        uint256 photoId,
-        bytes calldata data
+        uint256 _photoId,
+        bytes calldata _data
     ) external onlyOwner {
 
         /// @dev Currently storing 1 photo per storage contract -- this can be optimized to chunk more data into each storage contract!
-        if (data.length != photoDataByteSize) revert InvalidMemorySequence();
+        if (_data.length != photoDataByteSize) revert InvalidMemorySequence();
 
-        onChainStorage[photoId] = SSTORE2.write(data);
+        onChainStorage[_photoId] = SSTORE2.write(_data);
     }
 
     /// @notice Gets the data for a photo in .xqst format
     /// @dev Our renderer contract will uses this when generating the metadata
-    /// @param photoId The id of the photo -- TODO: This may have to change!
+    /// @param _photoId The id of the photo -- TODO: This may have to change!
     function getPhotoData(
-        uint256 photoId
+        uint256 _photoId
     ) external view returns (
         bytes memory
     )
     {
-        return SSTORE2.read(onChainStorage[photoId]);
+        return SSTORE2.read(onChainStorage[_photoId]);
     }
 }

@@ -16,7 +16,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "photoId",
+        "name": "_photoId",
         "type": "uint256"
       }
     ],
@@ -48,12 +48,12 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "photoId",
+        "name": "_photoId",
         "type": "uint256"
       },
       {
         "internalType": "bytes",
-        "name": "data",
+        "name": "_data",
         "type": "bytes"
       }
     ],
