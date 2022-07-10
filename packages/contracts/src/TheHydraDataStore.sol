@@ -5,6 +5,10 @@ import "./interfaces/ITheHydraDataStore.sol";
 import "solmate/auth/Owned.sol";
 import "solmate/utils/SSTORE2.sol";
 
+/// @title TheHydra is the genesis collection of the Altered Earth NFT series. 
+/// @author therightchoyce.eth
+/// @notice This contract acts as an on-chain data store for various pieces of the artwork
+/// @dev Uses SSTORE2 to get/set raw data on-chain
 contract TheHydraDataStore is ITheHydraDataStore, Owned {
 
     // --------------------------------------------------------
