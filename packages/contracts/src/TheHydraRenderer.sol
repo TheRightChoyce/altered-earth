@@ -65,10 +65,11 @@ contract TheHydraRenderer is ITheHydraRenderer {
         string calldata renderType
     ) external view returns (string memory)
     {
-        return string(abi.encodePacked(
-            dataStore.getOffChainBaseURI(),
-            id.toString()
-        ));
+        revert("not implemented");
+        // return string(abi.encodePacked(
+        //     dataStore.getOffChainBaseURI(),
+        //     id.toString()
+        // ));
     }
 
     // --------------------------------------------------------

@@ -77,17 +77,44 @@ contract TheHydraRendererTest is DSTest {
         assertEq(expected, _r.tokenURI(0));
     }
 
+    function testTokenURIIsPublic() public {
+        TheHydraRenderer _r = getNewRenderer();
+        
+        vm.prank(minter);
+        _r.tokenURI(0);
+
+        vm.prank(other);
+        _r.tokenURI(1);
+    }
+    function testTokenURIWithRenderType() public {
+
+        TheHydraRenderer _r = getNewRenderer();
+        
+        string memory result = _r.tokenURI(0, "128x128");
+    }
+
     // --------------------------------------------------------
     // ~~ Exquisite Graphics SVG Renderers  ~~
     // --------------------------------------------------------
+    function testDrawSVGToBytes() public {
+        // TODO -- need to implement xqstgfx in the testing env
+    }
+    function testDrawSVGToBytesIsPublic() public {
+        // TODO -- need to implement xqstgfx in the testing env
+    }
 
-    // TODO
+    function testDrawSVGToString() public {
+        // TODO -- need to implement xqstgfx in the testing env
+    }
+    function testDrawSVGToStringIsPublic() public {
+        // TODO -- need to implement xqstgfx in the testing env
+    }
 
     // --------------------------------------------------------
     // ~~ User Friendly Renderers  ~~
     // --------------------------------------------------------
 
-    // TODO
+    // TODO -- need to implement xqstgfx in the testing env
 
 
 }
