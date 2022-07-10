@@ -56,7 +56,7 @@ contract TheHydraRendererTest is DSTest {
         TheHydraRenderer _renderer = new TheHydraRenderer(
             address(_theHydra),
             address(_dataStore),
-            xqstgfxMainNet
+            address(xqstgfx)
         );
 
         assertEq(address(_renderer.theHydra()), address(_theHydra));
@@ -101,8 +101,7 @@ contract TheHydraRendererTest is DSTest {
     // --------------------------------------------------------
     // ~~ Exquisite Graphics SVG Renderers  ~~
     // --------------------------------------------------------
-    function testRenderSVGAsBytes() public {
-        // TODO -- need to implement xqstgfxMainNet in the testing env
+    function testRenderSVG() public {
     }
     function testRenderSVGAsBytesIsPublic() public {
         // TODO -- need to implement xqstgfxMainNet in the testing env

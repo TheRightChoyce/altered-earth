@@ -10,6 +10,10 @@ import "./lib/DynamicBuffer.sol";
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 
+/// @author therightchoyce.eth
+/// @title  Upgradeable renderer interface
+/// @notice This leaves room for us to change how we return token metadata and
+///         unlocks future capability like fully on-chain storage.
 contract TheHydraRenderer is ITheHydraRenderer {
     
     // --------------------------------------------------------
@@ -54,7 +58,11 @@ contract TheHydraRenderer is ITheHydraRenderer {
 
     /// @notice Standard URI function to get the token metadata
     /// @param _id Id of token
-    function tokenURI(uint256 _id) override public view returns (string memory) {
+    function tokenURI(
+        uint256 _id
+    ) override public view returns (
+        string memory
+    ) {
         return string(abi.encodePacked(
             dataStore.getOffChainBaseURI(),
             _id.toString()
@@ -84,7 +92,11 @@ contract TheHydraRenderer is ITheHydraRenderer {
     /// @notice This takes in the raw byte data in .xqst format and renders a full SVG to bytes memory
     /// @dev Draws pixels using xqstgfx, allocates memory for the SVG data, and creates the svg
     /// @param _data The input data, in .xqst format
-    function renderSVG(bytes memory _data) public view returns (bytes memory) {
+    function renderSVG(
+        bytes memory _data
+    ) public view returns (
+        bytes memory
+    ) {
         string memory rects = xqstgfx.drawPixelsUnsafe(_data);
         bytes memory svg = DynamicBuffer.allocate(2**19);
 
@@ -101,7 +113,11 @@ contract TheHydraRenderer is ITheHydraRenderer {
     /// @notice This takes in the raw byte data in .xqst format and renders a full SVG as an easy to understand string
     /// @dev Draws pixels using xqstgfx, allocates memory for the SVG data, and creates the svg
     /// @param _data The input data, in .xqst format
-    function renderSVG_AsString(bytes memory _data) public view returns (string memory) {
+    function renderSVG_AsString(
+        bytes memory _data
+    ) public view returns (
+        string memory
+    ) {
         return string(renderSVG(_data));
     }
 
