@@ -13,3 +13,6 @@
 [submodule "packages/contracts/lib/solidity-dynamic-buffer"]
 	path = packages/contracts/lib/solidity-dynamic-buffer
 	url = https://github.com/dievardump/solidity-dynamic-buffer
+[submodule "packages/contracts/lib/BoringSolidity"]
+	path = packages/contracts/lib/BoringSolidity
+	url = https://github.com/boringcrypto/BoringSolidity
