@@ -10,6 +10,7 @@ import "forge-std/Vm.sol";
 import "../src/TheHydra.sol";
 import "../src/TheHydraRenderer.sol";
 import "../src/TheHydraDataStore.sol";
+import "./mocks/ExquisiteGraphics.mock.sol";
 
 contract TheHydraRendererTest is DSTest {
     // --------------------------------------------------------
@@ -18,7 +19,8 @@ contract TheHydraRendererTest is DSTest {
     Vm private vm = Vm(HEVM_ADDRESS);
 
     // external addresses
-    address xqstgfx = 0xDf01A4040493B514605392620B3a0a05Eb8Cd295;
+    address xqstgfxMainNet = 0xDf01A4040493B514605392620B3a0a05Eb8Cd295;
+    ExquisiteGraphics xqstgfx = new ExquisiteGraphics();
 
     // Wallets to use for testing
     address private owner = vm.addr(uint256(keccak256(abi.encodePacked("owner"))));
@@ -41,7 +43,10 @@ contract TheHydraRendererTest is DSTest {
     function getNewRenderer() public returns (TheHydraRenderer) {
         TheHydra _theHydra = getNewHydraContract();
         TheHydraDataStore _dataStore = getNewDataStore();
-        return new TheHydraRenderer(address(_theHydra), address(_dataStore), xqstgfx);
+        
+        return new TheHydraRenderer(
+            address(_theHydra), address(_dataStore), address(xqstgfx)
+        );
     }
 
     function testConstructor() public {
@@ -51,12 +56,12 @@ contract TheHydraRendererTest is DSTest {
         TheHydraRenderer _renderer = new TheHydraRenderer(
             address(_theHydra),
             address(_dataStore),
-            xqstgfx
+            xqstgfxMainNet
         );
 
         assertEq(address(_renderer.theHydra()), address(_theHydra));
         assertEq(address(_renderer.dataStore()), address(_dataStore));
-        assertEq(address(_renderer.xqstgfx()), xqstgfx);
+        assertEq(address(_renderer.xqstgfx()), address(xqstgfx));
     }
 
     // --------------------------------------------------------
@@ -70,7 +75,7 @@ contract TheHydraRendererTest is DSTest {
         TheHydraRenderer _r = new TheHydraRenderer(
             address(_theHydra),
             address(_dataStore),
-            xqstgfx
+            address(xqstgfx)
         );
 
         string memory expected = string(abi.encodePacked(_dataStore.getOffChainBaseURI(), "0"));
@@ -96,25 +101,25 @@ contract TheHydraRendererTest is DSTest {
     // --------------------------------------------------------
     // ~~ Exquisite Graphics SVG Renderers  ~~
     // --------------------------------------------------------
-    function testDrawSVGToBytes() public {
-        // TODO -- need to implement xqstgfx in the testing env
+    function testRenderSVGAsBytes() public {
+        // TODO -- need to implement xqstgfxMainNet in the testing env
     }
-    function testDrawSVGToBytesIsPublic() public {
-        // TODO -- need to implement xqstgfx in the testing env
+    function testRenderSVGAsBytesIsPublic() public {
+        // TODO -- need to implement xqstgfxMainNet in the testing env
     }
 
-    function testDrawSVGToString() public {
-        // TODO -- need to implement xqstgfx in the testing env
+    function testRenderSVGAsString() public {
+        // TODO -- need to implement xqstgfxMainNet in the testing env
     }
-    function testDrawSVGToStringIsPublic() public {
-        // TODO -- need to implement xqstgfx in the testing env
+    function testRenderSVGAsStringIsPublic() public {
+        // TODO -- need to implement xqstgfxMainNet in the testing env
     }
 
     // --------------------------------------------------------
     // ~~ User Friendly Renderers  ~~
     // --------------------------------------------------------
 
-    // TODO -- need to implement xqstgfx in the testing env
+    // TODO -- need to implement xqstgfxMainNet in the testing env
 
 
 }

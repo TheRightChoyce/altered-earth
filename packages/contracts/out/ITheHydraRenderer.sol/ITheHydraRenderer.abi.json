@@ -3,11 +3,11 @@
     "inputs": [
       {
         "internalType": "bytes",
-        "name": "data",
+        "name": "_data",
         "type": "bytes"
       }
     ],
-    "name": "drawSVGToBytes",
+    "name": "renderSVG",
     "outputs": [
       {
         "internalType": "bytes",
@@ -22,11 +22,11 @@
     "inputs": [
       {
         "internalType": "bytes",
-        "name": "data",
+        "name": "_data",
         "type": "bytes"
       }
     ],
-    "name": "drawSVGToString",
+    "name": "renderSVG_ToString",
     "outputs": [
       {
         "internalType": "string",
@@ -41,12 +41,12 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "_id",
         "type": "uint256"
       },
       {
         "internalType": "string",
-        "name": "renderType",
+        "name": "_renderType",
         "type": "string"
       }
     ],
@@ -65,7 +65,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "_id",
         "type": "uint256"
       }
     ],

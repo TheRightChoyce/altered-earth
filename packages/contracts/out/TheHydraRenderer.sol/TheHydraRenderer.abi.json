@@ -36,44 +36,6 @@
   {
     "inputs": [
       {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "drawSVGToBytes",
-    "outputs": [
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "drawSVGToString",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "id",
         "type": "uint256"
@@ -110,6 +72,44 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
+    ],
+    "name": "renderSVG",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
+    ],
+    "name": "renderSVG_ToString",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "theHydra",
     "outputs": [
@@ -126,12 +126,12 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "id",
+        "name": "_id",
         "type": "uint256"
       },
       {
         "internalType": "string",
-        "name": "renderType",
+        "name": "_renderType",
         "type": "string"
       }
     ],
@@ -150,7 +150,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "id",
+        "name": "_id",
         "type": "uint256"
       }
     ],
