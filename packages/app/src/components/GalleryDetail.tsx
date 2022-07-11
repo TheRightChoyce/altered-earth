@@ -27,11 +27,18 @@ export const GalleryDetail = ({
   const isMounted = useIsMounted();
   const { address } = useAccount();
   const [hasOwner, setHasOwner] = useState(false);
+  const [tokenLoaded, setTokenLoaded] = useState(false);
+  const [previousPhoto, setPreviousPhoto] = useState(-1);
+
+  console.log(tokenLoaded, previousPhoto);
+  console.log(`photoId: ${photoId?.toString()}`);
+
   const owner = useTheHydraContractRead({
-    functionName: "ownerOf",
+    functionName: "ownerOfOrNull",
     args: photoId?.toString(),
     watch: true,
     onError(error) {
+      setTokenLoaded(true);
       const contractError = extractContractError(error);
       if (contractError !== "NOT_MINTED") {
         throw error;
@@ -43,16 +50,33 @@ export const GalleryDetail = ({
         if (contractError !== "NOT_MINTED") {
           throw error;
         }
+        setTokenLoaded(true);
       }
-      setHasOwner(data ? true : false);
+      setHasOwner(
+        data?.toString() === "0x0000000000000000000000000000000000000000"
+          ? false
+          : true
+      );
+      setTokenLoaded(true);
     },
     onSuccess(data) {
-      setHasOwner(data ? true : false);
+      console.log(data);
+      setHasOwner(
+        data?.toString() === "0x0000000000000000000000000000000000000000"
+          ? false
+          : true
+      );
+      setTokenLoaded(true);
     },
   });
 
+  if (previousPhoto != photoId) {
+    setPreviousPhoto(photoId);
+    setTokenLoaded(false);
+  }
+
   if (!isMounted) {
-    return null;
+    return <div>...</div>;
   }
 
   if (isNaN(photoId) || photoId < 0 || photoId > collection.photos.length) {
@@ -66,25 +90,25 @@ export const GalleryDetail = ({
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-16 lg:gap-32">
       <div className="col-span-3">
         {/* <!-- photo --> */}
         <div>
-          <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <div
-              className={`${
-                address ? "grayscale-0" : "grayscale"
-              } transition-all ease-in-out duration-5000 border-8 border-white`}
-            >
+          <div
+            className={`${
+              address ? "grayscale-0" : "grayscale"
+            } transition-colors ease-in-out duration-5000 border-4 md:border-8 border-white photoPreview overflow-hidden m-auto`}
+          >
+            {tokenLoaded && (
               <Image
+                layout="fill"
+                width="768"
+                height="1024"
                 src={photo.previewImageUri}
-                layout="responsive"
-                width="75%"
-                height="100%"
-                objectFit="contain"
                 alt={photo.name}
+                priority={true}
               />
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -126,23 +150,52 @@ export const GalleryDetail = ({
 
         {/* <!-- Info --> */}
         <div className="pt-8">
-          <h2 className="text-3xl">{photo.name}</h2>
-          <OwnerName address={owner.data?.toString()} className="mt-4" />
-          {!hasOwner && (
-            <div className="mt-4">
-              <MintButton
-                tokenId={photo.id}
-                disabled={address ? false : true}
-                label={address ? "Alter your Reality" : "Dream state required"}
+          <h2 className="text-3xl">
+            #{photo.id}
+            {" // "}
+            {photo.name}
+          </h2>
+          <div className="mt-4 h-24 bg-slate-800">
+            {!tokenLoaded && (
+              <div className="animate-spin">
+                <svg className="spinner" viewBox="0 0 50 50">
+                  <circle
+                    className="path"
+                    cx="25"
+                    cy="25"
+                    r="20"
+                    fill="none"
+                    strokeWidth="5"
+                  ></circle>
+                </svg>
+              </div>
+            )}
+
+            {tokenLoaded && hasOwner && (
+              <OwnerName
+                address={owner.data?.toString()}
+                className="mt-4 h-24 p-4 overflow-hidden"
               />
-              <div className="text-center py-4 bg-slate-800">0.25 ETH</div>
-              {address ? null : (
-                <div className="mt-2 italic text-center">
-                  (Connect your wallet to enter a dream state)
-                </div>
-              )}
-            </div>
-          )}
+            )}
+
+            {tokenLoaded && !hasOwner && (
+              <>
+                <MintButton
+                  tokenId={photo.id}
+                  disabled={address ? false : true}
+                  label={
+                    address ? "Alter your Reality" : "Dream state required"
+                  }
+                />
+                <div className="text-center mt-3">0.25 ETH</div>
+                {address ? null : (
+                  <div className="mt-2 italic text-center">
+                    (Connect your wallet to enter a dream state)
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
           <div className="mt-8 mb-8">
             <p className="mb-4">{photo.description}</p>

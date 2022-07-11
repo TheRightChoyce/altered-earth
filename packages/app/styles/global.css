@@ -17,3 +17,22 @@ h6 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 50;
 }
+
+.photoPreview {
+    height: 512px;
+    width: 384px;
+}
+
+@media (min-width: 1024px) {
+    .photoPreview {
+        height: 768px;
+        width: 576px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .photoPreview {
+        height: 1024px;
+        width: 768px;
+    }
+}
