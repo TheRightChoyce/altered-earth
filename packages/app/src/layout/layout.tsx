@@ -46,9 +46,9 @@ const Layout: React.FC = ({ children }) => {
                 <Link href="/">
                   <a>
                     <Image
-                      src="/altered-earth.svg"
+                      src="/altered-earth-sm.png"
                       width={200}
-                      height={20}
+                      height={14}
                       alt="Altered Earth"
                     />
                   </a>
@@ -61,7 +61,7 @@ const Layout: React.FC = ({ children }) => {
               </div>
             </div>
 
-            <div className="flex-grow flex flex-col gap-4 items-center justify-center p-16 pb-[10vh]">
+            <div className="flex-grow flex flex-col gap-4 items-center pb-[10vh]">
               {children}
             </div>
           </div>

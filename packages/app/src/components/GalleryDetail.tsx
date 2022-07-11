@@ -10,6 +10,7 @@ import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
 import { OwnerName } from "./OwnerName";
 import { PhotoCollection } from "./PhotoCollection";
+import { Spinner } from "./Spinner";
 
 const notFound = (
   <div className="flex flex-col w-full text-center">
@@ -91,9 +92,9 @@ export const GalleryDetail = ({
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-16 lg:gap-32">
-      <div className="col-span-3">
-        {/* <!-- photo --> */}
+    <div className="grid grid-cols-1 lg:grid-cols-5">
+      {/* Top / Left column  */}
+      <div className="lg:col-span-3">
         <div>
           <div
             className={`${
@@ -113,10 +114,10 @@ export const GalleryDetail = ({
           </div>
         </div>
       </div>
-      {/* Right column */}
-      <div className="col-span-2 text-sm">
+      {/* Bottom / Right column */}
+      <div className="lg:col-span-2 text-sm ml-[1vw] mt-[3vw] mr-[2vw] lg:mt-0">
         {/* <!-- nav --> */}
-        <div className="flex justify-between">
+        <div className="flex justify-between m-auto max-w-sm lg:max-w-lg">
           <div>
             <Link href={`/the-hydra/${navigatePreviousPhotoId}`}>
               <a>
@@ -150,7 +151,7 @@ export const GalleryDetail = ({
         </div>
 
         {/* <!-- Info --> */}
-        <div className="pt-8">
+        <div className="pt-8 max-w-sm mx-auto lg:max-w-lg">
           <h2 className="text-3xl">
             #{photo.id}
             {" // "}
@@ -158,17 +159,8 @@ export const GalleryDetail = ({
           </h2>
           <div className="mt-4 h-24 bg-slate-800">
             {!tokenLoaded && (
-              <div className="animate-spin">
-                <svg className="spinner" viewBox="0 0 50 50">
-                  <circle
-                    className="path"
-                    cx="25"
-                    cy="25"
-                    r="20"
-                    fill="none"
-                    strokeWidth="5"
-                  ></circle>
-                </svg>
+              <div className="pt-8">
+                <Spinner />
               </div>
             )}
 
