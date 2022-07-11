@@ -27,17 +27,17 @@
   },
   {
     "inputs": [],
+    "name": "ConsciousnessNotActivated",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "CouldNotAlterReality",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "InvalidDreamState",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "MemoryNotActivated",
     "type": "error"
   },
   {
@@ -110,7 +110,7 @@
         "type": "address"
       }
     ],
-    "name": "NewRealityIsVisualized",
+    "name": "ConsciousnessActivated",
     "type": "event"
   },
   {

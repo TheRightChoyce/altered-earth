@@ -49,7 +49,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     event RealityAltered(address indexed from, uint256 tokenId);
 
     /// @dev When the renderer contract is set and available
-    event NewRealityIsVisualized(address indexed renderer);
+    event ConsciousnessActivated(address indexed renderer);
 
     // --------------------------------------------------------
     // ~~ Errors ~~
@@ -60,7 +60,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     error RealityAlreadyAltered();
     error PayeeNotInDreamState();
     error InvalidDreamState();
-    error MemoryNotActivated();
+    error ConsciousnessNotActivated();
 
     // --------------------------------------------------------
     // ~~ Modifiers ~~
@@ -129,15 +129,18 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @param _renderer The address of the metadata contract
     function setRenderer(ITheHydraRenderer _renderer) external onlyOwner {
         renderer = _renderer;
-        emit NewRealityIsVisualized(address(_renderer));
+        emit ConsciousnessActivated(address(_renderer));
     }
 
     /// @notice Standard URI function to get the token metadata
     /// @param id Id of token requested
     function tokenURI(uint256 id) override public view returns (string memory) {
 
-        // By default, this reverts if a token isn't owned
+        /// @dev Ensure this id is in a dream state
         if (_ownerOf[id] == address(0)) revert BeyondTheScopeOfConsciousness();
+
+        /// @dev Ensure a rendering contract is set
+        if(address(renderer) == address(0)) revert ConsciousnessNotActivated();
         
         return renderer.tokenURI(id);
     }
