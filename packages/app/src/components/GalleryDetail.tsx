@@ -30,8 +30,10 @@ export const GalleryDetail = ({
   const [tokenLoaded, setTokenLoaded] = useState(false);
   const [previousPhoto, setPreviousPhoto] = useState(-1);
 
-  console.log(tokenLoaded, previousPhoto);
-  console.log(`photoId: ${photoId?.toString()}`);
+  const navigatePreviousPhotoId =
+    photoId === 0 ? collection.photos.length - 1 : photoId - 1;
+  const navigateNextPhotoId =
+    photoId === collection.photos.length - 1 ? 0 : photoId + 1;
 
   const owner = useTheHydraContractRead({
     functionName: "ownerOfOrNull",
@@ -60,7 +62,6 @@ export const GalleryDetail = ({
       setTokenLoaded(true);
     },
     onSuccess(data) {
-      console.log(data);
       setHasOwner(
         data?.toString() === "0x0000000000000000000000000000000000000000"
           ? false
@@ -117,7 +118,7 @@ export const GalleryDetail = ({
         {/* <!-- nav --> */}
         <div className="flex justify-between">
           <div>
-            <Link href={`/the-hydra/${photo.id - 1}`}>
+            <Link href={`/the-hydra/${navigatePreviousPhotoId}`}>
               <a>
                 <Image
                   src="/arrow-left.svg"
@@ -128,7 +129,7 @@ export const GalleryDetail = ({
               </a>
             </Link>
             <div className="w-4 inline-block">&nbsp;</div>
-            <Link href={`/the-hydra/${photo.id + 1}`}>
+            <Link href={`/the-hydra/${navigateNextPhotoId}`}>
               <a>
                 <Image
                   src="/arrow-right.svg"
