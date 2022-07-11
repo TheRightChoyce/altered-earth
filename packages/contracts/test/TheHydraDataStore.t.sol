@@ -130,15 +130,15 @@ contract TheHydraDataStoreTest is DSTest {
         TheHydraDataStore _d = getNewDataStore();
         
         vm.expectRevert(stdError.arithmeticError);
-        bytes memory result0 = _d.getPhotoData(0);
+        _d.getPhotoData(0);
         vm.expectRevert(stdError.arithmeticError);
-        bytes memory result1 = _d.getPhotoData(1);
+        _d.getPhotoData(1);
 
         vm.prank(owner);
         _d.storePhotoData(0, ArtworkHelper.getXQSTFile0());
-
-        bytes memory result2 = _d.getPhotoData(0);
+        _d.getPhotoData(0);
+        
         vm.expectRevert(stdError.arithmeticError);
-        bytes memory result3 = _d.getPhotoData(1);
+        _d.getPhotoData(1);
     }
 }

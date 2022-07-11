@@ -222,22 +222,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     }
 
     // --------------------------------------------------------
-    // ~~ Helper functions ~~
-    // --------------------------------------------------------
-    /// @notice Returns the owner of a token, or the zero address if unowned
-    /// @dev This is implemented as a helper for the dapp -- this funtion will not revert when a token is unowned, making it easier to check ownership from the front-end
-    /// @param id The id of the token
-    /// @return owner address Either the current owner or address(0)
-    function ownerOfOrNull(uint256 id) public view returns (address owner)
-    {
-        return _ownerOf[id];
-    }
-
-    // Upload
-
-    // On-chain preview
-
-    // --------------------------------------------------------
     // Withdraw ETH in contract
     // --------------------------------------------------------
     function withdrawPayments(address payable payee) external onlyOwner {
