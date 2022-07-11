@@ -41,12 +41,14 @@ export interface TheHydraInterface extends utils.Interface {
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "ownerOfOrNull(uint256)": FunctionFragment;
+    "renderer()": FunctionFragment;
     "returnToReality(uint256)": FunctionFragment;
     "royaltyInfo(uint256,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setOwner(address)": FunctionFragment;
+    "setRenderer(address)": FunctionFragment;
     "setRoyaltyInfo(address,uint256)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -69,12 +71,14 @@ export interface TheHydraInterface extends utils.Interface {
       | "owner"
       | "ownerOf"
       | "ownerOfOrNull"
+      | "renderer"
       | "returnToReality"
       | "royaltyInfo"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
       | "setOwner"
+      | "setRenderer"
       | "setRoyaltyInfo"
       | "supportsInterface"
       | "symbol"
@@ -116,6 +120,7 @@ export interface TheHydraInterface extends utils.Interface {
     functionFragment: "ownerOfOrNull",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(functionFragment: "renderer", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "returnToReality",
     values: [PromiseOrValue<BigNumberish>]
@@ -147,6 +152,10 @@ export interface TheHydraInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setOwner",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setRenderer",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -202,6 +211,7 @@ export interface TheHydraInterface extends utils.Interface {
     functionFragment: "ownerOfOrNull",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "renderer", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "returnToReality",
     data: BytesLike
@@ -223,6 +233,10 @@ export interface TheHydraInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setOwner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setRenderer",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "setRoyaltyInfo",
     data: BytesLike
@@ -249,15 +263,19 @@ export interface TheHydraInterface extends utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "ConsciousnessActivated(address)": EventFragment;
     "OwnerUpdated(address,address)": EventFragment;
     "RealityAltered(address,uint256)": EventFragment;
+    "TheHydraAwakens()": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ConsciousnessActivated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnerUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RealityAltered"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TheHydraAwakens"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
@@ -285,6 +303,17 @@ export type ApprovalForAllEvent = TypedEvent<
 
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
+export interface ConsciousnessActivatedEventObject {
+  renderer: string;
+}
+export type ConsciousnessActivatedEvent = TypedEvent<
+  [string],
+  ConsciousnessActivatedEventObject
+>;
+
+export type ConsciousnessActivatedEventFilter =
+  TypedEventFilter<ConsciousnessActivatedEvent>;
+
 export interface OwnerUpdatedEventObject {
   user: string;
   newOwner: string;
@@ -306,6 +335,11 @@ export type RealityAlteredEvent = TypedEvent<
 >;
 
 export type RealityAlteredEventFilter = TypedEventFilter<RealityAlteredEvent>;
+
+export interface TheHydraAwakensEventObject {}
+export type TheHydraAwakensEvent = TypedEvent<[], TheHydraAwakensEventObject>;
+
+export type TheHydraAwakensEventFilter = TypedEventFilter<TheHydraAwakensEvent>;
 
 export interface TransferEventObject {
   from: string;
@@ -391,6 +425,8 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string] & { owner: string }>;
 
+    renderer(overrides?: CallOverrides): Promise<[string]>;
+
     returnToReality(
       id: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -398,7 +434,7 @@ export interface TheHydra extends BaseContract {
 
     royaltyInfo(
       arg0: PromiseOrValue<BigNumberish>,
-      salePrice: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
       [string, BigNumber] & { receiver: string; royaltyAmount: BigNumber }
@@ -430,9 +466,14 @@ export interface TheHydra extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setRenderer(
+      _renderer: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     setRoyaltyInfo(
-      receiver: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
+      _receiver: PromiseOrValue<string>,
+      _amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -508,6 +549,8 @@ export interface TheHydra extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  renderer(overrides?: CallOverrides): Promise<string>;
+
   returnToReality(
     id: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -515,7 +558,7 @@ export interface TheHydra extends BaseContract {
 
   royaltyInfo(
     arg0: PromiseOrValue<BigNumberish>,
-    salePrice: PromiseOrValue<BigNumberish>,
+    _salePrice: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<
     [string, BigNumber] & { receiver: string; royaltyAmount: BigNumber }
@@ -547,9 +590,14 @@ export interface TheHydra extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setRenderer(
+    _renderer: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   setRoyaltyInfo(
-    receiver: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
+    _receiver: PromiseOrValue<string>,
+    _amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -625,6 +673,8 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    renderer(overrides?: CallOverrides): Promise<string>;
+
     returnToReality(
       id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -632,7 +682,7 @@ export interface TheHydra extends BaseContract {
 
     royaltyInfo(
       arg0: PromiseOrValue<BigNumberish>,
-      salePrice: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
       [string, BigNumber] & { receiver: string; royaltyAmount: BigNumber }
@@ -664,9 +714,14 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setRenderer(
+      _renderer: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setRoyaltyInfo(
-      receiver: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
+      _receiver: PromiseOrValue<string>,
+      _amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -720,6 +775,13 @@ export interface TheHydra extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
+    "ConsciousnessActivated(address)"(
+      renderer?: PromiseOrValue<string> | null
+    ): ConsciousnessActivatedEventFilter;
+    ConsciousnessActivated(
+      renderer?: PromiseOrValue<string> | null
+    ): ConsciousnessActivatedEventFilter;
+
     "OwnerUpdated(address,address)"(
       user?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
@@ -737,6 +799,9 @@ export interface TheHydra extends BaseContract {
       from?: PromiseOrValue<string> | null,
       tokenId?: null
     ): RealityAlteredEventFilter;
+
+    "TheHydraAwakens()"(): TheHydraAwakensEventFilter;
+    TheHydraAwakens(): TheHydraAwakensEventFilter;
 
     "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
@@ -796,6 +861,8 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    renderer(overrides?: CallOverrides): Promise<BigNumber>;
+
     returnToReality(
       id: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -803,7 +870,7 @@ export interface TheHydra extends BaseContract {
 
     royaltyInfo(
       arg0: PromiseOrValue<BigNumberish>,
-      salePrice: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -833,9 +900,14 @@ export interface TheHydra extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setRenderer(
+      _renderer: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     setRoyaltyInfo(
-      receiver: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
+      _receiver: PromiseOrValue<string>,
+      _amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -912,6 +984,8 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    renderer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     returnToReality(
       id: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -919,7 +993,7 @@ export interface TheHydra extends BaseContract {
 
     royaltyInfo(
       arg0: PromiseOrValue<BigNumberish>,
-      salePrice: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -949,9 +1023,14 @@ export interface TheHydra extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    setRenderer(
+      _renderer: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     setRoyaltyInfo(
-      receiver: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
+      _receiver: PromiseOrValue<string>,
+      _amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
