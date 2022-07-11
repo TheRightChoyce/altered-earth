@@ -37,6 +37,11 @@
   },
   {
     "inputs": [],
+    "name": "MemoryNotActivated",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "PayeeNotInDreamState",
     "type": "error"
   },

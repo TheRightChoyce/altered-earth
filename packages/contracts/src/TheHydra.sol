@@ -60,6 +60,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     error RealityAlreadyAltered();
     error PayeeNotInDreamState();
     error InvalidDreamState();
+    error MemoryNotActivated();
 
     // --------------------------------------------------------
     // ~~ Modifiers ~~
@@ -138,10 +139,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         // By default, this reverts if a token isn't owned
         if (_ownerOf[id] == address(0)) revert BeyondTheScopeOfConsciousness();
         
-        return
-            bytes(baseURI).length > 0
-                ? string(abi.encodePacked(baseURI, id.toString()))
-                : "";
+        return renderer.tokenURI(id);
     }
 
     // --------------------------------------------------------

@@ -72,7 +72,7 @@ contract TheHydraTest is DSTest {
         vm.expectEmit(false, false, false, true);
         emit TheHydraAwakens();
 
-        TheHydra _hydra = getNewContract();
+        getNewContract();
     }
 
 
@@ -98,13 +98,11 @@ contract TheHydraTest is DSTest {
     // --------------------------------------------------------
     function testRoyaltiesAreSetWhenCreated() public {
 
-        TheHydra _c = getNewContract();
         // Don't set anything and use the default royalties
 
         uint expectedRoyalty = (100 * royaltyAmount) / 10_000;
         (address receiver, uint256 amount) = testContract.royaltyInfo(0, 100);
 
-        console.log(receiver, amount);
         assertEq(royaltyReceiver, receiver);
         assertEq(expectedRoyalty, amount);
     }
@@ -171,6 +169,15 @@ contract TheHydraTest is DSTest {
     // --------------------------------------------------------
     // ~~ Metadata ~~
     // --------------------------------------------------------
+    function testTokenURIRevertsWhenNoRenderer() public {
+        TheHydra _c = getNewContract();
+        
+        vm.prank(minter);
+        _c.alterReality{value: mintPrice}(0);
+        
+        vm.expectRevert(TheHydra.MemoryNotActivated.selector);
+        _c.tokenURI(0);
+    }
     function testTokenURIForNonExistingToken() public {
         TheHydra _c = getNewContract();
         
@@ -178,13 +185,14 @@ contract TheHydraTest is DSTest {
         _c.tokenURI(0);
     }
     function testTokenURIForExistingToken() public {
-        // TheHydraRenderer _r = getNewRenderer();
         TheHydra _c = getNewContract();
         vm.prank(minter);
         _c.alterReality{value: mintPrice}(0);
         string memory uri = _c.tokenURI(0);
 
-        assertEq(uri, "baseUri0");
+        console.log(uri);
+
+        assertTrue(bytes(uri).length > 0);
     }
 
     function testSetRenderer() public {
