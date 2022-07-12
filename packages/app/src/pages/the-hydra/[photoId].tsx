@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import type { ReactElement } from "react";
@@ -24,11 +25,9 @@ const TheHydraDetailPage: NextPageWithLayout = () => {
 
   return (
     <>
-      <Link href="/the-hydra">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl uppercase text-center mb-8">
-          <a>The Hydra Collection</a>
-        </h1>
-      </Link>
+      {/* <h1 className="text-6xl leading-relaxed md:text-5xl lg:text-6xl uppercase text-center mt-8">
+        The Hydra
+      </h1> */}
       <GalleryDetail collection={theHydraCollection} photoId={photoId} />
     </>
   );

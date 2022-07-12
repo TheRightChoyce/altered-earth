@@ -4,7 +4,7 @@ import { PhotoCollection } from "../components/PhotoCollection";
 const collection = new PhotoCollection(
   0,
   "The Hydra",
-  "The hydra exists where the river meets the woods."
+  "The Hydra Collection explores this Earth tree through the lens of deep textures and wonderful colors. Each photo represents a small portion of The Hydra starting with its majestic heads and working across each intricate skin texture and tone."
 );
 
 collection.addPhoto(

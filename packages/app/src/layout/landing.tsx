@@ -14,7 +14,7 @@ export const graphClient = createGraphClient({
   url: "https://api.thegraph.com/subgraphs/name/holic/example-nft",
 });
 
-const Layout: React.FC = ({ children }) => {
+const Landing: React.FC = ({ children }) => {
   return (
     <>
       <Head>
@@ -40,8 +40,7 @@ const Layout: React.FC = ({ children }) => {
         <EthereumProviders>
           <div className="min-h-screen bg-slate-900 text-slate-100">
             <ConnectBar />
-
-            <div className="flex-grow flex flex-col gap-4 items-center pb-[10vh]">
+            <div className="flex-grow flex flex-col gap-4 pb-[10vh] justify-between align-middle">
               {children}
             </div>
           </div>
@@ -54,4 +53,4 @@ const Layout: React.FC = ({ children }) => {
   );
 };
 
-export default Layout;
+export default Landing;

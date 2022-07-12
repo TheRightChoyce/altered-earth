@@ -1,13 +1,13 @@
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useTheHydraContractRead } from "../contracts";
 import { extractContractError } from "../extractContractError";
-import { MintButton } from "../MintButton";
 import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
+import { GalleryMintButton } from "./GalleryMintButton";
+import { GalleryNav } from "./GalleryNav";
 import { OwnerName } from "./OwnerName";
 import { PhotoCollection } from "./PhotoCollection";
 import { Spinner } from "./Spinner";
@@ -26,15 +26,10 @@ export const GalleryDetail = ({
   photoId: number;
 }) => {
   const isMounted = useIsMounted();
-  const { address } = useAccount();
+  const { address, isConnected, isDisconnected } = useAccount();
   const [hasOwner, setHasOwner] = useState(false);
   const [tokenLoaded, setTokenLoaded] = useState(false);
   const [previousPhoto, setPreviousPhoto] = useState(-1);
-
-  const navigatePreviousPhotoId =
-    photoId === 0 ? collection.photos.length - 1 : photoId - 1;
-  const navigateNextPhotoId =
-    photoId === collection.photos.length - 1 ? 0 : photoId + 1;
 
   const owner = useTheHydraContractRead({
     functionName: "ownerOfOrNull",
@@ -92,134 +87,113 @@ export const GalleryDetail = ({
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5">
-      {/* Top / Left column  */}
-      <div className="lg:col-span-3">
-        <div>
-          <div
-            className={`${
-              address ? "grayscale-0" : "grayscale"
-            } transition-colors ease-in-out duration-5000 border-4 md:border-8 border-white photoPreview overflow-hidden m-auto`}
-          >
-            {tokenLoaded && (
-              <Image
-                layout="fill"
-                width="768"
-                height="1024"
-                src={photo.previewImageUri}
-                alt={photo.name}
-                priority={true}
-              />
-            )}
-          </div>
-        </div>
-      </div>
-      {/* Bottom / Right column */}
-      <div className="lg:col-span-2 text-sm ml-[1vw] mt-[3vw] mr-[2vw] lg:mt-0">
-        {/* <!-- nav --> */}
-        <div className="flex justify-between m-auto max-w-sm lg:max-w-lg">
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:mt-[2vh]">
+        {/* Top / Left column  */}
+        <div className="lg:col-span-1">
           <div>
-            <Link href={`/the-hydra/${navigatePreviousPhotoId}`}>
-              <a>
+            <div
+              className={`${
+                address ? "grayscale-0" : "grayscale"
+              } transition-colors ease-in-out duration-5000 border-4 md:border-8 border-white photoPreview overflow-hidden m-auto`}
+            >
+              {tokenLoaded && (
                 <Image
-                  src="/arrow-left.svg"
-                  width={32}
-                  height={32}
-                  alt="Previous"
+                  layout="responsive"
+                  width="768"
+                  height="1024"
+                  src={photo.previewImageUri}
+                  alt={photo.name}
+                  priority={true}
                 />
-              </a>
-            </Link>
-            <div className="w-4 inline-block">&nbsp;</div>
-            <Link href={`/the-hydra/${navigateNextPhotoId}`}>
-              <a>
-                <Image
-                  src="/arrow-right.svg"
-                  width={32}
-                  height={32}
-                  alt="Next"
-                />
-              </a>
-            </Link>
-          </div>
-          <div>
-            <Link href={`/the-hydra`}>
-              <a>
-                <Image src="/x.svg" width={28} height={28} alt="Close" />
-              </a>
-            </Link>
+              )}
+              {!tokenLoaded && (
+                <div className="flex h-full items-center">
+                  <div className="grow">
+                    <Spinner />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* <!-- Info --> */}
-        <div className="pt-8 max-w-sm mx-auto lg:max-w-lg">
-          <h2 className="text-3xl">
-            #{photo.id}
-            {" // "}
-            {photo.name}
-          </h2>
-          <div className="mt-4 h-24 bg-slate-800">
-            {!tokenLoaded && (
-              <div className="pt-8">
-                <Spinner />
+        {/* Bottom / Right column */}
+        <div className="lg:col-span-1 text-sm ml-[4vw] mt-[3vw] mr-[4vw] lg:mt-0">
+          {/* <!-- nav --> */}
+          <div className="px-[2vw] my-4">
+            <GalleryNav collection={collection} photoId={photoId} />
+          </div>
+
+          {/* <!-- Info --> */}
+          <div className="px-[2vw] my-4">
+            <h2 className="text-2xl uppercase lg:text-4xl">{photo.name}</h2>
+
+            <div className="mt-4 h-24 bg-slate-800">
+              {/* If we're waiting on the RPC call, show loading state */}
+              {!tokenLoaded && (
+                <div className="pt-8">
+                  <Spinner />
+                </div>
+              )}
+
+              {/* If our token is loaded AND it has an owner, show that */}
+              {tokenLoaded && hasOwner && (
+                <OwnerName
+                  address={owner.data?.toString()}
+                  className="mt-4 h-24 p-4 overflow-hidden lg:text-lg"
+                />
+              )}
+
+              {/* If our token is loaded AND it does not have an owner AND the user did not connect their wallet */}
+
+              {tokenLoaded && !hasOwner && (
+                <GalleryMintButton
+                  photo={photo}
+                  address={address}
+                  isConnected={isConnected}
+                  isDisconnected={isDisconnected}
+                />
+              )}
+            </div>
+
+            {address ? null : (
+              <div className="mt-4 italic text-center">
+                (Connect your wallet to enter a dream state)
               </div>
             )}
 
-            {tokenLoaded && hasOwner && (
-              <OwnerName
-                address={owner.data?.toString()}
-                className="mt-4 h-24 p-4 overflow-hidden"
-              />
-            )}
+            <div className="mt-8 mb-8 lg:text-lg">
+              <p className="mb-4">{photo.description}</p>
+              <p className="mb-4">
+                Each photo comes with a high-res immutable imoage stored on IPFS
+                (and maybe an on-chain SVG version)
+              </p>
+            </div>
 
-            {tokenLoaded && !hasOwner && (
-              <>
-                <MintButton
-                  tokenId={photo.id}
-                  disabled={address ? false : true}
-                  label={
-                    address ? "Alter your Reality" : "Dream state required"
-                  }
-                />
-                <div className="text-center mt-3">0.25 ETH</div>
-                {address ? null : (
-                  <div className="mt-2 italic text-center">
-                    (Connect your wallet to enter a dream state)
-                  </div>
-                )}
-              </>
-            )}
+            <div className="grid grid-cols-2 uppercase text-xs mb-8 lg:text-lg">
+              <div>Token ID</div>
+              <div>{photo.id}</div>
+
+              <div>Token standard</div>
+              <div>ERC-721</div>
+
+              <div>Contract</div>
+              <div>0x1234...0987</div>
+
+              <div>Metadata</div>
+              <div>IPFS</div>
+
+              <div>Roylaties</div>
+              <div>7.5%</div>
+            </div>
+
+            {/* <div className="uppercase mb-8">OpenSea | LooksRare</div> */}
+
+            {hasOwner && <OpenSeaButton tokenId={photo.id} />}
           </div>
-
-          <div className="mt-8 mb-8">
-            <p className="mb-4">{photo.description}</p>
-            <p className="mb-4">
-              Each photo comes with a high-res immutable imoage stored on IPFS
-              (and maybe an on-chain SVG version)
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 uppercase text-xs mb-8">
-            <div>Token ID</div>
-            <div>{photo.id}</div>
-
-            <div>Token standard</div>
-            <div>ERC-721</div>
-
-            <div>Contract</div>
-            <div>0x1234...0987</div>
-
-            <div>Metadata</div>
-            <div>IPFS</div>
-
-            <div>Roylaties</div>
-            <div>7.5%</div>
-          </div>
-
-          {/* <div className="uppercase mb-8">OpenSea | LooksRare</div> */}
-
-          {hasOwner && <OpenSeaButton tokenId={photo.id} />}
         </div>
       </div>
-    </div>
+    </>
   );
 };
