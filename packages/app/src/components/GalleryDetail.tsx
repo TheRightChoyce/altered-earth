@@ -100,9 +100,9 @@ export const GalleryDetail = ({
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-2 lg:mt-[2vh]">
+      <div className="flex flex-col lg:flex-row mt-[4vh]">
         {/* Top / Left column  */}
-        <div className="lg:col-span-1">
+        <div className="lg:basis-2/3">
           <div>
             <div
               className={`${imageClass} border-4 md:border-8 border-white photoPreview overflow-hidden m-auto max-h-[80vh]`}
@@ -129,7 +129,7 @@ export const GalleryDetail = ({
         </div>
 
         {/* Bottom / Right column */}
-        <div className="lg:col-span-1 text-sm ml-[4vw] mt-[3vw] mr-[4vw] lg:mt-0">
+        <div className="lg:basis-1/3 text-sm ml-[4vw] mt-[3vw] mr-[4vw] lg:mt-0">
           {/* <!-- nav --> */}
           <div className="px-[2vw] my-4">
             <GalleryNav collection={collection} photoId={photoId} />
@@ -158,12 +158,7 @@ export const GalleryDetail = ({
               {/* If our token is loaded AND it does not have an owner AND the user did not connect their wallet */}
 
               {tokenLoaded && !hasOwner && (
-                <GalleryMintButton
-                  photo={photo}
-                  address={address}
-                  isConnected={isConnected}
-                  isDisconnected={isDisconnected}
-                />
+                <GalleryMintButton photo={photo} address={address} />
               )}
             </div>
 

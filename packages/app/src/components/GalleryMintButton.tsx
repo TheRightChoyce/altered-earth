@@ -96,17 +96,13 @@ const CustomConnectButton = () => {
 export const GalleryMintButton = ({
   photo,
   address,
-  isConnected,
-  isDisconnected,
 }: {
   photo: Photo;
   address: string | undefined;
-  isConnected: boolean;
-  isDisconnected: boolean;
 }) => {
   return (
     <>
-      {isConnected && (
+      {address && (
         <>
           <MintButton
             tokenId={photo.id}
@@ -116,7 +112,7 @@ export const GalleryMintButton = ({
           <div className="text-center mt-3">0.25 ETH</div>
         </>
       )}
-      {isDisconnected && (
+      {!address && (
         <>
           <CustomConnectButton />
           <div className="text-center mt-3">0.25 ETH</div>
