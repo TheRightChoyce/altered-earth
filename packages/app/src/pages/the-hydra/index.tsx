@@ -1,7 +1,4 @@
-import Image from "next/image";
-import Link from "next/link";
 import type { ReactElement } from "react";
-import { useAccount } from "wagmi";
 
 import { Gallery } from "../../components/Gallery";
 import { theHydraCollection } from "../../data/the-hydra";
@@ -9,9 +6,6 @@ import Layout from "../../layout/layout";
 import type { NextPageWithLayout } from "../_app";
 
 const TheHydraPage: NextPageWithLayout = () => {
-  // const isMounted = useIsMounted();
-  const { address } = useAccount();
-
   return (
     <>
       <h1 className="text-6xl leading-relaxed lg:text-8xl uppercase text-center mt-8 lg:mt-16 lg:mb-8">
@@ -25,7 +19,7 @@ const TheHydraPage: NextPageWithLayout = () => {
         </p>
       </div>
 
-      <Gallery collection={theHydraCollection} address={address} />
+      <Gallery collection={theHydraCollection} />
     </>
   );
 };

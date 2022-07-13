@@ -1,15 +1,24 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 export const ConnectBar = () => {
-  const { address } = useAccount();
+  const { address, isReconnecting, isDisconnected } = useAccount();
+  const [barBgClass, setBarBgClass] = useState("bg-slate-800");
+
+  useEffect(() => {
+    setBarBgClass(
+      (isReconnecting || address) && !isDisconnected
+        ? "bg-slate-800"
+        : "bg-slate-600"
+    );
+  }, [address, isReconnecting, isDisconnected]);
+
   return (
     <div
-      className={`${
-        address ? "bg-slate-800" : "bg-pink-900"
-      } transition-color ease-in-out duration-1000 py-[2vh] flex flex-cols justify-between align-middle`}
+      className={`${barBgClass} transition-color ease-in-out duration-1000 py-[2vh] flex flex-cols justify-between align-middle`}
     >
       <div className="pl-6 mt-1">
         <Link href="/">

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useTheHydraContractRead } from "../contracts";
@@ -26,10 +26,22 @@ export const GalleryDetail = ({
   photoId: number;
 }) => {
   const isMounted = useIsMounted();
-  const { address, isConnected, isDisconnected } = useAccount();
   const [hasOwner, setHasOwner] = useState(false);
   const [tokenLoaded, setTokenLoaded] = useState(false);
   const [previousPhoto, setPreviousPhoto] = useState(-1);
+
+  const { address, isReconnecting, isDisconnected } = useAccount();
+  const [imageClass, setImageClass] = useState(
+    "grayscale-0 transition-all ease-in-out duration-5000"
+  );
+
+  useEffect(() => {
+    setImageClass(
+      (isReconnecting || address) && !isDisconnected
+        ? "grayscale-0 transition-all ease-in-out duration-5000"
+        : "grayscale"
+    );
+  }, [address, isReconnecting, isDisconnected]);
 
   const owner = useTheHydraContractRead({
     functionName: "ownerOfOrNull",
@@ -93,9 +105,7 @@ export const GalleryDetail = ({
         <div className="lg:col-span-1">
           <div>
             <div
-              className={`${
-                address ? "grayscale-0" : "grayscale"
-              } transition-colors ease-in-out duration-5000 border-4 md:border-8 border-white photoPreview overflow-hidden m-auto`}
+              className={`${imageClass} border-4 md:border-8 border-white photoPreview overflow-hidden m-auto max-h-[80vh]`}
             >
               {tokenLoaded && (
                 <Image
@@ -163,7 +173,7 @@ export const GalleryDetail = ({
               </div>
             )}
 
-            <div className="mt-8 mb-8 lg:text-lg">
+            <div className="mt-8 mb-8 lg:text-md">
               <p className="mb-4">{photo.description}</p>
               <p className="mb-4">
                 Each photo comes with a high-res immutable imoage stored on IPFS
@@ -171,7 +181,7 @@ export const GalleryDetail = ({
               </p>
             </div>
 
-            <div className="grid grid-cols-2 uppercase text-xs mb-8 lg:text-lg">
+            <div className="grid grid-cols-2 uppercase text-xs mb-8 lg:text-sm">
               <div>Token ID</div>
               <div>{photo.id}</div>
 

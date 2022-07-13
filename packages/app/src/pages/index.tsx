@@ -1,14 +1,24 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 import Landing from "../layout/landing";
 import type { NextPageWithLayout } from "./_app";
 
 const HomePage: NextPageWithLayout = () => {
-  const { address } = useAccount();
+  const { address, isReconnecting, isDisconnected } = useAccount();
+  const [imageClass, setImageClass] = useState(
+    "grayscale-0 transition-all ease-in-out duration-5000"
+  );
+
+  useEffect(() => {
+    setImageClass(
+      (isReconnecting || address) && !isDisconnected
+        ? "grayscale-0 transition-all ease-in-out duration-5000"
+        : "grayscale"
+    );
+  }, [address, isReconnecting, isDisconnected]);
 
   return (
     <>
@@ -30,11 +40,7 @@ const HomePage: NextPageWithLayout = () => {
         </div>
       </div>
 
-      <div
-        className={`${
-          address ? "grayscale-0" : "grayscale"
-        } transition-all ease-in-out duration-5000 mx-auto`}
-      >
+      <div className={`${imageClass} mx-auto`}>
         <div className="relative mb-16">
           <Link href="/the-hydra">
             <a>

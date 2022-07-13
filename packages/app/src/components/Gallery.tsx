@@ -1,19 +1,28 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../useIsMounted";
 import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
 
-export const Gallery = ({
-  address,
-  collection,
-}: {
-  address: string | undefined;
-  collection: PhotoCollection;
-}) => {
+export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   const isMounted = useIsMounted();
+
+  const { address, isReconnecting, isDisconnected } = useAccount();
+  const [imageClass, setImageClass] = useState(
+    "grayscale-0 transition-all ease-in-out duration-5000"
+  );
+
+  useEffect(() => {
+    setImageClass(
+      (isReconnecting || address) && !isDisconnected
+        ? "grayscale-0 transition-all ease-in-out duration-5000"
+        : "grayscale"
+    );
+  }, [address, isReconnecting, isDisconnected]);
 
   if (!isMounted) {
     return null;
@@ -30,13 +39,13 @@ export const Gallery = ({
   return (
     <>
       {collection.description && (
-        <div className="container mb-4 px-8 text-center tracking-wide text-md lg:text-xl lg:mb-16">
+        <div className="container mb-4 px-8 text-center tracking-wide text-md lg:text-xl lg:mb-8">
           <p>{collection.description}</p>
         </div>
       )}
 
       {!address && (
-        <div className="mb-8 bg-pink-900 p-8 lg:mb-16">
+        <div className="mb-8 p-8 lg:mb-16">
           <h4 className="text-2xl lg:text-4xl lg:max-w-xl mb-8 text-center text-pink-200 ">
             Only in a dream state can you fully experience an Altered Reality.
           </h4>
@@ -47,9 +56,7 @@ export const Gallery = ({
       )}
 
       <div
-        className={`${
-          address ? "grayscale-0" : "grayscale"
-        } px-[4vw] transition-all ease-in-out duration-5000 grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 justify-items-center `}
+        className={`${imageClass} px-[4vw] grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 justify-items-center `}
       >
         {collection.photos.map((photo: Photo) => (
           <div
