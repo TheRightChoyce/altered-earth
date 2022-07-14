@@ -29,6 +29,7 @@ export const GalleryDetail = ({
   const [hasOwner, setHasOwner] = useState(false);
   const [tokenLoaded, setTokenLoaded] = useState(false);
   const [previousPhoto, setPreviousPhoto] = useState(-1);
+  const [type, setType] = useState("original");
 
   const { address, isReconnecting, isDisconnected } = useAccount();
   const [imageClass, setImageClass] = useState(
@@ -113,16 +114,22 @@ export const GalleryDetail = ({
                     layout={"responsive"}
                     width={768}
                     height={1024}
-                    src={photo.previewImageUri}
+                    src={
+                      type == "original"
+                        ? photo.previewImageUri
+                        : photo.svgPreviewUri
+                    }
                     alt={photo.name}
                     priority={true}
                   />
                   <div className="absolute right-10 top-10 w-64 h-64 border-2 border-slate-900">
                     <Image
                       layout={"fill"}
-                      width={768}
-                      height={1024}
-                      src={photo.svgPreviewUri}
+                      src={
+                        type == "original"
+                          ? photo.svgPreviewUri
+                          : photo.previewImageUri
+                      }
                       alt={photo.name}
                     />
                   </div>
@@ -147,39 +154,42 @@ export const GalleryDetail = ({
           </div>
 
           {/* <!-- Info --> */}
-          <div className="px-[2vw] my-4">
-            <h2 className="text-2xl uppercase lg:text-4xl">{photo.name}</h2>
+          <div className="px-[2vw]">
+            <h2 className="my-[2vh] text-2xl uppercase lg:text-4xl">
+              {photo.name}
+            </h2>
 
-            <div className="mt-4 h-24 bg-slate-800">
-              {/* If we're waiting on the RPC call, show loading state */}
-              {!tokenLoaded && (
-                <div className="pt-8">
-                  <Spinner />
-                </div>
-              )}
-
-              {/* If our token is loaded AND it has an owner, show that */}
-              {tokenLoaded && hasOwner && (
-                <OwnerName
-                  address={owner.data?.toString()}
-                  className="mt-4 h-24 p-4 overflow-hidden lg:text-lg"
-                />
-              )}
-
-              {/* If our token is loaded AND it does not have an owner AND the user did not connect their wallet */}
-
-              {tokenLoaded && !hasOwner && (
-                <GalleryMintButton photo={photo} address={address} />
-              )}
+            <div className="inline-flex my-[2vh] w-full bg-slate-900">
+              <a
+                href="#original"
+                aria-current="page"
+                className={`
+                  ${
+                    type == "original"
+                      ? "text-slate-100 bg-slate-700"
+                      : "text-slate-600 hover:text-slate-400"
+                  } px-4 py-2 w-1/2 text-lg text-center transition-all duration-500
+                `}
+                onClick={() => setType("original")}
+              >
+                1 of 1 Original
+              </a>
+              <a
+                href="#edition"
+                className={`
+                  ${
+                    type == "edition"
+                      ? "text-slate-100 bg-slate-700"
+                      : "text-slate-600 hover:text-slate-400"
+                  } px-4 py-2 w-1/2 text-lg text-center transition-all duration-500
+                `}
+                onClick={() => setType("edition")}
+              >
+                On-chain edition
+              </a>
             </div>
 
-            {address ? null : (
-              <div className="mt-4 italic text-center">
-                (Connect your wallet to enter a dream state)
-              </div>
-            )}
-
-            <div className="mt-8 mb-8 lg:text-md">
+            <div className="my-[2vh] lg:text-md">
               <p className="mb-4">{photo.description}</p>
               <p className="mb-4">
                 Each 1 of 1 photo comes with a high-res immutable imoage stored
@@ -187,7 +197,38 @@ export const GalleryDetail = ({
               </p>
             </div>
 
-            <div className="grid grid-cols-2 uppercase text-xs mb-8 lg:text-sm">
+            <div className="my-[2vh]">
+              <div className="mt-4 h-24 bg-slate-800">
+                {/* If we're waiting on the RPC call, show loading state */}
+                {!tokenLoaded && (
+                  <div className="pt-8">
+                    <Spinner />
+                  </div>
+                )}
+
+                {/* If our token is loaded AND it has an owner, show that */}
+                {tokenLoaded && hasOwner && (
+                  <OwnerName
+                    address={owner.data?.toString()}
+                    className="mt-4 h-24 p-4 overflow-hidden lg:text-lg"
+                  />
+                )}
+
+                {/* If our token is loaded AND it does not have an owner AND the user did not connect their wallet */}
+
+                {tokenLoaded && !hasOwner && (
+                  <GalleryMintButton photo={photo} address={address} />
+                )}
+              </div>
+
+              {address ? null : (
+                <div className="mt-4 italic text-center">
+                  (Connect your wallet to enter a dream state)
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 uppercase text-xs mt-[2vh] mb-[4vh] lg:text-sm">
               <div>Token ID</div>
               <div>{photo.id}</div>
 
