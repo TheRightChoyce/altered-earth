@@ -8,6 +8,8 @@ export class Photo {
   price = 0.25;
   previewImage = "";
   previewImageUri = "";
+  svgPreview = "";
+  svgPreviewUri = "";
   slug = "";
 
   constructor(
@@ -31,5 +33,6 @@ export class Photo {
     }
 
     this.previewImage = `ALTERED-EARTH-${imageId}.jpg`;
+    this.svgPreview = `ALTERED-EARTH-${imageId}.svg`;
   }
 }

@@ -105,17 +105,28 @@ export const GalleryDetail = ({
         <div className="lg:basis-2/3">
           <div>
             <div
-              className={`${imageClass} border-4 md:border-8 border-white photoPreview overflow-hidden m-auto max-h-[80vh]`}
+              className={`${imageClass} border-4 md:border-8 border-white photoPreview m-auto`}
             >
               {tokenLoaded && (
-                <Image
-                  layout="responsive"
-                  width="768"
-                  height="1024"
-                  src={photo.previewImageUri}
-                  alt={photo.name}
-                  priority={true}
-                />
+                <div className="relative">
+                  <Image
+                    layout={"responsive"}
+                    width={768}
+                    height={1024}
+                    src={photo.previewImageUri}
+                    alt={photo.name}
+                    priority={true}
+                  />
+                  <div className="absolute right-10 top-10 w-64 h-64 border-2 border-slate-900">
+                    <Image
+                      layout={"fill"}
+                      width={768}
+                      height={1024}
+                      src={photo.svgPreviewUri}
+                      alt={photo.name}
+                    />
+                  </div>
+                </div>
               )}
               {!tokenLoaded && (
                 <div className="flex h-full items-center">
@@ -171,8 +182,8 @@ export const GalleryDetail = ({
             <div className="mt-8 mb-8 lg:text-md">
               <p className="mb-4">{photo.description}</p>
               <p className="mb-4">
-                Each photo comes with a high-res immutable imoage stored on IPFS
-                (and maybe an on-chain SVG version)
+                Each 1 of 1 photo comes with a high-res immutable imoage stored
+                on IPFS, and a fully on-chain SVG version.
               </p>
             </div>
 
