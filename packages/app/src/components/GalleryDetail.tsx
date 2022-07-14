@@ -101,42 +101,47 @@ export const GalleryDetail = ({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row mt-[4vh]">
+      <div className="flex flex-col lg:flex-row mt-[3vh]">
         {/* Top / Left column  */}
-        <div className="lg:basis-2/3">
-          <div>
-            <div
-              className={`${imageClass} border-4 md:border-8 border-white photoPreview m-auto`}
-            >
-              {tokenLoaded && (
-                <div className="relative">
+        <div className="lg:w-[60vw]">
+          <div className="p-[2vw]">
+            <div className={`${imageClass} m-auto`}>
+              {tokenLoaded && type == "original" && (
+                <div className="">
                   <Image
                     layout={"responsive"}
                     width={768}
                     height={1024}
-                    src={
-                      type == "original"
-                        ? photo.previewImageUri
-                        : photo.svgPreviewUri
-                    }
+                    src={photo.previewImageUri}
                     alt={photo.name}
                     priority={true}
                   />
-                  <div className="absolute right-10 top-10 w-64 h-64 border-2 border-slate-900">
+                </div>
+              )}
+              {!tokenLoaded && type == "original" && (
+                <div className="flex h-[100vh] items-center">
+                  <div className="grow">
+                    <Spinner />
+                  </div>
+                </div>
+              )}
+
+              {tokenLoaded && type == "edition" && (
+                <div className="flex w-[50vw] h-[50vw] lg:w-[512px] lg:h-[512px] items-center m-auto">
+                  <div className="grow">
                     <Image
-                      layout={"fill"}
-                      src={
-                        type == "original"
-                          ? photo.svgPreviewUri
-                          : photo.previewImageUri
-                      }
+                      layout={"responsive"}
+                      width={768}
+                      height={768}
+                      src={photo.svgPreviewUri}
                       alt={photo.name}
+                      priority={true}
                     />
                   </div>
                 </div>
               )}
-              {!tokenLoaded && (
-                <div className="flex h-full items-center">
+              {!tokenLoaded && type == "edition" && (
+                <div className="flex w-[50vw] h-[50vw] lg:w-[512px] lg:h-[512px] items-center m-auto">
                   <div className="grow">
                     <Spinner />
                   </div>
@@ -147,7 +152,7 @@ export const GalleryDetail = ({
         </div>
 
         {/* Bottom / Right column */}
-        <div className="lg:basis-1/3 text-sm ml-[4vw] mt-[3vw] mr-[4vw] lg:mt-0">
+        <div className="lg:w-[40vw] text-sm mt-[3vw] lg:mt-0">
           {/* <!-- nav --> */}
           <div className="px-[2vw] my-4">
             <GalleryNav collection={collection} photoId={photoId} />
