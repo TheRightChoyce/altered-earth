@@ -192,6 +192,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     )
         public
         view
+        CheckConsciousness(_originalId)
         returns (uint256)
     {
         /// @dev same as getEditionStartId + add the counter
