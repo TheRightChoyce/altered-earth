@@ -206,7 +206,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     )
         external
         payable
-        ElevatingConsciousnessHasACost(mintPriceOriginal)
+        ElevatingConsciousnessHasACost(mintPriceEdition)
     {
         _safeMint(msg.sender, _originalId, "Welcome to TheHydra's Reality");
         emit RealityAltered(msg.sender, _originalId);
