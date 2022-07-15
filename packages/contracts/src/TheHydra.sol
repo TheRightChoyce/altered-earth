@@ -174,7 +174,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     
     /// @notice Gets the starting index for the editions based off an original
     /// @param _originalId TokenId of the original 1-of-1 NFT
-    function getEditionStartId(uint256 _originalId) 
+    function getEditionStartId(
+        uint256 _originalId
+    ) 
         public
         pure
         CheckConsciousness(_originalId)
@@ -185,7 +187,13 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     }
     /// @notice Gets the next sequental id available to mint for a particular edition
     /// @param _originalId TokenId of the original 1-of-1 NFT
-    function getNextEditionId(uint256 _originalId) public returns (uint256) {
+    function getNextEditionId(
+        uint256 _originalId
+    )
+        public
+        view
+        returns (uint256)
+    {
         return 0;
     }
 

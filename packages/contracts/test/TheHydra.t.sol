@@ -199,6 +199,12 @@ contract TheHydraTest is DSTest {
         assertEq(_c.getNextEditionId(48), 2450);
         assertEq(_c.getNextEditionId(49), 2500);
     }
+    function testGetNextEditionIdRevertsWhenOutOfBounds() public {
+        TheHydra _c = getNewContract();
+        
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _c.getNextEditionId(50);
+    }
 
     function testEditionMintFailsWithInvalidPrice() public {
         vm.expectRevert(TheHydra.CouldNotAlterReality.selector);
