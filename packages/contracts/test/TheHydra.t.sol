@@ -24,7 +24,7 @@ contract TheHydraTest is DSTest {
     address private other = vm.addr(uint256(keccak256(abi.encodePacked("other"))));
 
     // state variables
-    uint256 totalSupply = 50;
+    uint256 totalSupply = 50 + (50 * 50);
     uint256 mintPriceOriginal = 0.001 ether;
     uint256 mintPriceEdition = 0.0005 ether;
     uint256 royaltyAmount = 1000; // 1000 / 10_000 => 10%
