@@ -5,6 +5,7 @@
 /data/pixel-png/*.png
 /data/svg/*.svg
 /data/svg-storage/*.txt
+/data/metadata/testnets/*
 
 # dependencies
 /node_modules
