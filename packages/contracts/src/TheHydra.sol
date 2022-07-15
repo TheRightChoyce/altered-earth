@@ -209,7 +209,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         CheckConsciousness(_originalId)
         ElevatingConsciousnessHasACost(mintPriceEdition)
     {
-        _safeMint(msg.sender, _originalId, "Welcome to TheHydra's Reality");
+        uint256 editionId = getNextEditionId(_originalId);
+        _safeMint(msg.sender, editionId, "Welcome to TheHydra's Reality");
         emit RealityAltered(msg.sender, _originalId);
     }
 

@@ -208,10 +208,10 @@ contract TheHydraTest is DSTest {
 
     function testEditionMintFailsWithInvalidPrice() public {
         vm.expectRevert(TheHydra.CouldNotAlterReality.selector);
-        testContract.alterSubReality{value: mintPriceEdition - 0.001 ether}(0);
+        testContract.alterSubReality{value: mintPriceEdition - 0.0001 ether}(0);
 
         vm.expectRevert(TheHydra.CouldNotAlterReality.selector);
-        testContract.alterSubReality{value: mintPriceEdition + 0.001 ether}(1);
+        testContract.alterSubReality{value: mintPriceEdition + 0.0001 ether}(1);
 
         vm.expectRevert(TheHydra.CouldNotAlterReality.selector);
         testContract.alterSubReality{value: mintPriceOriginal}(2);
