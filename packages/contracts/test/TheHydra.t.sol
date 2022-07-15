@@ -228,6 +228,7 @@ contract TheHydraTest is DSTest {
 
         assertEq(_c.balanceOf(minter), 1);
         assertEq(address(_c.ownerOf(50)), minter);
+        assertEq(address(_c.ownerOf(0)), address(0));
     }
     function testEditionMintEventsRealityAlteredEvent() public {
         TheHydra _c = getNewContract();
@@ -268,17 +269,52 @@ contract TheHydraTest is DSTest {
         assertEq(_c.getNextEditionId(0), 52);
         assertEq(_c.getNextEditionId(1), 102);
     }
-    function testEditionGetNextEditionIdAndMintRevertsAtEditionLimit() public {
+    function testEditionGetNextEditionIdRevertsAtEditionLimit() public {
         TheHydra _c = getNewContract();
+        vm.startPrank(minter);
         for (uint256 i = 0; i < 50; i++) {
+            uint256 next = _c.getNextEditionId(0);
             _c.alterSubReality{value: mintPriceEdition}(0);
+            assertEq(address(_c.ownerOf(next)), minter);
         }
 
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
         _c.getNextEditionId(0);
         
+        vm.stopPrank();
+    }
+    function testEditionMintRevertsAtEditionLimit() public {
+        TheHydra _c = getNewContract();
+        vm.startPrank(minter);
+        for (uint256 i = 0; i < 50; i++) {
+            _c.alterSubReality{value: mintPriceEdition}(0);
+        }
+        
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
-        testContract.alterSubReality{value: mintPriceEdition}(0);
+        _c.alterSubReality{value: mintPriceEdition}(0);
+
+        // now check another token to be sure
+        for (uint256 i = 0; i < 50; i++) {
+            uint256 next = _c.getNextEditionId(1);
+            _c.alterSubReality{value: mintPriceEdition}(1);
+            assertEq(address(_c.ownerOf(next)), minter);
+        }
+
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _c.alterSubReality{value: mintPriceEdition}(1);
+        
+        // now check the last token
+        // now check another token to be sure
+        for (uint256 i = 0; i < 50; i++) {
+            uint256 next = _c.getNextEditionId(49);
+            _c.alterSubReality{value: mintPriceEdition}(49);
+            assertEq(address(_c.ownerOf(next)), minter);
+        }
+
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _c.alterSubReality{value: mintPriceEdition}(49);
+
+        vm.stopPrank();
     }
 
     // --------------------------------------------------------

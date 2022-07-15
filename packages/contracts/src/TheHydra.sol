@@ -38,7 +38,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Track the total supply available to mint in this collection, this includes all originals + editions => originals + (originals * editionsPer)
     uint256 immutable public totalSupply = 2550; 
 
-    /// @dev Easily track the number of editions minted for each original contract
+    /// @dev Easily track the number of editions minted for each original contract. Using a counter instead of tracking the starting index because if we tracked the starting index for each edition, then there would be a need to initilize each starting index to a particular sequenced number vs. just allowing default value of 0 here.
     mapping (uint256 => uint256) editionMintCount;
     
     /// @dev The default mint price for a 1-of-1 original
@@ -86,10 +86,17 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     }
     
     /// @dev Ensures tokenId is within the valid range token range
-    /// @param id The token id to check
-    modifier CheckConsciousness(uint256 id) {
+    /// @param _id The token id to check
+    modifier CheckConsciousness(uint256 _id) {
         // currently allowing zero-based ids
-        if (id > maxOriginalId) revert BeyondTheScopeOfConsciousness();
+        if (_id > maxOriginalId) revert BeyondTheScopeOfConsciousness();
+        _;
+    }
+    /// @dev Fail if an edition has reached its mint capacity
+    /// @param _originalId The edition id to check
+    modifier CheckSubConsciousness(uint256 _originalId) {
+        // currently allowing zero-based ids
+        if (editionMintCount[_originalId] > 49) revert BeyondTheScopeOfConsciousness();
         _;
     }
 
@@ -196,14 +203,27 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         public
         view
         CheckConsciousness(_originalId)
+        CheckSubConsciousness(_originalId)
         returns (uint256)
     {
         /// @dev same as getEditionStartId + add the counter
         return (_originalId * 50) + 50 + editionMintCount[_originalId];
     }
 
+    function getEditionMintCount(
+        uint256 _originalId
+    )
+        public
+        view
+        CheckConsciousness(_originalId)
+        returns (uint256)
+    {
+        return editionMintCount[_originalId];
+    }
+
     /// @notice Mint an edition of an original
-    /// @dev _id TokenId of the original 1-of-1 NFT
+    /// @dev This will revert if trying to revert more than 50 of an edition. This check is inside of CheckSubConsciousness, which is checked in the call to getNextEditionId. Not checking here as to not duplicate work
+    /// @param _originalId TokenId of the original 1-of-1 NFT
     function alterSubReality(
         uint256 _originalId
     )
@@ -213,8 +233,11 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         ElevatingConsciousnessHasACost(mintPriceEdition)
     {
         uint256 editionId = getNextEditionId(_originalId);
+        
         ++editionMintCount[_originalId];
+        
         _safeMint(msg.sender, editionId, "Welcome to TheHydra's Reality");
+        
         emit RealityAltered(msg.sender, editionId);
     }
 
