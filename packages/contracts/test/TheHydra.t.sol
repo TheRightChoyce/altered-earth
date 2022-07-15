@@ -137,22 +137,22 @@ contract TheHydraTest is DSTest {
     // --------------------------------------------------------
     // ~~ Minting -- Originals ~~
     // --------------------------------------------------------
-    function testEditionMintFailsWithInvalidPrice() public {
+    function testMintFailsWithInvalidPrice() public {
         vm.expectRevert(TheHydra.CouldNotAlterReality.selector);
         testContract.alterReality{value: 0.01 ether}(0);
     }
-    function testEditionMintFailsWithInvalidTokenId() public {
+    function testMintFailsWithInvalidTokenId() public {
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
         testContract.alterReality{value: mintPriceOriginal}(totalSupply);
     }
-    function testEditionMintSuccedsWithValidPriceAndId() public {
+    function testMintSuccedsWithValidPriceAndId() public {
         TheHydra _c = getNewContract();
         vm.prank(minter);
         _c.alterReality{value: mintPriceOriginal}(0);
 
         assertEq(_c.balanceOf(minter), 1);
     }
-    function testEditionMintFailsWhenTokenAlreadyMinted() public {
+    function testMintFailsWhenTokenAlreadyMinted() public {
         TheHydra _c = getNewContract();
         vm.startPrank(minter);
 
@@ -162,7 +162,7 @@ contract TheHydraTest is DSTest {
         
         vm.stopPrank();
     }
-    function testEditionMintEmitsRealityAlteredEvent() public {
+    function testMintEmitsRealityAlteredEvent() public {
         TheHydra _c = getNewContract();
         vm.startPrank(minter);
         
@@ -191,8 +191,16 @@ contract TheHydraTest is DSTest {
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
         _c.getEditionStartId(50);
     }
+    function testGetNextEditionIdWhenNoEditionsMinted() public {
+        TheHydra _c = getNewContract();
+        assertEq(_c.getNextEditionId(0), 50);
+        assertEq(_c.getNextEditionId(1), 100);
+        assertEq(_c.getNextEditionId(2), 150);
+        assertEq(_c.getNextEditionId(48), 2450);
+        assertEq(_c.getNextEditionId(49), 2500);
+    }
 
-    function testMintFailsWithInvalidPrice() public {
+    function testEditionMintFailsWithInvalidPrice() public {
         vm.expectRevert(TheHydra.CouldNotAlterReality.selector);
         testContract.alterSubReality{value: mintPriceEdition - 0.001 ether}(0);
 
@@ -202,19 +210,19 @@ contract TheHydraTest is DSTest {
         vm.expectRevert(TheHydra.CouldNotAlterReality.selector);
         testContract.alterSubReality{value: mintPriceOriginal}(2);
     }
-    function testMintFailsWithInvalidTokenId() public {
+    function testEditionMintFailsWithInvalidTokenId() public {
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
         testContract.alterSubReality{value: mintPriceEdition}(totalSupply);
     }
 
-    function testMintSuccedsWithValidPriceAndId() public {
+    function testEditionMintSuccedsWithValidPriceAndId() public {
         TheHydra _c = getNewContract();
         vm.prank(minter);
         _c.alterSubReality{value: mintPriceEdition}(0);
 
         assertEq(_c.balanceOf(minter), 1);
     }
-    function testMintEventsRealityAlteredEvent() public {
+    function testEditionMintEventsRealityAlteredEvent() public {
         TheHydra _c = getNewContract();
         vm.startPrank(minter);
         
