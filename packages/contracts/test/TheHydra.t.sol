@@ -422,6 +422,8 @@ contract TheHydraTest is DSTest {
 
     function testBurnedTokenCanNotBeReMinted() public {
 
+        /// @dev Not supported by solmate, see here: https://github.com/Rari-Capital/solmate/issues/92
+
         TheHydra _c = getNewContract();
         vm.startPrank(minter);
         _c.alterReality{value: mintPriceOriginal}(0);
