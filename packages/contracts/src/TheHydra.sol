@@ -10,6 +10,9 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./interfaces/ITheHydra.sol";
 import "./interfaces/ITheHydraRenderer.sol";
 
+// TODO -- remove!!
+import "forge-std/console.sol";
+
 /// @title TheHydra is the genesis collection of the Altered Earth NFT series
 /// @author therightchoyce.eth
 /// @notice This implemeints the ERC721 standard
@@ -210,8 +213,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         ElevatingConsciousnessHasACost(mintPriceEdition)
     {
         uint256 editionId = getNextEditionId(_originalId);
+        ++editionMintCount[_originalId];
         _safeMint(msg.sender, editionId, "Welcome to TheHydra's Reality");
-        emit RealityAltered(msg.sender, _originalId);
+        emit RealityAltered(msg.sender, editionId);
     }
 
     // /// @notice mint either a original or on-chain edition

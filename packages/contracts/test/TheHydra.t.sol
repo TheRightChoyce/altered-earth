@@ -227,6 +227,7 @@ contract TheHydraTest is DSTest {
         _c.alterSubReality{value: mintPriceEdition}(0);
 
         assertEq(_c.balanceOf(minter), 1);
+        assertEq(address(_c.ownerOf(50)), minter);
     }
     function testEditionMintEventsRealityAlteredEvent() public {
         TheHydra _c = getNewContract();
@@ -244,22 +245,28 @@ contract TheHydraTest is DSTest {
         TheHydra _c = getNewContract();
         assertEq(_c.getNextEditionId(0), 50);
 
+        vm.prank(minter);
         _c.alterSubReality{value: mintPriceEdition}(0);
-
         assertEq(_c.getNextEditionId(0), 51);
+
+        vm.prank(minter);
+        _c.alterSubReality{value: mintPriceEdition}(0);
+        assertEq(_c.getNextEditionId(0), 52);
 
         // next
-        assertEq(_c.getNextEditionId(1), 50);
+        assertEq(_c.getNextEditionId(1), 100);
+        vm.prank(minter);
         _c.alterSubReality{value: mintPriceEdition}(1);
 
-        assertEq(_c.getNextEditionId(0), 51);
-        assertEq(_c.getNextEditionId(1), 51);
+        assertEq(_c.getNextEditionId(0), 52);
+        assertEq(_c.getNextEditionId(1), 101);
 
         // one more time
+        vm.prank(minter);
         _c.alterSubReality{value: mintPriceEdition}(1);
 
-        assertEq(_c.getNextEditionId(0), 51);
-        assertEq(_c.getNextEditionId(1), 52);
+        assertEq(_c.getNextEditionId(0), 52);
+        assertEq(_c.getNextEditionId(1), 102);
     }
     function testEditionGetNextEditionIdAndMintRevertsAtEditionLimit() public {
         TheHydra _c = getNewContract();
