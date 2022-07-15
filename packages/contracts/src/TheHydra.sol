@@ -32,12 +32,12 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev The maximum available editions per original.
     uint256 immutable editionsPerOriginal = 50;
 
-    /// @dev Track the total supply available to mint in this collection,this includes all originals + editions => originals + (originals * editionsPer)
+    /// @dev Track the total supply available to mint in this collection, this includes all originals + editions => originals + (originals * editionsPer)
     uint256 immutable public totalSupply = 2550; 
 
     /// @dev Easily track the number of editions minted for each original contract
     mapping (uint256 => uint256) editionMintCount;
-
+    
     /// @dev The default mint price for a 1-of-1 original
     uint256 public mintPriceOriginal;
 
@@ -194,7 +194,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         view
         returns (uint256)
     {
-        return 0;
+        /// @dev same as getEditionStartId + add the counter
+        return (_originalId * 50) + 50 + editionMintCount[_originalId];
     }
 
     /// @notice Mint an edition of an original

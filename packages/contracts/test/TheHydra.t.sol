@@ -177,7 +177,7 @@ contract TheHydraTest is DSTest {
     // --------------------------------------------------------
     // ~~ Minting -- Editions
     // --------------------------------------------------------
-    function testGetEditionStartId() public {
+    function testEditionGetEditionStartId() public {
         TheHydra _c = getNewContract();
         assertEq(_c.getEditionStartId(0), 50);
         assertEq(_c.getEditionStartId(1), 100);
@@ -185,13 +185,13 @@ contract TheHydraTest is DSTest {
         assertEq(_c.getEditionStartId(48), 2450);
         assertEq(_c.getEditionStartId(49), 2500);
     }
-    function testGetEditionStartIdRevertsWhenOutOfBounds() public {
+    function testEditionGetEditionStartIdRevertsWhenOutOfBounds() public {
         TheHydra _c = getNewContract();
         
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
         _c.getEditionStartId(50);
     }
-    function testGetNextEditionIdWhenNoEditionsMinted() public {
+    function testEditionGetNextEditionIdWhenNoEditionsMinted() public {
         TheHydra _c = getNewContract();
         assertEq(_c.getNextEditionId(0), 50);
         assertEq(_c.getNextEditionId(1), 100);
@@ -199,7 +199,7 @@ contract TheHydraTest is DSTest {
         assertEq(_c.getNextEditionId(48), 2450);
         assertEq(_c.getNextEditionId(49), 2500);
     }
-    function testGetNextEditionIdRevertsWhenOutOfBounds() public {
+    function testEditionGetNextEditionIdRevertsWhenOutOfBounds() public {
         TheHydra _c = getNewContract();
         
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
@@ -240,15 +240,28 @@ contract TheHydraTest is DSTest {
         vm.stopPrank();
     }
 
-    function testGetNextEditionId() public {
+    function testEditionGetNextEditionIdAfterMinting() public {
         TheHydra _c = getNewContract();
         assertEq(_c.getNextEditionId(0), 50);
 
         _c.alterSubReality{value: mintPriceEdition}(0);
 
-        assertEq(_c.getNextEditionId(0), 51);    
+        assertEq(_c.getNextEditionId(0), 51);
+
+        // next
+        assertEq(_c.getNextEditionId(1), 50);
+        _c.alterSubReality{value: mintPriceEdition}(1);
+
+        assertEq(_c.getNextEditionId(0), 51);
+        assertEq(_c.getNextEditionId(1), 51);
+
+        // one more time
+        _c.alterSubReality{value: mintPriceEdition}(1);
+
+        assertEq(_c.getNextEditionId(0), 51);
+        assertEq(_c.getNextEditionId(1), 52);
     }
-    function testGetNextEditionIdAndMintRevertsAtEditionLimit() public {
+    function testEditionGetNextEditionIdAndMintRevertsAtEditionLimit() public {
         TheHydra _c = getNewContract();
         for (uint256 i = 0; i < 50; i++) {
             _c.alterSubReality{value: mintPriceEdition}(0);
