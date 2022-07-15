@@ -13,7 +13,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "_mintPrice",
+        "name": "_mintPriceOriginal",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_mintPriceEdition",
         "type": "uint256"
       }
     ],
@@ -198,6 +203,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_originalId",
+        "type": "uint256"
+      }
+    ],
+    "name": "alterSubReality",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "spender",
         "type": "address"
@@ -267,6 +285,44 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_originalId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getEditionStartId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_originalId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getNextEditionId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "",
         "type": "address"
@@ -290,7 +346,20 @@
   },
   {
     "inputs": [],
-    "name": "mintPrice",
+    "name": "mintPriceEdition",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "mintPriceOriginal",
     "outputs": [
       {
         "internalType": "uint256",

@@ -34,7 +34,7 @@ contract TheHydraDataStoreTest is DSTest {
     // --------------------------------------------------------
     
     function getNewHydraContract() public returns (TheHydra) {
-        return new TheHydra(owner, 'ipfs://test/', mintPrice);
+        return new TheHydra(owner, 'ipfs://test/', mintPrice, 0.0005 ether);
     }
     function getNewDataStore() public returns (TheHydraDataStore) {
         return new TheHydraDataStore(owner, "ipfs://test/");

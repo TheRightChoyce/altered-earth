@@ -26,14 +26,23 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Renderer contract for metadata * on-chain artwork
     ITheHydraRenderer public renderer;
 
-    /// @dev Track the total supply available to mint in this collection
-    uint256 public totalSupply;
-    
-    /// @dev Track the max Id available to mint, which may differe from the total supply number if zero-based
-    uint256 _maxMintId;
+    /// @dev This is the maximium Id available for the originals.. I.E with 50 available and starting from 0, the maxOriginalId should be 49
+    uint256 immutable maxOriginalId = 49;
 
-    /// @dev The default mint price for a NFT
-    uint256 public mintPrice;
+    /// @dev The maximum available editions per original.
+    uint256 immutable editionsPerOriginal = 50;
+
+    /// @dev Track the total supply available to mint in this collection,this includes all originals + editions => originals + (originals * editionsPer)
+    uint256 immutable public totalSupply = 2550; 
+
+    /// @dev Easily track the number of editions minted for each original contract
+    mapping (uint256 => uint256) editionMintCount;
+
+    /// @dev The default mint price for a 1-of-1 original
+    uint256 public mintPriceOriginal;
+
+    /// @dev The default mint price for an on-chain edition
+    uint256 public mintPriceEdition;
 
     /// @dev baseURI for any off-chain assets
     string public baseURI;
@@ -77,7 +86,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @param id The token id to check
     modifier CheckConsciousness(uint256 id) {
         // currently allowing zero-based ids
-        if (id > _maxMintId) revert BeyondTheScopeOfConsciousness();
+        if (id > maxOriginalId) revert BeyondTheScopeOfConsciousness();
         _;
     }
 
@@ -92,12 +101,14 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @param _owner The owner of the contract, when deployed
     /// @param _baseURI The base url for any assets in this collection, i.e. an IPFS link
-    /// @param _mintPrice The mint price for a single NFT, in ether
+    /// @param _mintPriceOriginal The mint price for a single NFT, in ether
+    /// @param _mintPriceEdition The mint price for an on-chain edition, in either
     constructor(
 
         address _owner,
         string memory _baseURI,
-        uint256 _mintPrice
+        uint256 _mintPriceOriginal,
+        uint256 _mintPriceEdition
     
     ) ERC721('Altered Earth: The Hydra Collection', 'ALTERED') Owned(_owner) {
 
@@ -108,14 +119,10 @@ contract TheHydra is Owned, ERC721, ITheHydra {
             address(0x18836acedeF35D4A6C00Aae46a36fAdE12ee5FF7),
             1000 // 1000 / 10_000 => 10%
         );
-        // 50 1-of-1s
-        totalSupply = 50;
-        
-        // price, TODO -- change on launch : ) 
-        mintPrice = _mintPrice;
 
-        /// @dev Use this to compare 0-based counters to for slight gas savings
-        _maxMintId = 49;
+        // Setup initial mint prices
+        mintPriceOriginal = _mintPriceOriginal;
+        mintPriceEdition = _mintPriceEdition;
 
         emit TheHydraAwakens();
     }
@@ -146,20 +153,66 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     }
 
     // --------------------------------------------------------
-    // ~~ Mint Functions ~~
+    // ~~ Mint Functions => Originals ~~
     // --------------------------------------------------------
     function alterReality(
         uint256 id
     )
         external
         payable
-        ElevatingConsciousnessHasACost(mintPrice)
+        ElevatingConsciousnessHasACost(mintPriceOriginal)
         CheckConsciousness(id)
         RealityNotAlreadyAltered(id)
     {
         _safeMint(msg.sender, id, "Welcome to TheHydra's Reality");
         emit RealityAltered(msg.sender, id);
     }
+
+    // --------------------------------------------------------
+    // ~~ Mint Functions => Editions ~~
+    // --------------------------------------------------------
+    
+    /// @notice Gets the starting index for the editions based off an original
+    /// @param _originalId TokenId of the original 1-of-1 NFT
+    function getEditionStartId(uint256 _originalId) public returns (uint256) {
+        return 0;
+        // return (_orignalId * editionsPerOriginal) + 50
+    }
+    /// @notice Gets the next sequental id available to mint for a particular edition
+    /// @param _originalId TokenId of the original 1-of-1 NFT
+    function getNextEditionId(uint256 _originalId) public returns (uint256) {
+        return 0;
+    }
+
+    /// @notice Mint an edition of an original
+    /// @dev _id TokenId of the original 1-of-1 NFT
+    function alterSubReality(
+        uint256 _originalId
+    )
+        external
+        payable
+        ElevatingConsciousnessHasACost(mintPriceOriginal)
+    {
+        _safeMint(msg.sender, _originalId, "Welcome to TheHydra's Reality");
+        emit RealityAltered(msg.sender, _originalId);
+    }
+
+    // /// @notice mint either a original or on-chain edition
+    // /// @param _id The id of the original token, even if this is an edition mint
+    // /// @param _type Either "original" or "edition". If original, attempt to mint token #`_id` -- if edition, attempt to mint the next available edition for that original Id
+    // function alterReality(
+    //     uint256 _id,
+    //     string calldata _type
+    // )
+    //     external
+    //     payable
+    //     ElevatingConsciousnessHasACost(mintPriceOriginal)
+    //     CheckConsciousness(_id)
+    //     RealityNotAlreadyAltered(_id)
+    // {
+    //     _safeMint(msg.sender, id, "Welcome to TheHydra's Reality");
+    //     emit RealityAltered(msg.sender, id);
+    // }
 
     /// @notice Send your AlteredEarth token back to Reality
     /// @dev Burns it
