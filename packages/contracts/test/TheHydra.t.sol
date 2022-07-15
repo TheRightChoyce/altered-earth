@@ -228,7 +228,9 @@ contract TheHydraTest is DSTest {
 
         assertEq(_c.balanceOf(minter), 1);
         assertEq(address(_c.ownerOf(50)), minter);
-        assertEq(address(_c.ownerOf(0)), address(0));
+        
+        vm.expectRevert('NOT_MINTED');
+        address(_c.ownerOf(0));
     }
     function testEditionMintEventsRealityAlteredEvent() public {
         TheHydra _c = getNewContract();
