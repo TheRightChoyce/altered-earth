@@ -237,9 +237,18 @@ contract TheHydraTest is DSTest {
         vm.startPrank(minter);
         
         vm.expectEmit(true, true, false, true);
-        emit RealityAltered(minter, 0);
-        
+        emit RealityAltered(minter, 50);
         _c.alterSubReality{value: mintPriceEdition}(0);
+
+        // next
+        vm.expectEmit(true, true, false, true);
+        emit RealityAltered(minter, 51);
+        _c.alterSubReality{value: mintPriceEdition}(0);
+
+        // next original
+        vm.expectEmit(true, true, false, true);
+        emit RealityAltered(minter, 100);
+        _c.alterSubReality{value: mintPriceEdition}(1);
         
         vm.stopPrank();
     }
