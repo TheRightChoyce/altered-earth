@@ -7,11 +7,6 @@
         "type": "address"
       },
       {
-        "internalType": "string",
-        "name": "_baseURI",
-        "type": "string"
-      },
-      {
         "internalType": "uint256",
         "name": "_mintPriceOriginal",
         "type": "uint256"
@@ -245,19 +240,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "baseURI",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
       }
     ],
     "stateMutability": "view",

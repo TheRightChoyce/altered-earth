@@ -41,7 +41,7 @@ contract TheHydraTest is DSTest {
     event ConsciousnessActivated(address indexed renderer);
 
     function getNewContract() public returns (TheHydra) {
-        return new TheHydra(owner, 'baseUri', mintPriceOriginal, mintPriceEdition);
+        return new TheHydra(owner, mintPriceOriginal, mintPriceEdition);
     }
     function getNewDataStore() public returns (TheHydraDataStore) {
         return new TheHydraDataStore(owner, "ipfs://test/");
@@ -55,7 +55,6 @@ contract TheHydraTest is DSTest {
     function setUp() public {
         testContract = new TheHydra(
             owner,
-            'ipfs://test',
             mintPriceOriginal,
             mintPriceEdition
         );
@@ -71,7 +70,6 @@ contract TheHydraTest is DSTest {
         assertEq(_hydra.owner(), owner);
         assertEq(_hydra.name(), 'Altered Earth: The Hydra Collection');
         assertEq(_hydra.symbol(), 'ALTERED');
-        assertEq(_hydra.baseURI(), 'baseUri');
         assertEq(_hydra.totalSupply(), totalSupply);
         assertEq(_hydra.mintPriceOriginal(), mintPriceOriginal);
         assertEq(_hydra.mintPriceEdition(), mintPriceEdition);

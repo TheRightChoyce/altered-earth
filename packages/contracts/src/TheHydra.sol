@@ -47,9 +47,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev The default mint price for an on-chain edition
     uint256 public mintPriceEdition;
 
-    /// @dev baseURI for any off-chain assets
-    string public baseURI;
-
     // --------------------------------------------------------
     // ~~ Events ~~
     // --------------------------------------------------------
@@ -110,19 +107,15 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
 
     /// @param _owner The owner of the contract, when deployed
-    /// @param _baseURI The base url for any assets in this collection, i.e. an IPFS link
     /// @param _mintPriceOriginal The mint price for a single NFT, in ether
     /// @param _mintPriceEdition The mint price for an on-chain edition, in either
     constructor(
 
         address _owner,
-        string memory _baseURI,
         uint256 _mintPriceOriginal,
         uint256 _mintPriceEdition
     
     ) ERC721('Altered Earth: The Hydra Collection', 'ALTERED') Owned(_owner) {
-
-        baseURI = _baseURI;
 
         // therightchoyce.eth and 10% -- can be changed later
         royalties = Royalties(
