@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import { useIsMounted } from "../useIsMounted";
 import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
+import { TypeToggle } from "./TypeToggle";
 
 export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   const isMounted = useIsMounted();
@@ -15,6 +16,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   const [imageClass, setImageClass] = useState(
     "grayscale-0 transition-all ease-in-out duration-5000"
   );
+  const [type, setType] = useState("original");
 
   useEffect(() => {
     setImageClass(
@@ -55,6 +57,9 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
         </div>
       )}
 
+      {/* Original / Edition toggle */}
+      <TypeToggle type={type} setType={setType} />
+
       <div
         className={`${imageClass} px-[4vw] grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 justify-items-center `}
       >
@@ -64,14 +69,18 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
             className="md:h-64 md:w-64 lg:hover:scale-110 lg:transition-transform lg:duration-500"
           >
             <h5 className="cursor-pointer">
-              <Link href={`/the-hydra/${photo.id}`}>
+              <Link href={`/the-hydra/${photo.id}#${type}`}>
                 <a>
                   <Image
-                    src={photo.previewImageUri}
+                    src={
+                      type == "original"
+                        ? photo.previewImageUri
+                        : photo.svgPreviewUri
+                    }
                     width={512}
                     height={512}
                     alt={photo.name}
-                    className="opacity-90 hover:opacity-100 ease-linear"
+                    className="opacity-90 hover:opacity-100 ease-linear transition-all duration-500"
                   />
                 </a>
               </Link>
