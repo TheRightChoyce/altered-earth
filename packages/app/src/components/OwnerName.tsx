@@ -1,4 +1,5 @@
 import { useENS } from "../useENS";
+import { Address } from "./Address";
 
 const zeroAddress = "0x0000000000000000000000000000000000000000";
 
@@ -14,12 +15,11 @@ export const OwnerName = ({
   if (ens.address === zeroAddress) {
     return null;
   }
-  const start = address?.slice(0, 6);
-  const end = address?.slice(address?.length - 5, address?.length - 1);
-  const addressFormatted = `${start}...${end}`;
+  const addressFormatted = Address(address || zeroAddress);
   return (
-    <h4 className={className}>
-      {ens.name || addressFormatted} is wandering this reality
-    </h4>
+    <div className={className}>
+      <h4 className="text-xl mb-2">{ens.name || addressFormatted}</h4>
+      <h6 className="text-sm">is wandering this reality</h6>
+    </div>
   );
 };

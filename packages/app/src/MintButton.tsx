@@ -12,10 +12,12 @@ export const MintButton = ({
   tokenId,
   disabled,
   label,
+  onSuccess,
 }: {
   tokenId: number;
   disabled: boolean;
   label: string | undefined;
+  onSuccess: (owner: string, tx: string) => void;
 }) => {
   const { connector } = useAccount();
 
@@ -29,7 +31,7 @@ export const MintButton = ({
       await switchChain(connector);
       const signer = await connector.getSigner();
       const contract = theHydraContract.connect(signer);
-      const price = await contract.mintPrice();
+      const price = await contract.mintPriceOriginal();
 
       try {
         onProgress(`Minting token #${id}…`);
@@ -81,6 +83,7 @@ export const MintButton = ({
               closeButton: true,
             });
             console.log(receipt);
+            onSuccess(receipt.from, receipt.transactionHash);
           },
           (error) => {
             toast.update(toastId, {

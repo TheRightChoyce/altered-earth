@@ -2,10 +2,11 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
-import { useTheHydraContractRead } from "../contracts";
+import { theHydraContract, useTheHydraContractRead } from "../contracts";
 import { extractContractError } from "../extractContractError";
 import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
+import { Address } from "./Address";
 import { GalleryMintButton } from "./GalleryMintButton";
 import { GalleryNav } from "./GalleryNav";
 import { OwnerName } from "./OwnerName";
@@ -56,6 +57,7 @@ export const GalleryDetail = ({
       }
     },
     onSettled(data, error) {
+      console.log(`onSettled ${data}`);
       if (error) {
         const contractError = extractContractError(error);
         if (contractError !== "NOT_MINTED") {
@@ -79,6 +81,10 @@ export const GalleryDetail = ({
       setTokenLoaded(true);
     },
   });
+
+  const onMintSuccess = (owner, tx) => {
+    setHasOwner(true);
+  };
 
   if (previousPhoto != photoId) {
     setPreviousPhoto(photoId);
@@ -164,6 +170,7 @@ export const GalleryDetail = ({
               {photo.name}
             </h2>
 
+            {/* Original / Edition toggle */}
             <div className="inline-flex my-[2vh] w-full bg-slate-900">
               <a
                 href="#original"
@@ -194,14 +201,7 @@ export const GalleryDetail = ({
               </a>
             </div>
 
-            <div className="my-[2vh] lg:text-md">
-              <p className="mb-4">{photo.description}</p>
-              <p className="mb-4">
-                Each 1 of 1 photo comes with a high-res immutable imoage stored
-                on IPFS, and a fully on-chain SVG version.
-              </p>
-            </div>
-
+            {/* Mint / Ownership */}
             <div className="my-[2vh]">
               <div className="mt-4 h-24 bg-slate-800">
                 {/* If we're waiting on the RPC call, show loading state */}
@@ -222,7 +222,11 @@ export const GalleryDetail = ({
                 {/* If our token is loaded AND it does not have an owner AND the user did not connect their wallet */}
 
                 {tokenLoaded && !hasOwner && (
-                  <GalleryMintButton photo={photo} address={address} />
+                  <GalleryMintButton
+                    photo={photo}
+                    address={address}
+                    onSuccess={onMintSuccess}
+                  />
                 )}
               </div>
 
@@ -233,7 +237,24 @@ export const GalleryDetail = ({
               )}
             </div>
 
-            <div className="grid grid-cols-2 uppercase text-xs mt-[2vh] mb-[4vh] lg:text-sm">
+            {/* Description */}
+            <div className="my-[3vh] lg:text-md">
+              <p className="mb-4">{photo.description}</p>
+              <p className="mb-4">
+                {type == "original" && (
+                  <span>
+                    An original 1-of-1 artwork comes with a high-res immutable
+                    image stored on IPFS and a fully on-chain SVG version.
+                  </span>
+                )}
+                {type == "edition" && (
+                  <span>Each edition is stored fully on-chain as an SVG.</span>
+                )}
+              </p>
+            </div>
+
+            {/* Metadata */}
+            <div className="grid grid-cols-2 uppercase text-xs mt-[9vh] mb-[4vh] lg:text-sm border-t-2 border-slate-500 pt-4">
               <div>Token ID</div>
               <div>{photo.id}</div>
 
@@ -241,7 +262,15 @@ export const GalleryDetail = ({
               <div>ERC-721</div>
 
               <div>Contract</div>
-              <div>0x1234...0987</div>
+              <div>
+                <a
+                  href={`https://goerli.etherscan.io/address/${theHydraContract.address}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {Address(theHydraContract.address)}
+                </a>
+              </div>
 
               <div>Metadata</div>
               <div>IPFS</div>

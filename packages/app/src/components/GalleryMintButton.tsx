@@ -97,9 +97,11 @@ const CustomConnectButton = () => {
 export const GalleryMintButton = ({
   photo,
   address,
+  onSuccess,
 }: {
   photo: Photo;
   address: string | undefined;
+  onSuccess: (owner: string, tx: string) => void;
 }) => {
   return (
     <>
@@ -109,6 +111,7 @@ export const GalleryMintButton = ({
             tokenId={photo.id}
             disabled={address ? false : true}
             label="Alter your Reality"
+            onSuccess={onSuccess}
           />
           <div className="text-center mt-3">0.25 ETH</div>
         </>
