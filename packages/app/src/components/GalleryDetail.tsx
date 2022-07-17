@@ -57,7 +57,7 @@ export const GalleryDetail = ({
       }
     },
     onSettled(data, error) {
-      console.log(`onSettled ${data}`);
+      console.debug(`onSettled ${data}`);
       if (error) {
         const contractError = extractContractError(error);
         if (contractError !== "NOT_MINTED") {
@@ -82,8 +82,9 @@ export const GalleryDetail = ({
     },
   });
 
-  const onMintSuccess = (owner, tx) => {
+  const onMintSuccess = (owner: string, tx: string) => {
     setHasOwner(true);
+    console.debug(owner, tx);
   };
 
   if (previousPhoto != photoId) {
@@ -269,7 +270,11 @@ export const GalleryDetail = ({
             {/* Metadata */}
             <div className="grid grid-cols-2 uppercase text-xs mt-[9vh] mb-[4vh] lg:text-sm border-t-2 border-slate-500 pt-4">
               <div>Token ID</div>
-              <div>{photo.id}</div>
+              <div>
+                {type == "original"
+                  ? photo.id
+                  : `${photo.getEditionIdStart()} - ${photo.getEditionIdEnd()}`}
+              </div>
 
               <div>Token standard</div>
               <div>ERC-721</div>
@@ -286,7 +291,7 @@ export const GalleryDetail = ({
               </div>
 
               <div>Metadata</div>
-              <div>IPFS</div>
+              <div>{type == "original" ? "IPFS" : "On-chain"}</div>
 
               <div>Roylaties</div>
               <div>7.5%</div>

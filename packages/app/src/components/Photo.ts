@@ -35,4 +35,11 @@ export class Photo {
     this.previewImage = `ALTERED-EARTH-${imageId}.jpg`;
     this.svgPreview = `ALTERED-EARTH-${imageId}.svg`;
   }
+
+  getEditionIdStart = () => {
+    return this.id * 50 + 50;
+  };
+  getEditionIdEnd = () => {
+    return this.id * 50 + 99;
+  };
 }

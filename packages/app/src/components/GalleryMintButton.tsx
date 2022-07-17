@@ -1,6 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import { Button } from "../Button";
+import { theHydraContract } from "../contracts";
 import { MintButton } from "../MintButton";
 import { Photo } from "./Photo";
 
@@ -105,6 +106,8 @@ export const GalleryMintButton = ({
   isOriginal: boolean;
   onSuccess: (owner: string, tx: string) => void;
 }) => {
+  const price = isOriginal ? "0.25" : "0.05";
+
   return (
     <>
       {address && (
@@ -116,13 +119,13 @@ export const GalleryMintButton = ({
             isOriginal={isOriginal}
             onSuccess={onSuccess}
           />
-          <div className="text-center mt-3">0.25 ETH</div>
+          <div className="text-center mt-3">{price} ETH</div>
         </>
       )}
       {!address && (
         <>
           <CustomConnectButton />
-          <div className="text-center mt-3">0.25 ETH</div>
+          <div className="text-center mt-3">{price} ETH</div>
         </>
       )}
     </>
