@@ -326,6 +326,41 @@ contract TheHydraTest is DSTest {
         vm.stopPrank();
     }
 
+    function testEditionGetOriginalIdWhenEdition() public {
+        TheHydra _c = getNewContract();
+        assertEq(0, _c.getOriginalId(50));
+        assertEq(0, _c.getOriginalId(99));
+
+        assertEq(1, _c.getOriginalId(100));
+        assertEq(1, _c.getOriginalId(149));
+
+        assertEq(2, _c.getOriginalId(150));
+        assertEq(2, _c.getOriginalId(199));
+
+        assertEq(48, _c.getOriginalId(2450));
+        assertEq(48, _c.getOriginalId(2499));
+
+        assertEq(49, _c.getOriginalId(2500));
+        assertEq(49, _c.getOriginalId(2549));
+    }
+    function testEditionGetOriginalIdWhenOriginal() public {
+        TheHydra _c = getNewContract();
+        assertEq(0, _c.getOriginalId(0));
+        assertEq(1, _c.getOriginalId(1));
+        assertEq(2, _c.getOriginalId(2));
+        assertEq(48, _c.getOriginalId(48));
+        assertEq(49, _c.getOriginalId(49));
+    }
+    function testEditionGetOriginalIdWhenOutOfBounds() public {
+        TheHydra _c = getNewContract();
+
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _c.getOriginalId(2550);
+
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _c.getOriginalId(2551);
+    }
+
     // --------------------------------------------------------
     // ~~ Metadata ~~
     // --------------------------------------------------------

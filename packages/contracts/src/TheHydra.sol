@@ -10,9 +10,6 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./interfaces/ITheHydra.sol";
 import "./interfaces/ITheHydraRenderer.sol";
 
-// TODO -- remove!!
-import "forge-std/console.sol";
-
 /// @title TheHydra is the genesis collection of the Altered Earth NFT series
 /// @author therightchoyce.eth
 /// @notice This implemeints the ERC721 standard
@@ -175,6 +172,14 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // ~~ Mint Functions => Editions ~~
     // --------------------------------------------------------
     
+    /// @notice Returns the original id based on any original or edition Id provided
+    /// @param _id TokenId of an original 1-of-1, or edition NFT
+    function getOriginalId(
+        uint256 _id
+    ) public returns (uint256) {
+        return 0;
+    }
+    
     /// @notice Gets the starting index for the editions based off an original
     /// @param _originalId TokenId of the original 1-of-1 NFT
     function getEditionStartId(
@@ -233,23 +238,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         
         emit RealityAltered(msg.sender, editionId);
     }
-
-    // /// @notice mint either a original or on-chain edition
-    // /// @param _id The id of the original token, even if this is an edition mint
-    // /// @param _type Either "original" or "edition". If original, attempt to mint token #`_id` -- if edition, attempt to mint the next available edition for that original Id
-    // function alterReality(
-    //     uint256 _id,
-    //     string calldata _type
-    // )
-    //     external
-    //     payable
-    //     ElevatingConsciousnessHasACost(mintPriceOriginal)
-    //     CheckConsciousness(_id)
-    //     RealityNotAlreadyAltered(_id)
-    // {
-    //     _safeMint(msg.sender, id, "Welcome to TheHydra's Reality");
-    //     emit RealityAltered(msg.sender, id);
-    // }
 
     /// @notice Send your AlteredEarth token back to Reality
     /// @dev Burns it
