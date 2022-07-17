@@ -1,7 +1,7 @@
-source .env.local
+source ../.env.local
 
-if [ -z "$CHAIN_NAME" ]; then
-  echo "CHAIN_NAME is not set"
+if [ -z "$CHAIN_ID" ]; then
+  echo "CHAIN_ID is not set"
   exit 1
 fi
 
