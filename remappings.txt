@@ -3,3 +3,4 @@ forge-std/=packages/contracts/lib/forge-std/src/
 erc721a/=packages/contracts/lib/ERC721A/
 solmate/=packages/contracts/lib/solmate/src/
 boringsolidity/=packages/contracts/lib/BoringSolidity/
+solenv/=packages/contracts/lib/solenv/src

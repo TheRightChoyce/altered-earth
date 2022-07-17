@@ -12,6 +12,14 @@ out/Script.sol/**/*.abi.json
 out/Vm.sol/**/*.abi.json
 out/console.sol/**/*.abi.json
 out/console2.sol/**/*.abi.json
+out/SolEnv.sol/**/*.abi.json
 # Why do these globs make this so hard?
 
 .env.*
+
+# Ingore scripting output
+out/*.s.sol/**/*
+
+# Ignore broadcast outputs
+broadcast/*
+

@@ -13,3 +13,6 @@
 [submodule "packages/contracts/lib/BoringSolidity"]
 	path = packages/contracts/lib/BoringSolidity
 	url = https://github.com/boringcrypto/BoringSolidity
+[submodule "packages/contracts/lib/solenv"]
+	path = packages/contracts/lib/solenv
+	url = https://github.com/memester-xyz/solenv
