@@ -12,11 +12,13 @@ export const MintButton = ({
   tokenId,
   disabled,
   label,
+  isOriginal,
   onSuccess,
 }: {
   tokenId: number;
   disabled: boolean;
   label: string | undefined;
+  isOriginal: boolean;
   onSuccess: (owner: string, tx: string) => void;
 }) => {
   const { connector } = useAccount();
@@ -31,26 +33,26 @@ export const MintButton = ({
       await switchChain(connector);
       const signer = await connector.getSigner();
       const contract = theHydraContract.connect(signer);
-      const price = await contract.mintPriceOriginal();
+      const price = isOriginal
+        ? await contract.mintPriceOriginal()
+        : await contract.mintPriceEdition();
 
       try {
         onProgress(`Minting token #${id}…`);
 
         const tx = await promiseNotify(
-          contract.alterReality(id, { value: price })
+          isOriginal
+            ? contract.alterReality(id, { value: price })
+            : contract.alterSubReality(id, { value: price })
         ).after(1000 * 5, () =>
           onProgress("Please confirm transaction in your wallet…")
         );
         console.log("mint tx", tx);
 
-        onProgress("Finalizing transaction…");
+        onProgress("Altering reality…");
         const receipt = await promiseNotify(tx.wait())
-          .after(1000 * 15, () =>
-            onProgress(
-              "It can sometimes take a while to finalize a transaction…"
-            )
-          )
-          .after(1000 * 30, () => onProgress("Still working on it…"));
+          .after(1000 * 15, () => onProgress("Formulating the perfect dream…"))
+          .after(1000 * 30, () => onProgress("Checking consciousness…"));
         console.log("mint receipt", receipt);
 
         return { receipt };
@@ -60,7 +62,7 @@ export const MintButton = ({
         throw new Error(`Transaction error: ${contractError}`);
       }
     },
-    [connector]
+    [connector, isOriginal]
   );
 
   return (

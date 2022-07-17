@@ -203,6 +203,7 @@ export const GalleryDetail = ({
 
             {/* Mint / Ownership */}
             <div className="my-[2vh]">
+              {/* Connected states */}
               <div className="mt-4 h-24 bg-slate-800">
                 {/* If we're waiting on the RPC call, show loading state */}
                 {!tokenLoaded && (
@@ -212,7 +213,7 @@ export const GalleryDetail = ({
                 )}
 
                 {/* If our token is loaded AND it has an owner, show that */}
-                {tokenLoaded && hasOwner && (
+                {type == "original" && tokenLoaded && hasOwner && (
                   <OwnerName
                     address={owner.data?.toString()}
                     className="mt-4 h-24 p-4 overflow-hidden lg:text-lg"
@@ -221,10 +222,22 @@ export const GalleryDetail = ({
 
                 {/* If our token is loaded AND it does not have an owner AND the user did not connect their wallet */}
 
-                {tokenLoaded && !hasOwner && (
+                {type == "original" && tokenLoaded && !hasOwner && (
                   <GalleryMintButton
                     photo={photo}
                     address={address}
+                    isOriginal={true}
+                    onSuccess={onMintSuccess}
+                  />
+                )}
+
+                {/* For editions -- show the mint button */}
+
+                {type == "edition" && tokenLoaded && (
+                  <GalleryMintButton
+                    photo={photo}
+                    address={address}
+                    isOriginal={false}
                     onSuccess={onMintSuccess}
                   />
                 )}

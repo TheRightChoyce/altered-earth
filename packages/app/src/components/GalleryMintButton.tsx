@@ -97,10 +97,12 @@ const CustomConnectButton = () => {
 export const GalleryMintButton = ({
   photo,
   address,
+  isOriginal,
   onSuccess,
 }: {
   photo: Photo;
   address: string | undefined;
+  isOriginal: boolean;
   onSuccess: (owner: string, tx: string) => void;
 }) => {
   return (
@@ -111,6 +113,7 @@ export const GalleryMintButton = ({
             tokenId={photo.id}
             disabled={address ? false : true}
             label="Alter your Reality"
+            isOriginal={isOriginal}
             onSuccess={onSuccess}
           />
           <div className="text-center mt-3">0.25 ETH</div>
