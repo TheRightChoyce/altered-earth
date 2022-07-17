@@ -177,6 +177,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     function getOriginalId(
         uint256 _id
     ) public returns (uint256) {
+        if (_id < 50) { 
+            return _id;
+        }
         return 0;
     }
     
