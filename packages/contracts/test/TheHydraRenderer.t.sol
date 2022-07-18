@@ -30,6 +30,9 @@ contract TheHydraRendererTest is DSTest {
 
     // Mint params
     uint256 mintPrice = 0.001 ether;
+    string offChainBaseURI = "ipfs://test/";
+
+    error BeyondTheScopeOfConsciousness();
 
     // --------------------------------------------------------
     // ~ Helper Functions ~
@@ -39,7 +42,7 @@ contract TheHydraRendererTest is DSTest {
         return new TheHydra(owner, mintPrice, 0.0005 ether);
     }
     function getNewDataStore() public returns (TheHydraDataStore) {
-        return new TheHydraDataStore(owner, "ipfs://test/");
+        return new TheHydraDataStore(owner, offChainBaseURI);
     }
     function getNewRenderer() public returns (TheHydraRenderer) {
         TheHydra _theHydra = getNewHydraContract();
@@ -69,7 +72,7 @@ contract TheHydraRendererTest is DSTest {
     // ~~ ERC721 TokenURI implementation  ~~
     // --------------------------------------------------------
 
-    function testTokenURI() public {
+    function testTokenURIForOriginal() public {
         TheHydra _theHydra = getNewHydraContract();
         TheHydraDataStore _dataStore = getNewDataStore();
         
@@ -79,8 +82,45 @@ contract TheHydraRendererTest is DSTest {
             address(xqstgfx)
         );
 
-        string memory expected = string(abi.encodePacked(_dataStore.getOffChainBaseURI(), "0"));
-        assertEq(expected, _r.tokenURI(0));
+        assertEq(_r.tokenURI(0), string(abi.encodePacked(offChainBaseURI, "0")));
+        assertEq(_r.tokenURI(1), string(abi.encodePacked(offChainBaseURI, "1")));
+        assertEq(_r.tokenURI(49), string(abi.encodePacked(offChainBaseURI, "49")));
+    }
+    
+    function testTokenURIForEdition() public {
+        TheHydra _theHydra = getNewHydraContract();
+        TheHydraDataStore _dataStore = getNewDataStore();
+        
+        TheHydraRenderer _r = new TheHydraRenderer(
+            address(_theHydra),
+            address(_dataStore),
+            address(xqstgfx)
+        );
+
+        // Ensure there is SOME output
+        assertTrue(
+            keccak256(abi.encodePacked(_r.tokenURI(50)))
+            != keccak256(abi.encodePacked(""))
+        );
+
+        assertTrue(
+            keccak256(abi.encodePacked(_r.tokenURI(50)))
+            != keccak256(abi.encodePacked(offChainBaseURI, "50"))
+        );
+        assertTrue(
+            keccak256(abi.encodePacked(_r.tokenURI(51)))
+            != keccak256(abi.encodePacked(offChainBaseURI, "51"))
+        );
+        assertTrue(
+            keccak256(abi.encodePacked(_r.tokenURI(2449)))
+            != keccak256(abi.encodePacked(offChainBaseURI, "2449"))
+        );
+
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _r.tokenURI(2550);
+
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _r.tokenURI(2551);
     }
 
     function testTokenURIIsPublic() public {

@@ -58,7 +58,8 @@ contract TheHydraRenderer is ITheHydraRenderer {
     // --------------------------------------------------------
 
     /// @notice Standard URI function to get the token metadata
-    /// @param _id Id of token
+    /// @dev This is intended to be called from the main token contract, therefore there is no out of bounds check on the ID here. If calling directly, ensure the ID is valid!
+    /// @param _id Id of the token, either an original or an edition
     function tokenURI(
         uint256 _id
     ) override public view returns (
@@ -70,6 +71,7 @@ contract TheHydraRenderer is ITheHydraRenderer {
                 _id.toString()
             ));
         }
+        return "";
         // uint256 originalId = ice64.getOriginalTokenId(id);
         // string memory originalIdStr = originalId.toString();
 

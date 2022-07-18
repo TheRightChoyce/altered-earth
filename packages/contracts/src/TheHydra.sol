@@ -100,7 +100,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @param _originalId The edition id to check
     modifier CheckSubConsciousness(uint256 _originalId) {
         // currently allowing zero-based ids
-        if (editionMintCount[_originalId] > 49) revert BeyondTheScopeOfConsciousness();
+        if (editionMintCount[_originalId] > maxOriginalId) revert BeyondTheScopeOfConsciousness();
         _;
     }
 
