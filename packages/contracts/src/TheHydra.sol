@@ -26,14 +26,17 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Renderer contract for metadata * on-chain artwork
     ITheHydraRenderer public renderer;
 
-    /// @dev This is the maximium Id available for the originals.. I.E with 50 available and starting from 0, the maxOriginalId should be 49
-    uint256 immutable maxOriginalId = 49;
-
     /// @dev The maximum available editions per original.
     uint256 immutable editionsPerOriginal = 50;
 
+    /// @dev The total number of 1-of-1 original NFTs available
+    uint256 immutable totalOriginalSupply = 50;
+
+    /// @dev The total number of 1-of-1 original NFTs available
+    uint256 immutable totalEditionSupply = 2500;
+    
     /// @dev Track the total supply available to mint in this collection, this includes all originals + editions => originals + (originals * editionsPer)
-    uint256 immutable public totalSupply = 2550; 
+    uint256 immutable public totalSupply;
 
     /// @dev Easily track the number of editions minted for each original contract. Using a counter instead of tracking the starting index because if we tracked the starting index for each edition, then there would be a need to initilize each starting index to a particular sequenced number vs. just allowing default value of 0 here.
     mapping (uint256 => uint256) editionMintCount;
@@ -43,6 +46,13 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @dev The default mint price for an on-chain edition
     uint256 public mintPriceEdition;
+
+    /// @dev This is the maximium Id available for the originals.. I.E with 50 available and starting from 0, the maxOriginalId should be 49. Used to save gas during when doing > or < logic.
+    uint256 immutable maxOriginalId = 49;
+
+    /// @dev This is the maximium Id available for the editions.. I.E if there are 2500 editions and 50 originals, the max editionId is 2549. Used to save gas during when doing > or < logic.
+    uint256 immutable maxEditionId = 2549;
+
 
     // --------------------------------------------------------
     // ~~ Events ~~
@@ -124,6 +134,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         mintPriceOriginal = _mintPriceOriginal;
         mintPriceEdition = _mintPriceEdition;
 
+        // Ensure we set total supply
+        totalSupply = totalOriginalSupply + totalEditionSupply; 
+
         emit TheHydraAwakens();
     }
 
@@ -177,12 +190,12 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     function getOriginalId(
         uint256 _id
     ) public pure returns (uint256) {
-        if (_id < 50) { 
+        if (_id > maxEditionId ) revert BeyondTheScopeOfConsciousness();
+        
+        if (_id < totalOriginalSupply) { 
             return _id;
         }
-        uint256 base = (_id - 50);
-
-        return base / 50;
+        return (_id - totalOriginalSupply) / editionsPerOriginal;
     }
     
     /// @notice Gets the starting index for the editions based off an original
