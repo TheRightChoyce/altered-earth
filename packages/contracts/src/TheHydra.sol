@@ -176,11 +176,13 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @param _id TokenId of an original 1-of-1, or edition NFT
     function getOriginalId(
         uint256 _id
-    ) public returns (uint256) {
+    ) public pure returns (uint256) {
         if (_id < 50) { 
             return _id;
         }
-        return 0;
+        uint256 base = (_id - 50);
+
+        return base / 50;
     }
     
     /// @notice Gets the starting index for the editions based off an original

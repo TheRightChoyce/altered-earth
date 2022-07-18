@@ -328,20 +328,20 @@ contract TheHydraTest is DSTest {
 
     function testEditionGetOriginalIdWhenEdition() public {
         TheHydra _c = getNewContract();
-        assertEq(0, _c.getOriginalId(50));
-        assertEq(0, _c.getOriginalId(99));
+        assertEq(_c.getOriginalId(50), 0);
+        assertEq(_c.getOriginalId(99), 0);
 
-        assertEq(1, _c.getOriginalId(100));
-        assertEq(1, _c.getOriginalId(149));
+        assertEq(_c.getOriginalId(100), 1);
+        assertEq(_c.getOriginalId(149), 1);
 
-        assertEq(2, _c.getOriginalId(150));
-        assertEq(2, _c.getOriginalId(199));
+        assertEq(_c.getOriginalId(150), 2);
+        assertEq(_c.getOriginalId(199), 2);
 
-        assertEq(48, _c.getOriginalId(2450));
-        assertEq(48, _c.getOriginalId(2499));
+        assertEq(_c.getOriginalId(2450), 48);
+        assertEq(_c.getOriginalId(2499), 48);
 
-        assertEq(49, _c.getOriginalId(2500));
-        assertEq(49, _c.getOriginalId(2549));
+        assertEq(_c.getOriginalId(2500), 49);
+        assertEq(_c.getOriginalId(2549), 49);
     }
     function testEditionGetOriginalIdWhenOriginal() public {
         TheHydra _c = getNewContract();
