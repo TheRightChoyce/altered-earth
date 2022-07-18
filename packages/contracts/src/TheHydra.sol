@@ -36,7 +36,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     uint256 immutable totalEditionSupply = 2500;
     
     /// @dev Track the total supply available to mint in this collection, this includes all originals + editions => originals + (originals * editionsPer)
-    uint256 immutable public totalSupply;
+    uint256 immutable public totalSupply = 2550;
 
     /// @dev Easily track the number of editions minted for each original contract. Using a counter instead of tracking the starting index because if we tracked the starting index for each edition, then there would be a need to initilize each starting index to a particular sequenced number vs. just allowing default value of 0 here.
     mapping (uint256 => uint256) editionMintCount;
@@ -133,9 +133,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         // Setup initial mint prices
         mintPriceOriginal = _mintPriceOriginal;
         mintPriceEdition = _mintPriceEdition;
-
-        // Ensure we set total supply
-        totalSupply = totalOriginalSupply + totalEditionSupply; 
 
         emit TheHydraAwakens();
     }
@@ -235,6 +232,22 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         returns (uint256)
     {
         return editionMintCount[_originalId];
+    }
+
+    /// @notice Gets the number of available editions per original
+    /// @dev Define this as a function since we need to expose it over the interface for external contract calls.
+    function getMaxEditionsPerOriginal() public pure returns (uint256) {
+        return editionsPerOriginal;
+    }
+    /// @notice Gets the total supply of the originals
+    /// @dev Define this as a function since we need to expose it over the interface for external contract calls.
+    function getOrigialTotalSupply() public pure returns (uint256) {
+        return totalOriginalSupply;
+    }
+    /// @notice Gets the total supply of all originals + editions
+    /// @dev Define this as a function since we need to expose it over the interface for external contract calls.
+    function getTotalSupply() public pure returns (uint256) {
+        return totalSupply;
     }
 
     /// @notice Mint an edition of an original

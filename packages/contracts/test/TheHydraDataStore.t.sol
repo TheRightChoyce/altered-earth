@@ -140,5 +140,5 @@ contract TheHydraDataStoreTest is DSTest {
         
         vm.expectRevert(stdError.arithmeticError);
         _d.getPhotoData(1);
-    }
+    }    
 }

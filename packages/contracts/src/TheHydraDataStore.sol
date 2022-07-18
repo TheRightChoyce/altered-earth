@@ -28,7 +28,6 @@ contract TheHydraDataStore is ITheHydraDataStore, Owned {
     // ~~ Errors ~~
     // --------------------------------------------------------
 
-    error BeyondTheScopeOfConsciousness();
     error InvalidMemorySequence();
 
     // --------------------------------------------------------

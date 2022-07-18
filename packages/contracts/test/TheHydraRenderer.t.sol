@@ -90,37 +90,85 @@ contract TheHydraRendererTest is DSTest {
     function testTokenURIForEdition() public {
         TheHydra _theHydra = getNewHydraContract();
         TheHydraDataStore _dataStore = getNewDataStore();
-        
+
+        /// @dev -- reminder!! dataStore fails with stdError.arithmeticError if it can not look up a photo from the store
+
         TheHydraRenderer _r = new TheHydraRenderer(
             address(_theHydra),
             address(_dataStore),
             address(xqstgfx)
         );
 
+        vm.startPrank(owner);
+        /// @dev -- these are the originalIds that need to be stored -- not the edition ids!
+        
         // Ensure there is SOME output
+        _dataStore.storePhotoData(0, ArtworkHelper.getXQSTFile1());
         assertTrue(
             keccak256(abi.encodePacked(_r.tokenURI(50)))
             != keccak256(abi.encodePacked(""))
         );
 
+        bytes memory token50 = abi.encodePacked(_r.tokenURI(50));
         assertTrue(
-            keccak256(abi.encodePacked(_r.tokenURI(50)))
+            keccak256(token50)
             != keccak256(abi.encodePacked(offChainBaseURI, "50"))
         );
+
+        // original 1
+        _dataStore.storePhotoData(1, ArtworkHelper.getXQSTFile1());
+        bytes memory token51 = abi.encodePacked(_r.tokenURI(51));
         assertTrue(
-            keccak256(abi.encodePacked(_r.tokenURI(51)))
+            keccak256(token51)
             != keccak256(abi.encodePacked(offChainBaseURI, "51"))
         );
+        bytes memory token100 = abi.encodePacked(_r.tokenURI(100));
         assertTrue(
-            keccak256(abi.encodePacked(_r.tokenURI(2449)))
-            != keccak256(abi.encodePacked(offChainBaseURI, "2449"))
+            keccak256(abi.encodePacked(token100))
+            != keccak256(abi.encodePacked(offChainBaseURI, "100"))
         );
 
-        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
-        _r.tokenURI(2550);
+        // original 2
+        _dataStore.storePhotoData(2, ArtworkHelper.getXQSTFile1());
+        
+        bytes memory token150 = abi.encodePacked(_r.tokenURI(150));
+        assertTrue(
+            keccak256(abi.encodePacked(token150))
+            != keccak256(abi.encodePacked(offChainBaseURI, "150"))
+        );
+        bytes memory token199 = abi.encodePacked(_r.tokenURI(199));
+        assertTrue(
+            keccak256(abi.encodePacked(token199))
+            != keccak256(abi.encodePacked(offChainBaseURI, "199"))
+        );
 
-        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
-        _r.tokenURI(2551);
+        // // original 48
+        _dataStore.storePhotoData(48, ArtworkHelper.getXQSTFile1());
+        bytes memory token2450 = abi.encodePacked(_r.tokenURI(2450));
+        assertTrue(
+            keccak256(abi.encodePacked(token2450))
+            != keccak256(abi.encodePacked(offChainBaseURI, "2450"))
+        );
+        bytes memory token2499 = abi.encodePacked(_r.tokenURI(2499));
+        assertTrue(
+            keccak256(abi.encodePacked(token2499))
+            != keccak256(abi.encodePacked(offChainBaseURI, "2499"))
+        );
+
+        // // original 49
+        _dataStore.storePhotoData(49, ArtworkHelper.getXQSTFile1());
+        bytes memory token2500 = abi.encodePacked(_r.tokenURI(2500));
+        assertTrue(
+            keccak256(abi.encodePacked(token2500))
+            != keccak256(abi.encodePacked(offChainBaseURI, "2500"))
+        );
+        bytes memory token2549 = abi.encodePacked(_r.tokenURI(2549));
+        assertTrue(
+            keccak256(abi.encodePacked(token2549))
+            != keccak256(abi.encodePacked(offChainBaseURI, "2549"))
+        );
+
+        vm.stopPrank();
     }
 
     function testTokenURIIsPublic() public {

@@ -303,6 +303,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getMaxEditionsPerOriginal",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -322,6 +335,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getOrigialTotalSupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -330,6 +356,19 @@
       }
     ],
     "name": "getOriginalId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTotalSupply",
     "outputs": [
       {
         "internalType": "uint256",

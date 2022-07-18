@@ -65,46 +65,48 @@ contract TheHydraRenderer is ITheHydraRenderer {
     ) override public view returns (
         string memory
     ) {
-        if (_id < 50 ) {
+        /// @dev Originals return their tokenUri string
+        if (_id < theHydra.getOrigialTotalSupply() ) {
             return string(abi.encodePacked(
                 dataStore.getOffChainBaseURI(),
                 _id.toString()
             ));
         }
-        return "";
-        // uint256 originalId = ice64.getOriginalTokenId(id);
-        // string memory originalIdStr = originalId.toString();
 
-        // bytes memory data = dataStore.getRawPhotoData(originalId);
-        // bytes memory svg = drawSVGToBytes(data);
+        /// @dev Editions build their tokenUri string on chain
+        uint256 originalId = theHydra.getOriginalId(_id);
+        string memory originalIdStr = originalId.toString();
 
-        // bytes memory svgBase64 = DynamicBuffer.allocate(2**19);
-        // svgBase64.appendSafe("data:image/svg+xml;base64,");
-        // svgBase64.appendSafe(bytes(Base64.encode(svg)));
+        bytes memory data = dataStore.getPhotoData(originalId);
+        bytes memory svg = renderSVG(data);
 
-        // bytes memory json = DynamicBuffer.allocate(2**19);
-        // bytes memory jsonBase64 = DynamicBuffer.allocate(2**19);
+        bytes memory svgBase64 = DynamicBuffer.allocate(2**20);
+        svgBase64.appendSafe("data:image/svg+xml;base64,");
+        svgBase64.appendSafe(bytes(Base64.encode(svg)));
 
-        // json.appendSafe(
-        //     abi.encodePacked(
-        //         '{"symbol":"ICE64","name":"ICE64 #',
-        //         originalIdStr,
-        //         ' (Edition)","description":"A fully on-chain edition of ICE64 #',
-        //         originalIdStr,
-        //         ". Edition size of ",
-        //         ice64.getMaxEditions().toString(),
-        //         '. Each edition is 64x64px in size with a 32px border, 64 colors, and stored on the Ethereum blockchain forever.","image":"',
-        //         string(svgBase64),
-        //         '","external_url":"https://ice64.com/photo/',
-        //         id.toString(),
-        //         '","attributes":[{"trait_type":"Size","value":"64x64px"},{"trait_type":"Border","value":"32px"},{"trait_type":"Colors","value":"64"}]}'
-        //     )
-        // );
+        bytes memory json = DynamicBuffer.allocate(2**20);
+        bytes memory jsonBase64 = DynamicBuffer.allocate(2**20);
 
-        // jsonBase64.appendSafe("data:application/json;base64,");
-        // jsonBase64.appendSafe(bytes(Base64.encode(json)));
+        json.appendSafe(
+            abi.encodePacked(
+                '{"symbol":"ALTERED","name":"The Hydra #',
+                _id.toString(),
+                '","description":"A fully on-chain edition of The Hydra #',
+                originalIdStr,
+                ". Edition of ",
+                theHydra.getMaxEditionsPerOriginal().toString(),
+                '. Each edition is 64x64px in size with a 32px border, 64 colors, and stored on the Ethereum blockchain forever.","image":"',
+                string(svgBase64),
+                '","external_url":"https://altered-earth.xyz/the-hydra/',
+                _id.toString(),
+                '","attributes":[{"trait_type":"Size","value":"64x64px"},{"trait_type":"Border","value":"32px"},{"trait_type":"Colors","value":"64"}]}'
+            )
+        );
 
-        // return string(jsonBase64);
+        jsonBase64.appendSafe("data:application/json;base64,");
+        jsonBase64.appendSafe(bytes(Base64.encode(json)));
+
+        return string(jsonBase64);
     }
     
     /// @notice Get the tokenURI using a custom render type. This allows for retrevial of on-chain, off-chain, or a custom render.. I.E maybe there are multiple sizes
