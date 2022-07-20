@@ -1,7 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import { Button } from "../Button";
-import { theHydraContract } from "../contracts";
 import { MintButton } from "../MintButton";
 import { Photo } from "./Photo";
 

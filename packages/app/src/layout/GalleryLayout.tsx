@@ -1,7 +1,5 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
-import Image from "next/Image";
-import Link from "next/link";
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import {
@@ -10,7 +8,6 @@ import {
 } from "urql";
 
 import { EthereumProviders } from "../EthereumProviders";
-import { ConnectBar } from "./ConnectBar";
 import Footer from "./footer";
 
 export const graphClient = createGraphClient({
