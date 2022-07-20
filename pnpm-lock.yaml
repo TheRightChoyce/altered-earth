@@ -105,7 +105,7 @@ importers:
       typechain: 8.1.0_typescript@4.7.3
       typescript: 4.7.3
 
-  packages/photos:
+  packages/scripts:
     specifiers:
       '@digitak/esrun': ^3.2.8
       '@exquisite-graphics/js': ^0.1.3
