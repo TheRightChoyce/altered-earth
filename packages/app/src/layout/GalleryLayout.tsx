@@ -1,5 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Head from "next/head";
+import Image from "next/Image";
+import Link from "next/link";
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import {
@@ -39,15 +41,18 @@ const Layout: React.FC = ({ children }) => {
       </Head>
       <GraphProvider value={graphClient}>
         <EthereumProviders>
-          <div className="pr-6 top-6 right-6 z-20 fixed">
-            <ConnectButton
-              label="Enter Dream State"
-              accountStatus="full"
-              chainStatus="icon"
-              showBalance={true}
-            />
-          </div>
           <div className="min-h-screen bg-gray-900 text-gray-100">
+            <div className="h-16 lg:h-0 flex items-center justify-center">
+              <div className="lg:pr-6 lg:top-6 lg:right-6 z-20 fixed">
+                <ConnectButton
+                  label="Enter Dream State"
+                  accountStatus="full"
+                  chainStatus="icon"
+                  showBalance={true}
+                />
+              </div>
+            </div>
+
             {children}
           </div>
 

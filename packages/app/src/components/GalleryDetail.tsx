@@ -110,91 +110,99 @@ export const GalleryDetail = ({
 
   return (
     <>
-      <div className="flex">
+      <div className="flex flex-col lg:flex-row">
         {/* Left nav bar */}
-        <div className="w-[10vw] custom-side-bar-bg h-[100vh] fixed">
-          <div className="flex flex-col">
-            <div className="m-auto py-12">
-              <Link href="/">
-                <a>
-                  <h1 className="text-5xl m-auto custom-major-mono">Ae</h1>
-                </a>
-              </Link>
-            </div>
+        <div className="w-full h-24 custom-side-bar-bg flex flex-row items-center justify-around lg:justify-start lg:flex-col lg:w-[10vw] lg:h-[100vh] lg:fixed">
+          <div className="lg:w-full">
+            <Link href="/">
+              <a>
+                <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center">
+                  <h1 className="text-4xl lg:text-5xl m-auto custom-major-mono">
+                    Ae
+                  </h1>
+                </div>
+              </a>
+            </Link>
+          </div>
 
-            <div className="py-12 flex justify-center">
-              <Link href="/the-hydra">
-                <a>
-                  <div>
+          <div className="lg:w-full">
+            <Link href="/the-hydra">
+              <a>
+                <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center">
+                  <div className="pt-2 lg:pt-0">
                     <h1 className="text-5xl custom-major-mono">H</h1>
                   </div>
                   <div>
                     <small className="uppercase">The Hydra</small>
                   </div>
-                </a>
-              </Link>
-            </div>
-            <div
-              className={`${
-                type == "original" ? "bg-slate-600" : "hover:bg-gray-700"
-              } flex justify-center`}
+                </div>
+              </a>
+            </Link>
+          </div>
+          <div className="lg:w-full">
+            <a
+              onClick={() => setType("original")}
+              href="#edition"
+              className="py-12"
             >
-              <a
-                onClick={() => setType("original")}
-                href="#edition"
-                className="py-12"
+              <div
+                className={`${
+                  type == "original" ? "bg-slate-600" : "hover:bg-gray-700"
+                } text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center`}
               >
-                <div>
+                <div className="pt-2 lg:pt-0">
                   <h1 className="text-5xl custom-major-mono">o</h1>
                 </div>
                 <div>
                   <small className="uppercase">Originals</small>
                 </div>
-              </a>
-            </div>
-            <div
-              className={`${
-                type == "edition" ? "bg-slate-600" : "hover:bg-gray-700"
-              } flex justify-center`}
+              </div>
+            </a>
+          </div>
+          <div className="lg:w-full">
+            <a
+              onClick={() => setType("edition")}
+              href="#edition"
+              className="py-12"
             >
-              <a
-                onClick={() => setType("edition")}
-                href="#edition"
-                className="py-12"
+              <div
+                className={`${
+                  type == "edition" ? "bg-slate-600" : "hover:bg-gray-700"
+                } text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center`}
               >
-                <div>
+                <div className="pt-2 lg:pt-0">
                   <h1 className="text-5xl custom-major-mono">e</h1>
                 </div>
                 <div>
                   <small className="uppercase">Editions</small>
                 </div>
-              </a>
-            </div>
-            <div className="fixed bottom-[2vh] w-[10vw] pl-2">
-              <div className="flex justify-center">
-                <div>
-                  <a
-                    href="https://therightchoyce.com"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Image
-                      src="/trc3-logo.svg"
-                      width={128}
-                      height={128}
-                      alt="therightchoyce.eth"
-                    />
-                  </a>
-                </div>
+              </div>
+            </a>
+          </div>
+          <div className="fixed bottom-[2vh] w-[10vw] pl-2">
+            <div className="flex justify-center">
+              <div>
+                <a
+                  href="https://therightchoyce.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Image
+                    src="/trc3-logo.svg"
+                    width={128}
+                    height={128}
+                    alt="therightchoyce.eth"
+                  />
+                </a>
               </div>
             </div>
           </div>
         </div>
-        <div className="flex flex-row-reverse lg:flex-row pl-8 w-[90vw] ml-[10vw]">
+        <div className="flex flex-col-reverse lg:flex-row w-[100vw] lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">
           {/* left / bottom -- info */}
           <div className="col-span-1 flex-auto basis-1/2 pr-8">
             {/* nav */}
-            <div className="flex flex-rows mb-8">
+            <div className="flex flex-rows mb-8 ml-4 lg:ml-0" id="nav">
               {/* breadcrumbs + arrow navigation */}
               <div className="h-16 flex items-center justify-between w-full">
                 <div className="">
@@ -213,7 +221,7 @@ export const GalleryDetail = ({
             </div>
 
             {/* Token Information */}
-            <div className="w-10/12">
+            <div className="w-10/12 m-auto lg:m-0">
               {/* Name & description */}
               <div className="my-[2vh]">
                 <h2 className="text-2xl lg:text-5xl mb-8">{photo.name}</h2>
@@ -222,7 +230,7 @@ export const GalleryDetail = ({
                   <p className="mb-4">
                     {type == "original" && (
                       <span>
-                        An original 1-of-1 artwork comes with a high-res
+                        An original 1-of-1 artwork that comes with a high-res
                         immutable image stored on IPFS and a fully on-chain SVG
                         version. Each token conforms to the ERC-721 standard.
                       </span>
@@ -369,7 +377,10 @@ export const GalleryDetail = ({
           </div>
 
           {/* right / top -- image */}
-          <div className="col-span-1 flex-auto h-[100vh] basis-1/2">
+          <div
+            className="col-span-1 flex-auto h-[100vh] basis-1/2"
+            id="artwork"
+          >
             <div className={`${imageClass} m-auto`}>
               {tokenLoaded && type == "original" && (
                 <div className="">
@@ -401,7 +412,7 @@ export const GalleryDetail = ({
                       src={photo.previewImageUri}
                       alt={photo.name}
                       priority={true}
-                      className="opacity-10"
+                      className="opacity-20"
                     />
                     <div className="absolute w-[75%] h-[75%] top-[12.5%] left-[12.5%]">
                       <Image
