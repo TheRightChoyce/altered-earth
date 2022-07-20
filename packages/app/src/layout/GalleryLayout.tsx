@@ -54,9 +54,8 @@ const Layout: React.FC = ({ children }) => {
             </div>
 
             {children}
+            <Footer />
           </div>
-
-          <Footer />
         </EthereumProviders>
       </GraphProvider>
       <ToastContainer position="bottom-right" draggable={false} />

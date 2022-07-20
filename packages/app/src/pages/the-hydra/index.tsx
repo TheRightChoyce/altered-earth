@@ -8,12 +8,7 @@ import type { NextPageWithLayout } from "../_app";
 const TheHydraPage: NextPageWithLayout = () => {
   return (
     <>
-      <Gallery
-        collection={theHydraCollection}
-        title={"the HydrA"}
-        description="The Hydra exists where the river meets the woods.... The journey is
-          forever changing and The Hydra is always the destination."
-      />
+      <Gallery collection={theHydraCollection} />
     </>
   );
 };

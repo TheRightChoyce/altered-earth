@@ -9,15 +9,7 @@ import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
 import { TypeToggle } from "./TypeToggle";
 
-export const Gallery = ({
-  collection,
-  title,
-  description,
-}: {
-  collection: PhotoCollection;
-  title: string;
-  description: string;
-}) => {
+export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   const isMounted = useIsMounted();
 
   const { address, isReconnecting, isDisconnected } = useAccount();
@@ -116,7 +108,7 @@ export const Gallery = ({
             </div>
           </a>
         </div>
-        <div className="fixed bottom-[2vh] w-[10vw] pl-2">
+        <div className="invisible lg:visible lg:fixed lg:bottom-[2vh] lg:w-[10vw] lg:pl-2">
           <div className="flex justify-center">
             <div>
               <a
@@ -153,13 +145,22 @@ export const Gallery = ({
         <div className="flex flex-col lg:flex-row">
           <div className="basis-1/2">
             <h1 className="text-6xl leading-relaxed lg:text-7xl lg:mb-8 custom-major-mono text-center lg:text-left">
-              {title}
+              {collection.name}
             </h1>
+            {collection.headline && (
+              <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8">
+                <p>{collection.headline}</p>
+              </div>
+            )}
             {collection.description && (
               <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8">
                 <p>{collection.description}</p>
               </div>
             )}
+            <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8">
+              The collection consists of 50 1-of-1 original photos. Each photo
+              then has 50 editions of an on-chain version available.
+            </div>
           </div>
           <div className="basis-1/2">
             <Image
@@ -185,6 +186,11 @@ export const Gallery = ({
             </div>
           </div>
         )}
+
+        <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8">
+          To switch between originals and editions, use the “O” and “E” buttons
+          on the nav , or press the “O” or “E” key on your keyboard.
+        </div>
 
         <div className="mt-16">
           {/* Original / Edition toggle */}

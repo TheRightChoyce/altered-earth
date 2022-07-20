@@ -178,7 +178,7 @@ export const GalleryDetail = ({
             </div>
           </a>
         </div>
-        <div className="fixed bottom-[2vh] w-[10vw] pl-2">
+        <div className="invisible lg:visible lg:fixed lg:bottom-[2vh] lg:w-[10vw] lg:pl-2">
           <div className="flex justify-center">
             <div>
               <a

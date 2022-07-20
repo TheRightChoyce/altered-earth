@@ -6,13 +6,15 @@ export class PhotoCollection {
   id = 0;
   name = "";
   slug = "";
+  headline = "";
   description = "";
 
   photos = new Array<Photo>();
 
-  constructor(id: number, name: string, description: string) {
+  constructor(id: number, name: string, headline: string, description: string) {
     this.id = id;
     this.name = name;
+    this.headline = headline;
     this.description = description;
 
     this.slug = slugify(this.name.toLowerCase());
