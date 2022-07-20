@@ -13,7 +13,6 @@ import { GalleryNav } from "./GalleryNav";
 import { OwnerName } from "./OwnerName";
 import { PhotoCollection } from "./PhotoCollection";
 import { Spinner } from "./Spinner";
-import { TypeToggle } from "./TypeToggle";
 
 const notFound = (
   <div className="flex flex-col w-full text-center">
