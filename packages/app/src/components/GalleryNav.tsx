@@ -16,7 +16,7 @@ export const GalleryNav = ({
     photoId === collection.photos.length - 1 ? 0 : photoId + 1;
 
   return (
-    <div className="flex justify-between m-auto ">
+    <div className="w-24">
       <div>
         <Link href={`/the-hydra/${navigatePreviousPhotoId}`}>
           <a>
@@ -28,17 +28,10 @@ export const GalleryNav = ({
             />
           </a>
         </Link>
-        <div className="w-4 inline-block">&nbsp;</div>
+        <div className="w-8 inline-block">&nbsp;</div>
         <Link href={`/the-hydra/${navigateNextPhotoId}`}>
           <a>
             <Image src="/arrow-right.svg" width={32} height={32} alt="Next" />
-          </a>
-        </Link>
-      </div>
-      <div>
-        <Link href={`/the-hydra`}>
-          <a>
-            <Image src="/x.svg" width={28} height={28} alt="Close" />
           </a>
         </Link>
       </div>

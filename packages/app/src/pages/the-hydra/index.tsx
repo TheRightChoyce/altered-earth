@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 
 import { Gallery } from "../../components/Gallery";
 import { theHydraCollection } from "../../data/the-hydra";
-import Layout from "../../layout/layout";
+import Layout from "../../layout/GalleryLayout";
 import type { NextPageWithLayout } from "../_app";
 
 const TheHydraPage: NextPageWithLayout = () => {
