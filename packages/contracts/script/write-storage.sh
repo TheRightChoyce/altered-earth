@@ -1,4 +1,4 @@
-source ../.env.local
+source .env.local
 
 if [ -z "$CHAIN_ID" ]; then
   echo "CHAIN_ID is not set"

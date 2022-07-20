@@ -26,19 +26,22 @@ export interface WriteStorageInterface extends utils.Interface {
   functions: {
     "IS_SCRIPT()": FunctionFragment;
     "run()": FunctionFragment;
+    "setUp()": FunctionFragment;
     "vm()": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "IS_SCRIPT" | "run" | "vm"
+    nameOrSignatureOrTopic: "IS_SCRIPT" | "run" | "setUp" | "vm"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "IS_SCRIPT", values?: undefined): string;
   encodeFunctionData(functionFragment: "run", values?: undefined): string;
+  encodeFunctionData(functionFragment: "setUp", values?: undefined): string;
   encodeFunctionData(functionFragment: "vm", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "IS_SCRIPT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "run", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setUp", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "vm", data: BytesLike): Result;
 
   events: {};
@@ -77,6 +80,10 @@ export interface WriteStorage extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setUp(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     vm(overrides?: CallOverrides): Promise<[string]>;
   };
 
@@ -86,12 +93,18 @@ export interface WriteStorage extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setUp(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   vm(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     IS_SCRIPT(overrides?: CallOverrides): Promise<boolean>;
 
     run(overrides?: CallOverrides): Promise<void>;
+
+    setUp(overrides?: CallOverrides): Promise<void>;
 
     vm(overrides?: CallOverrides): Promise<string>;
   };
@@ -105,6 +118,10 @@ export interface WriteStorage extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setUp(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     vm(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
@@ -112,6 +129,10 @@ export interface WriteStorage extends BaseContract {
     IS_SCRIPT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     run(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setUp(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

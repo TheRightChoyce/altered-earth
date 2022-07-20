@@ -9,7 +9,7 @@ if [ -z "$CHAIN_ID" ]; then
   exit 1
 fi
 
-forge script script/DeployAll.s.sol:DeployAll -vvvv --ffi --chain-id $CHAIN_ID \
+forge script script/DeployRenderer.s.sol:DeployRenderer -vvvv --ffi --chain-id $CHAIN_ID \
     --rpc-url $RPC_URL \
     --private-key $DEPLOYER_PRIVATE_KEY \
     --broadcast \

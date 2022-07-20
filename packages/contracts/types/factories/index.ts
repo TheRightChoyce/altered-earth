@@ -12,6 +12,7 @@ export { IERC20__factory } from "./IERC20__factory";
 export { IERC20Metadata__factory } from "./IERC20Metadata__factory";
 export { IERC2981__factory } from "./IERC2981__factory";
 export { IExquisiteGraphics__factory } from "./IExquisiteGraphics__factory";
+export { ITheHydra__factory } from "./ITheHydra__factory";
 export { ITheHydraDataStore__factory } from "./ITheHydraDataStore__factory";
 export { ITheHydraRenderer__factory } from "./ITheHydraRenderer__factory";
 export { Ownable__factory } from "./Ownable__factory";

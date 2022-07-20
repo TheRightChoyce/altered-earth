@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WriteStorage__factory = exports.TheHydraRenderer__factory = exports.TheHydraRender__factory = exports.TheHydraDataStore__factory = exports.TheHydra__factory = exports.Owned__factory = exports.Ownable__factory = exports.ITheHydraRenderer__factory = exports.ITheHydraDataStore__factory = exports.IExquisiteGraphics__factory = exports.IERC2981__factory = exports.IERC20Metadata__factory = exports.IERC20__factory = exports.IERC165__factory = exports.ExquisiteGraphics__factory = exports.ERC721TokenReceiver__factory = exports.ERC721__factory = exports.ERC20__factory = exports.DeployAll__factory = exports.factories = void 0;
+exports.WriteStorage__factory = exports.TheHydraRenderer__factory = exports.TheHydraRender__factory = exports.TheHydraDataStore__factory = exports.TheHydra__factory = exports.Owned__factory = exports.Ownable__factory = exports.ITheHydraRenderer__factory = exports.ITheHydraDataStore__factory = exports.ITheHydra__factory = exports.IExquisiteGraphics__factory = exports.IERC2981__factory = exports.IERC20Metadata__factory = exports.IERC20__factory = exports.IERC165__factory = exports.ExquisiteGraphics__factory = exports.ERC721TokenReceiver__factory = exports.ERC721__factory = exports.ERC20__factory = exports.DeployAll__factory = exports.factories = void 0;
 exports.factories = __importStar(require("./factories"));
 var DeployAll__factory_1 = require("./factories/DeployAll.s.sol/DeployAll__factory");
 Object.defineProperty(exports, "DeployAll__factory", { enumerable: true, get: function () { return DeployAll__factory_1.DeployAll__factory; } });
@@ -45,6 +45,8 @@ var IERC2981__factory_1 = require("./factories/IERC2981__factory");
 Object.defineProperty(exports, "IERC2981__factory", { enumerable: true, get: function () { return IERC2981__factory_1.IERC2981__factory; } });
 var IExquisiteGraphics__factory_1 = require("./factories/IExquisiteGraphics__factory");
 Object.defineProperty(exports, "IExquisiteGraphics__factory", { enumerable: true, get: function () { return IExquisiteGraphics__factory_1.IExquisiteGraphics__factory; } });
+var ITheHydra__factory_1 = require("./factories/ITheHydra__factory");
+Object.defineProperty(exports, "ITheHydra__factory", { enumerable: true, get: function () { return ITheHydra__factory_1.ITheHydra__factory; } });
 var ITheHydraDataStore__factory_1 = require("./factories/ITheHydraDataStore__factory");
 Object.defineProperty(exports, "ITheHydraDataStore__factory", { enumerable: true, get: function () { return ITheHydraDataStore__factory_1.ITheHydraDataStore__factory; } });
 var ITheHydraRenderer__factory_1 = require("./factories/ITheHydraRenderer__factory");

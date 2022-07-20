@@ -24,11 +24,6 @@ const _abi = [
     },
     {
         inputs: [],
-        name: "BeyondTheScopeOfConsciousness",
-        type: "error",
-    },
-    {
-        inputs: [],
         name: "InvalidMemorySequence",
         type: "error",
     },
