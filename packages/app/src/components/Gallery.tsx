@@ -9,7 +9,15 @@ import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
 import { TypeToggle } from "./TypeToggle";
 
-export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
+export const Gallery = ({
+  collection,
+  title,
+  description,
+}: {
+  collection: PhotoCollection;
+  title: string;
+  description: string;
+}) => {
   const isMounted = useIsMounted();
 
   const { address, isReconnecting, isDisconnected } = useAccount();
@@ -39,55 +47,193 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   }
 
   return (
-    <>
-      {collection.description && (
-        <div className="container mb-4 px-8 text-center tracking-wide text-md lg:text-xl lg:mb-8">
-          <p>{collection.description}</p>
+    <div className="flex flex-col lg:flex-row">
+      {/* Left nav bar */}
+      <div className="w-full h-24 custom-side-bar-bg flex flex-row items-center justify-around lg:justify-start lg:flex-col lg:w-[10vw] lg:h-[100vh] lg:fixed">
+        <div className="lg:w-full">
+          <Link href="/">
+            <a>
+              <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center">
+                <h1 className="text-4xl lg:text-5xl m-auto custom-major-mono">
+                  Ae
+                </h1>
+              </div>
+            </a>
+          </Link>
         </div>
-      )}
 
-      {!address && (
-        <div className="mb-8 p-8 lg:mb-16">
-          <h4 className="text-2xl lg:text-4xl lg:max-w-xl mb-8 text-center text-pink-200 ">
-            Only in a dream state can you fully experience an Altered Reality.
-          </h4>
-          <div className="flex justify-center">
-            <ConnectButton label="Connect wallet to dream" />
-          </div>
+        <div className="lg:w-full">
+          <Link href="/the-hydra">
+            <a>
+              <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center">
+                <div className="pt-2 lg:pt-0">
+                  <h1 className="text-5xl custom-major-mono">H</h1>
+                </div>
+                <div>
+                  <small className="uppercase">The Hydra</small>
+                </div>
+              </div>
+            </a>
+          </Link>
         </div>
-      )}
-
-      {/* Original / Edition toggle */}
-      <TypeToggle type={type} setType={setType} />
-
-      <div
-        className={`${imageClass} px-[4vw] grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 justify-items-center `}
-      >
-        {collection.photos.map((photo: Photo) => (
-          <div
-            key={photo.id}
-            className="md:h-64 md:w-64 lg:hover:scale-110 lg:transition-transform lg:duration-500"
+        <div className="lg:w-full">
+          <a
+            onClick={() => setType("original")}
+            href="#edition"
+            className="py-12"
           >
-            <h5 className="cursor-pointer">
-              <Link href={`/the-hydra/${photo.id}#${type}`}>
-                <a>
-                  <Image
-                    src={
-                      type == "original"
-                        ? photo.previewImageUri
-                        : photo.svgPreviewUri
-                    }
-                    width={512}
-                    height={512}
-                    alt={photo.name}
-                    className="opacity-90 hover:opacity-100 ease-linear transition-all duration-500"
-                  />
-                </a>
-              </Link>
-            </h5>
+            <div
+              className={`${
+                type == "original" ? "bg-slate-600" : "hover:bg-gray-700"
+              } text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center`}
+            >
+              <div className="pt-2 lg:pt-0">
+                <h1 className="text-5xl custom-major-mono">o</h1>
+              </div>
+              <div>
+                <small className="uppercase">Originals</small>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div className="lg:w-full">
+          <a
+            onClick={() => setType("edition")}
+            href="#edition"
+            className="py-12"
+          >
+            <div
+              className={`${
+                type == "edition" ? "bg-slate-600" : "hover:bg-gray-700"
+              } text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center`}
+            >
+              <div className="pt-2 lg:pt-0">
+                <h1 className="text-5xl custom-major-mono">e</h1>
+              </div>
+              <div>
+                <small className="uppercase">Editions</small>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div className="fixed bottom-[2vh] w-[10vw] pl-2">
+          <div className="flex justify-center">
+            <div>
+              <a
+                href="https://therightchoyce.com"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Image
+                  src="/trc3-logo.svg"
+                  width={128}
+                  height={128}
+                  alt="therightchoyce.eth"
+                />
+              </a>
+            </div>
           </div>
-        ))}
+        </div>
       </div>
-    </>
+      {/* content */}
+      <div className="w-[100vw] lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">
+        <div className="flex flex-rows lg:mb-8 ml-4 lg:ml-0" id="nav">
+          {/* breadcrumbs + arrow navigation */}
+          <div className="h-16 flex items-center justify-between w-full">
+            <div className="">
+              <h4 className="lg:text-xl font-extralight leading-relaxed">
+                <Link href="/the-hydra">
+                  <a className="font-extrabold">THE HYDRA</a>
+                </Link>{" "}
+                / ORIGINALS
+              </h4>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col lg:flex-row">
+          <div className="basis-1/2">
+            <h1 className="text-6xl leading-relaxed lg:text-7xl lg:mb-8 custom-major-mono text-center lg:text-left">
+              {title}
+            </h1>
+            {collection.description && (
+              <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8">
+                <p>{collection.description}</p>
+              </div>
+            )}
+          </div>
+          <div className="basis-1/2">
+            <Image
+              src="/the-hydra/hydra-hero.png"
+              alt="The Hydra Collection"
+              layout="intrinsic"
+              width={1443}
+              height={658}
+            />
+          </div>
+        </div>
+
+        {!address && (
+          <div className="my-8 p-8 lg:mb-16 flex flex-col justify-center items-center w-3/4 bg-pink-900 m-auto">
+            <div className="basis-1">
+              <h4 className="text-2xl lg:max-w-xl mb-8 text-center text-gray-200 uppercase">
+                altered earth is best experienced in a dream state. please
+                connect your wallet to dream
+              </h4>
+            </div>
+            <div className="">
+              <ConnectButton label="Connect wallet to dream" />
+            </div>
+          </div>
+        )}
+
+        <div className="mt-16">
+          {/* Original / Edition toggle */}
+          <TypeToggle type={type} setType={setType} />
+
+          <div
+            className={`${imageClass} px-[4vw] grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 justify-items-center`}
+          >
+            {collection.photos.map((photo: Photo) => (
+              <div
+                key={photo.id}
+                className="h-64 w-48 md:h-96 md:w-64 lg:hover:scale-110 lg:transition-transform lg:duration-500"
+              >
+                <Link href={`/the-hydra/${photo.id}#${type}`}>
+                  <a>
+                    <div className="relative">
+                      <Image
+                        layout={"responsive"}
+                        width={768}
+                        height={1024}
+                        src={photo.previewImageUri}
+                        alt={photo.name}
+                        priority={true}
+                        className={`${
+                          type == "original" ? "opacity-100" : "opacity-20"
+                        } ease-linear transition-all duration-500`}
+                      />
+                      <div
+                        className={`${
+                          type == "original" ? "hidden" : "visible"
+                        } absolute w-[75%] h-[75%] top-[12.5%] left-[12.5%]`}
+                      >
+                        <Image
+                          layout={"responsive"}
+                          width={768}
+                          height={768}
+                          src={photo.svgPreviewUri}
+                          alt={photo.name}
+                          priority={true}
+                        />
+                      </div>
+                    </div>
+                  </a>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };

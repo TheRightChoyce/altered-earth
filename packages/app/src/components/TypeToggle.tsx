@@ -19,7 +19,7 @@ export const TypeToggle = ({
             `}
         onClick={() => setType("original")}
       >
-        1 of 1 Original
+        Browse originals
       </a>
       <a
         href="#edition"
@@ -32,7 +32,7 @@ export const TypeToggle = ({
             `}
         onClick={() => setType("edition")}
       >
-        On-chain edition
+        Browse editions
       </a>
     </div>
   );
