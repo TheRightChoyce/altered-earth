@@ -74,17 +74,63 @@ contract TheHydraRendererTest is DSTest {
     //
 
     function testSetDataStore() public {
-        assertTrue(false);
+        TheHydraRenderer _render = getNewRenderer();
+        TheHydraDataStore _dataStore = getNewDataStore();
+
+        assertTrue(address(_render.dataStore()) !=  address(_dataStore));
+        
+        vm.prank(owner);
+        _render.setDataStore(address(_dataStore));
+        assertEq(address(_render.dataStore()), address(_dataStore));
     }
     function testSetDataStoreOnlyOwner() public {
-        assertTrue(false);
+        TheHydraRenderer _render = getNewRenderer();
+        TheHydraDataStore _dataStore = getNewDataStore();
+        
+        vm.startPrank(minter);
+        vm.expectRevert('UNAUTHORIZED');
+        _render.setDataStore(address(_dataStore));
+        vm.stopPrank();
+    }
+    function testSetDataStoreTracksHistory() public {
+        TheHydraRenderer _renderer = getNewRenderer();
+        
+        // first
+        TheHydraDataStore _dataStore1 = getNewDataStore();
+        
+        vm.prank(owner);
+        _renderer.setDataStore(address(_dataStore1));
+        
+        assertEq(_renderer.dataStoreHistory(0), address(_dataStore1));
+
+        // second
+        TheHydraDataStore _dataStore2 = getNewDataStore();
+        
+        vm.prank(owner);
+        _renderer.setDataStore(address(_dataStore2));
+
+        assertEq(_renderer.dataStoreHistory(0), address(_dataStore1));
+        assertEq(_renderer.dataStoreHistory(1), address(_dataStore2));
     }
 
     function testSetExquisiteGraphics() public {
-        assertTrue(false);
+        TheHydraRenderer _render = getNewRenderer();
+        ExquisiteGraphics _xqstgfx = new ExquisiteGraphics();
+
+        assertTrue(address(_render.xqstgfx()) != address(_xqstgfx));
+        
+        vm.prank(owner);
+        _render.setExquisiteGraphics(address(_xqstgfx));
+        assertEq(address(_render.xqstgfx()), address(_xqstgfx));
     }
     function testSetExquisiteGraphicsOnlyOwner() public {
-        assertTrue(false);
+        TheHydraRenderer _render = getNewRenderer();
+        ExquisiteGraphics _xqstgfx = new ExquisiteGraphics();
+
+        vm.startPrank(minter);
+        vm.expectRevert('UNAUTHORIZED');
+        _render.setExquisiteGraphics(address(_xqstgfx));
+        vm.stopPrank();
     }
 
     // --------------------------------------------------------

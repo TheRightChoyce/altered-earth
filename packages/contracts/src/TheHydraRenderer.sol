@@ -70,7 +70,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         address _dataStore
     ) external onlyOwner {
         dataStore = ITheHydraDataStore(_dataStore);
-        // TODO -- track any updates in dataStoreHistory
+        dataStoreHistory.push(_dataStore);
     }
 
     /// @notice Allows the owner to update the ExquisiteGraphics library
@@ -140,7 +140,6 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
                 '{"trait_type":"Colors","value":"256"}',
             ']'
         );
-
 
         json.appendSafe(
             abi.encodePacked(
