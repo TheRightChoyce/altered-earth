@@ -48,7 +48,7 @@ contract TheHydraTest is DSTest {
     }
     function getNewRenderer(TheHydra _c) public returns (TheHydraRenderer) {
         return new TheHydraRenderer(
-            address(_c), address(getNewDataStore()), address(xqstgfx)
+            owner, address(_c), address(getNewDataStore()), address(xqstgfx)
         );
     }
 
@@ -359,6 +359,10 @@ contract TheHydraTest is DSTest {
 
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
         _c.getOriginalId(2551);
+    }
+
+    function testGetEditionIndexFromId() public {
+        assertTrue(false);
     }
 
     // --------------------------------------------------------

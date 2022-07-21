@@ -10,12 +10,15 @@ import "./lib/DynamicBuffer.sol";
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "boringsolidity/contracts/libraries/Base64.sol";
+import "solmate/auth/Owned.sol";
+
+// TODO -- ability to update datastore and xqstgfx contracts
 
 /// @author therightchoyce.eth
 /// @title  Upgradeable renderer interface
 /// @notice This leaves room for us to change how we return token metadata and
 ///         unlocks future capability like fully on-chain storage.
-contract TheHydraRenderer is ITheHydraRenderer {
+contract TheHydraRenderer is ITheHydraRenderer, Owned {
     
     // --------------------------------------------------------
     // ~~ Utilities  ~~
@@ -33,6 +36,9 @@ contract TheHydraRenderer is ITheHydraRenderer {
     /// @dev The address of the on-chain data storage contract
     ITheHydraDataStore public dataStore;
 
+    /// @notice Track the history of data store updates for integrity purposes
+    address[] public dataStoreHistory;
+
     /// @dev The address of the xqstgfx public rendering contract
     IExquisiteGraphics public xqstgfx;
 
@@ -40,16 +46,38 @@ contract TheHydraRenderer is ITheHydraRenderer {
     // ~~ Constructor  ~~
     // --------------------------------------------------------
     
+    /// @param _owner The owner of the contract, when deployed
     /// @param _theHydra The address of the token ownership contract
     /// @param _theHydraDataStore The address of the on-chain data storage contract
     /// @param _xqstgfx The address of the xqstgfx public rendering contract
     constructor(
+        address _owner,
         address _theHydra,
         address _theHydraDataStore,
         address _xqstgfx
-    ) {
+    ) Owned(_owner) {
         theHydra = ITheHydra(_theHydra);
         dataStore = ITheHydraDataStore(_theHydraDataStore);
+        xqstgfx = IExquisiteGraphics(payable(_xqstgfx));
+    }
+
+    // --------------------------------------------------------
+    // ~~ Setters  ~~
+    // --------------------------------------------------------
+    /// @notice Allows the owner to update the data store
+    /// @param _dataStore New address for the datastore
+    function setDataStore(
+        address _dataStore
+    ) external onlyOwner {
+        dataStore = ITheHydraDataStore(_dataStore);
+        // TODO -- track any updates in dataStoreHistory
+    }
+
+    /// @notice Allows the owner to update the ExquisiteGraphics library
+    /// @param _xqstgfx new address for the _xqstgfx library
+    function setExquisiteGraphics(
+        address _xqstgfx
+    ) external onlyOwner {
         xqstgfx = IExquisiteGraphics(payable(_xqstgfx));
     }
 
@@ -75,31 +103,54 @@ contract TheHydraRenderer is ITheHydraRenderer {
 
         /// @dev Editions build their tokenUri string on chain
         uint256 originalId = theHydra.getOriginalId(_id);
-        string memory originalIdStr = originalId.toString();
+        bytes memory svg = renderSVG(dataStore.getData(originalId));
 
-        bytes memory data = dataStore.getPhotoData(originalId);
-        bytes memory svg = renderSVG(data);
-
+        /// @dev Build the base64 encoded version of the SVG to reference in the imageUrl
         bytes memory svgBase64 = DynamicBuffer.allocate(2**20);
         svgBase64.appendSafe("data:image/svg+xml;base64,");
         svgBase64.appendSafe(bytes(Base64.encode(svg)));
 
+        /// @dev Build the json for the metadata file
         bytes memory json = DynamicBuffer.allocate(2**20);
         bytes memory jsonBase64 = DynamicBuffer.allocate(2**20);
 
+        bytes memory editionOf = abi.encodePacked(
+            theHydra.getEditionIndexFromId(_id),
+            ' of ',
+            theHydra.getMaxEditionsPerOriginal().toString()
+        );
+        bytes memory name = abi.encodePacked(
+            '"name":"The Hydra #', _id.toString(),'",'
+        );
+        bytes memory description = abi.encodePacked(
+            '"description":"An on-chain edition of The Hydra #', originalId.toString(),
+            '. This is edition ', string(editionOf),
+            '. Each edition is stored as an immutable SVG on the Ethereum blockchain.",'
+        );
+        bytes memory image = abi.encodePacked(
+            '"image":"', string(svgBase64),'",'
+        );
+        bytes memory externalUrl = abi.encodePacked(
+            '"external_url":"https://altered-earth.xyz/the-hydra/', _id.toString(),'",'
+        );
+        bytes memory attributes = abi.encodePacked(
+            '"attributes":[',
+                '{"trait_type":"Edition","value":"', editionOf, '"},',
+                '{"trait_type":"Size","value":"64x64px"},',
+                '{"trait_type":"Colors","value":"256"}',
+            ']'
+        );
+
+
         json.appendSafe(
             abi.encodePacked(
-                '{"symbol":"ALTERED","name":"The Hydra #',
-                _id.toString(),
-                '","description":"A fully on-chain edition of The Hydra #',
-                originalIdStr,
-                ". Edition of ",
-                theHydra.getMaxEditionsPerOriginal().toString(),
-                '. Each edition is 64x64px in size with a 32px border, 64 colors, and stored on the Ethereum blockchain forever.","image":"',
-                string(svgBase64),
-                '","external_url":"https://altered-earth.xyz/the-hydra/',
-                _id.toString(),
-                '","attributes":[{"trait_type":"Size","value":"64x64px"},{"trait_type":"Border","value":"32px"},{"trait_type":"Colors","value":"64"}]}'
+                '{',
+                    name,
+                    description,
+                    image,
+                    externalUrl,
+                    attributes,
+                '}'
             )
         );
 
@@ -142,9 +193,9 @@ contract TheHydraRenderer is ITheHydraRenderer {
 
         svg.appendSafe(
             abi.encodePacked(
-                '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" width="100%" height="100%" version="1.1" viewBox="0 0 128 128" fill="#fff"><rect width="128" height="128" fill="#fff" /><g transform="translate(32,32)">',
+                '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" width="100%" height="100%" version="1.1" viewBox="0 0 128 128" fill="#fff">',
                 rects,
-                "</g></svg>"
+                "</svg>"
             )
         );        
         return svg;
@@ -170,7 +221,7 @@ contract TheHydraRenderer is ITheHydraRenderer {
     ) external view returns (
         string memory
     ) {
-        bytes memory data = dataStore.getPhotoData(_id);
+        bytes memory data = dataStore.getData(_id);
         return renderSVG_AsString(data);
     }
 
@@ -179,7 +230,7 @@ contract TheHydraRenderer is ITheHydraRenderer {
     ) external view returns (
         string memory
     ) {
-        bytes memory data = dataStore.getPhotoData(_id);
+        bytes memory data = dataStore.getData(_id);
         bytes memory svg = renderSVG(data);
 
         bytes memory svgBase64 = DynamicBuffer.allocate(2**19);

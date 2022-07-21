@@ -29,6 +29,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev The maximum available editions per original.
     uint256 immutable editionsPerOriginal = 50;
 
+    /// @dev Max edition count per origial
+    uint256 immutable maxEditionCountPerOriginal = 49;
+
     /// @dev The total number of 1-of-1 original NFTs available
     uint256 immutable totalOriginalSupply = 50;
 
@@ -100,7 +103,15 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @param _originalId The edition id to check
     modifier CheckSubConsciousness(uint256 _originalId) {
         // currently allowing zero-based ids
-        if (editionMintCount[_originalId] > maxOriginalId) revert BeyondTheScopeOfConsciousness();
+        if (editionMintCount[_originalId] > maxEditionCountPerOriginal) revert BeyondTheScopeOfConsciousness();
+        _;
+    }
+
+    /// @dev Fail if the editionId is actually an originalId, or if it is beyond the max number of editions
+    /// @param _editionId The tokenId of this edition
+    modifier CheckEditionIdBoundries(uint256 _editionId) {
+        if (_editionId < totalOriginalSupply) revert BeyondTheScopeOfConsciousness();
+        if (_editionId > maxEditionId) revert BeyondTheScopeOfConsciousness();
         _;
     }
 
@@ -206,7 +217,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         returns (uint256)
     {
         /// @dev (originalId * editionsPerOriginal) + numOriginals
-        return (_originalId * 50) + 50;
+        return (_originalId * editionsPerOriginal) + totalOriginalSupply;
     }
     /// @notice Gets the next sequental id available to mint for a particular edition
     /// @param _originalId TokenId of the original 1-of-1 NFT
@@ -220,9 +231,11 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         returns (uint256)
     {
         /// @dev same as getEditionStartId + add the counter
-        return (_originalId * 50) + 50 + editionMintCount[_originalId];
+        return (_originalId * editionsPerOriginal) + totalOriginalSupply + editionMintCount[_originalId];
     }
 
+    /// @notice Gets the current number of editions minted for this original
+    /// @param _originalId TokenId of the original 1-of-1 NFT
     function getEditionMintCount(
         uint256 _originalId
     )
@@ -232,6 +245,20 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         returns (uint256)
     {
         return editionMintCount[_originalId];
+    }
+
+    /// @notice Given any editionId, determine the index of that edition.. I.E is it edition 1 of 50, 10 of 50, etc..
+    /// @param _id TokenId of the edition
+    function getEditionIndexFromId(
+        uint256 _id
+    )
+        public
+        view
+        CheckEditionIdBoundries(_id)
+        returns (uint256)
+    {
+        // TODO!
+        return _id;
     }
 
     /// @notice Gets the number of available editions per original

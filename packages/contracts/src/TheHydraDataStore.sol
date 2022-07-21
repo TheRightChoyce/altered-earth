@@ -19,7 +19,7 @@ contract TheHydraDataStore is ITheHydraDataStore, Owned {
     string private offChainBaseURI;
     
     /// @dev Byte size of each on-chain photo
-    uint256 private constant photoDataByteSize = 5128;
+    uint256 immutable private photoDataByteSize = 5128;
 
     /// @dev Maps each photo to its on-chain storage address
     mapping(uint256 => address) private onChainStorage;
@@ -65,30 +65,30 @@ contract TheHydraDataStore is ITheHydraDataStore, Owned {
     // ~~ On Chain Storage ~~
     // --------------------------------------------------------
 
-    /// @notice Admin function to store the on-chain data for a particular photo
+    /// @notice Admin function to store the on-chain data for TheHydra
     /// @dev Uses SSTORE2 to store bytes data as a stand-alone contract
-    /// @param _photoId The id of the photo -- TODO: This may have to change!
-    /// @param _data The raw data in the .xqst formar
-    function storePhotoData(
-        uint256 _photoId,
+    /// @param _originalId The originalId of the photo, not the editionId. You can use the TheHydra.getOriginalId() to get the originalId of any edition
+    /// @param _data The raw data in the .xqst format
+    function storeData(
+        uint256 _originalId,
         bytes calldata _data
     ) external onlyOwner {
 
         /// @dev Currently storing 1 photo per storage contract -- this can be optimized to chunk more data into each storage contract!
         if (_data.length != photoDataByteSize) revert InvalidMemorySequence();
 
-        onChainStorage[_photoId] = SSTORE2.write(_data);
+        onChainStorage[_originalId] = SSTORE2.write(_data);
     }
 
-    /// @notice Gets the data for a photo in .xqst format
+    /// @notice Gets the data in .xqst format
     /// @dev Our renderer contract will uses this when generating the metadata
-    /// @param _photoId The id of the photo -- TODO: This may have to change!
-    function getPhotoData(
-        uint256 _photoId
+    /// @param _originalId The originalId of the photo, not the editionId. You can use the TheHydra.getOriginalId() to get the originalId of any edition
+    function getData(
+        uint256 _originalId
     ) external view returns (
         bytes memory
     )
     {
-        return SSTORE2.read(onChainStorage[_photoId]);
+        return SSTORE2.read(onChainStorage[_originalId]);
     }
 }

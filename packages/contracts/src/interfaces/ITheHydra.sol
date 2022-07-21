@@ -11,4 +11,5 @@ interface ITheHydra {
     function getMaxEditionsPerOriginal() external pure returns (uint256);
     function getOrigialTotalSupply() external pure returns (uint256);
     function getTotalSupply() external pure returns (uint256);
+    function getEditionIndexFromId(uint256 _id) external view returns (uint256);
 }

@@ -23,6 +23,7 @@ contract DeployRenderer is Script {
 
     function deployRendererContract() public {
         renderer = new TheHydraRenderer(
+            vm.envAddress("OWNER"),
             address(theHydra),
             address(dataStore),
             0xDf01A4040493B514605392620B3a0a05Eb8Cd295

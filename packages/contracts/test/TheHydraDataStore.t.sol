@@ -75,53 +75,53 @@ contract TheHydraDataStoreTest is DSTest {
     // ~~ On Chain Storage ~~
     // --------------------------------------------------------
 
-    function testStorePhotoData() public {
+    function testStoreData() public {
         TheHydraDataStore _d = getNewDataStore();
 
         bytes memory token0 = ArtworkHelper.getXQSTFile0();
         bytes memory token1 = ArtworkHelper.getXQSTFile1();
         
         vm.prank(owner);
-        _d.storePhotoData(0, token0);
+        _d.storeData(0, token0);
 
         vm.prank(owner);
-        _d.storePhotoData(1, token1);
+        _d.storeData(1, token1);
 
-        bytes memory result0 = _d.getPhotoData(0);
-        bytes memory result1 = _d.getPhotoData(1);
+        bytes memory result0 = _d.getData(0);
+        bytes memory result1 = _d.getData(1);
         
         assertEq0(token0, result0);
         assertEq0(token1, result1);
         
     }
-    function testStorePhotoDataOnlyOwner() public {
+    function testStoreDataOnlyOwner() public {
         TheHydraDataStore _d = getNewDataStore();
         
         vm.expectRevert("UNAUTHORIZED");
         vm.startPrank(minter);
-        _d.storePhotoData(0, ArtworkHelper.getXQSTFile0());
+        _d.storeData(0, ArtworkHelper.getXQSTFile0());
         vm.stopPrank();
     }
 
-    function testStorePhotoDataInvalidData() public {
+    function testStoreDataInvalidData() public {
         TheHydraDataStore _d = getNewDataStore();
         
         vm.expectRevert(TheHydraDataStore.InvalidMemorySequence.selector);
         vm.startPrank(owner);
-        _d.storePhotoData(0, hex"000000");
+        _d.storeData(0, hex"000000");
         vm.stopPrank();
     }
 
     function testGetPhotoDataIsPublic() public {
         TheHydraDataStore _d = getNewDataStore();
         vm.prank(owner);
-        _d.storePhotoData(0, ArtworkHelper.getXQSTFile0());
+        _d.storeData(0, ArtworkHelper.getXQSTFile0());
 
         vm.prank(minter);
-        bytes memory minterResult = _d.getPhotoData(0);
+        bytes memory minterResult = _d.getData(0);
 
         vm.prank(owner);
-        bytes memory ownerResult = _d.getPhotoData(0);
+        bytes memory ownerResult = _d.getData(0);
 
         assertEq0(ArtworkHelper.getXQSTFile0(), minterResult);
         assertEq0(ownerResult, minterResult);
@@ -130,15 +130,15 @@ contract TheHydraDataStoreTest is DSTest {
         TheHydraDataStore _d = getNewDataStore();
         
         vm.expectRevert(stdError.arithmeticError);
-        _d.getPhotoData(0);
+        _d.getData(0);
         vm.expectRevert(stdError.arithmeticError);
-        _d.getPhotoData(1);
+        _d.getData(1);
 
         vm.prank(owner);
-        _d.storePhotoData(0, ArtworkHelper.getXQSTFile0());
-        _d.getPhotoData(0);
+        _d.storeData(0, ArtworkHelper.getXQSTFile0());
+        _d.getData(0);
         
         vm.expectRevert(stdError.arithmeticError);
-        _d.getPhotoData(1);
+        _d.getData(1);
     }    
 }

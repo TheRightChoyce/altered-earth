@@ -49,7 +49,7 @@ contract TheHydraRendererTest is DSTest {
         TheHydraDataStore _dataStore = getNewDataStore();
         
         return new TheHydraRenderer(
-            address(_theHydra), address(_dataStore), address(xqstgfx)
+            owner, address(_theHydra), address(_dataStore), address(xqstgfx)
         );
     }
 
@@ -58,6 +58,7 @@ contract TheHydraRendererTest is DSTest {
         TheHydraDataStore _dataStore = getNewDataStore();
         
         TheHydraRenderer _renderer = new TheHydraRenderer(
+            owner,
             address(_theHydra),
             address(_dataStore),
             address(xqstgfx)
@@ -66,6 +67,24 @@ contract TheHydraRendererTest is DSTest {
         assertEq(address(_renderer.theHydra()), address(_theHydra));
         assertEq(address(_renderer.dataStore()), address(_dataStore));
         assertEq(address(_renderer.xqstgfx()), address(xqstgfx));
+    }
+
+    //
+    // ~~ Setters ~~
+    //
+
+    function testSetDataStore() public {
+        assertTrue(false);
+    }
+    function testSetDataStoreOnlyOwner() public {
+        assertTrue(false);
+    }
+
+    function testSetExquisiteGraphics() public {
+        assertTrue(false);
+    }
+    function testSetExquisiteGraphicsOnlyOwner() public {
+        assertTrue(false);
     }
 
     // --------------------------------------------------------
@@ -77,6 +96,7 @@ contract TheHydraRendererTest is DSTest {
         TheHydraDataStore _dataStore = getNewDataStore();
         
         TheHydraRenderer _r = new TheHydraRenderer(
+            owner,
             address(_theHydra),
             address(_dataStore),
             address(xqstgfx)
@@ -94,6 +114,7 @@ contract TheHydraRendererTest is DSTest {
         /// @dev -- reminder!! dataStore fails with stdError.arithmeticError if it can not look up a photo from the store
 
         TheHydraRenderer _r = new TheHydraRenderer(
+            owner,
             address(_theHydra),
             address(_dataStore),
             address(xqstgfx)
@@ -103,7 +124,7 @@ contract TheHydraRendererTest is DSTest {
         /// @dev -- these are the originalIds that need to be stored -- not the edition ids!
         
         // Ensure there is SOME output
-        _dataStore.storePhotoData(0, ArtworkHelper.getXQSTFile1());
+        _dataStore.storeData(0, ArtworkHelper.getXQSTFile1());
         assertTrue(
             keccak256(abi.encodePacked(_r.tokenURI(50)))
             != keccak256(abi.encodePacked(""))
@@ -116,7 +137,7 @@ contract TheHydraRendererTest is DSTest {
         );
 
         // original 1
-        _dataStore.storePhotoData(1, ArtworkHelper.getXQSTFile1());
+        _dataStore.storeData(1, ArtworkHelper.getXQSTFile1());
         bytes memory token51 = abi.encodePacked(_r.tokenURI(51));
         assertTrue(
             keccak256(token51)
@@ -129,7 +150,7 @@ contract TheHydraRendererTest is DSTest {
         );
 
         // original 2
-        _dataStore.storePhotoData(2, ArtworkHelper.getXQSTFile1());
+        _dataStore.storeData(2, ArtworkHelper.getXQSTFile1());
         
         bytes memory token150 = abi.encodePacked(_r.tokenURI(150));
         assertTrue(
@@ -143,7 +164,7 @@ contract TheHydraRendererTest is DSTest {
         );
 
         // // original 48
-        _dataStore.storePhotoData(48, ArtworkHelper.getXQSTFile1());
+        _dataStore.storeData(48, ArtworkHelper.getXQSTFile1());
         bytes memory token2450 = abi.encodePacked(_r.tokenURI(2450));
         assertTrue(
             keccak256(abi.encodePacked(token2450))
@@ -156,7 +177,7 @@ contract TheHydraRendererTest is DSTest {
         );
 
         // // original 49
-        _dataStore.storePhotoData(49, ArtworkHelper.getXQSTFile1());
+        _dataStore.storeData(49, ArtworkHelper.getXQSTFile1());
         bytes memory token2500 = abi.encodePacked(_r.tokenURI(2500));
         assertTrue(
             keccak256(abi.encodePacked(token2500))
@@ -186,6 +207,7 @@ contract TheHydraRendererTest is DSTest {
         TheHydraDataStore _dataStore = getNewDataStore();
         
         TheHydraRenderer _r = new TheHydraRenderer(
+            owner,
             address(_theHydra),
             address(_dataStore),
             address(xqstgfx)
@@ -248,19 +270,20 @@ contract TheHydraRendererTest is DSTest {
         TheHydraDataStore _dataStore = getNewDataStore();
         
         TheHydraRenderer _r = new TheHydraRenderer(
+            owner,
             address(_theHydra),
             address(_dataStore),
             address(xqstgfx)
         );
 
         vm.prank(owner);
-        _dataStore.storePhotoData(0, ArtworkHelper.getXQSTFile0());
+        _dataStore.storeData(0, ArtworkHelper.getXQSTFile0());
         
         string memory result0 = _r.getOnChainSVG(0);
         assertTrue(bytes(result0).length > 0);
 
         vm.prank(owner);
-        _dataStore.storePhotoData(1, ArtworkHelper.getXQSTFile1());
+        _dataStore.storeData(1, ArtworkHelper.getXQSTFile1());
         
         string memory result1 = _r.getOnChainSVG(1);
         assertTrue(bytes(result1).length > 1);
@@ -284,19 +307,20 @@ contract TheHydraRendererTest is DSTest {
         TheHydraDataStore _dataStore = getNewDataStore();
         
         TheHydraRenderer _r = new TheHydraRenderer(
+            owner,
             address(_theHydra),
             address(_dataStore),
             address(xqstgfx)
         );
 
         vm.prank(owner);
-        _dataStore.storePhotoData(0, ArtworkHelper.getXQSTFile0());
+        _dataStore.storeData(0, ArtworkHelper.getXQSTFile0());
         
         string memory result0 = _r.getOnChainSVG_AsBase64(0);
         assertTrue(bytes(result0).length > 0);
 
         vm.prank(owner);
-        _dataStore.storePhotoData(1, ArtworkHelper.getXQSTFile1());
+        _dataStore.storeData(1, ArtworkHelper.getXQSTFile1());
         
         string memory result1 = _r.getOnChainSVG_AsBase64(1);
         assertTrue(bytes(result1).length > 1);
