@@ -7,11 +7,17 @@ import type {
   BigNumberish,
   BytesLike,
   CallOverrides,
+  ContractTransaction,
+  Overrides,
   PopulatedTransaction,
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -24,30 +30,46 @@ import type {
 export interface TheHydraRendererInterface extends utils.Interface {
   functions: {
     "dataStore()": FunctionFragment;
+    "dataStoreHistory(uint256)": FunctionFragment;
     "getOnChainSVG(uint256)": FunctionFragment;
     "getOnChainSVG_AsBase64(uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
     "renderSVG(bytes)": FunctionFragment;
     "renderSVG_AsString(bytes)": FunctionFragment;
+    "setDataStore(address)": FunctionFragment;
+    "setExquisiteGraphics(address)": FunctionFragment;
+    "setOwner(address)": FunctionFragment;
     "theHydra()": FunctionFragment;
     "tokenURI(uint256,string)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
+    "tokenURI_AsString(uint256)": FunctionFragment;
     "xqstgfx()": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "dataStore"
+      | "dataStoreHistory"
       | "getOnChainSVG"
       | "getOnChainSVG_AsBase64"
+      | "owner"
       | "renderSVG"
       | "renderSVG_AsString"
+      | "setDataStore"
+      | "setExquisiteGraphics"
+      | "setOwner"
       | "theHydra"
       | "tokenURI(uint256,string)"
       | "tokenURI(uint256)"
+      | "tokenURI_AsString"
       | "xqstgfx"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "dataStore", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "dataStoreHistory",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
     functionFragment: "getOnChainSVG",
     values: [PromiseOrValue<BigNumberish>]
@@ -56,6 +78,7 @@ export interface TheHydraRendererInterface extends utils.Interface {
     functionFragment: "getOnChainSVG_AsBase64",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renderSVG",
     values: [PromiseOrValue<BytesLike>]
@@ -63,6 +86,18 @@ export interface TheHydraRendererInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "renderSVG_AsString",
     values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setDataStore",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setExquisiteGraphics",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setOwner",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "theHydra", values?: undefined): string;
   encodeFunctionData(
@@ -73,9 +108,17 @@ export interface TheHydraRendererInterface extends utils.Interface {
     functionFragment: "tokenURI(uint256)",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "tokenURI_AsString",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(functionFragment: "xqstgfx", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "dataStore", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "dataStoreHistory",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getOnChainSVG",
     data: BytesLike
@@ -84,11 +127,21 @@ export interface TheHydraRendererInterface extends utils.Interface {
     functionFragment: "getOnChainSVG_AsBase64",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "renderSVG", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renderSVG_AsString",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setDataStore",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setExquisiteGraphics",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setOwner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "theHydra", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "tokenURI(uint256,string)",
@@ -98,10 +151,29 @@ export interface TheHydraRendererInterface extends utils.Interface {
     functionFragment: "tokenURI(uint256)",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenURI_AsString",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "xqstgfx", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "OwnerUpdated(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "OwnerUpdated"): EventFragment;
 }
+
+export interface OwnerUpdatedEventObject {
+  user: string;
+  newOwner: string;
+}
+export type OwnerUpdatedEvent = TypedEvent<
+  [string, string],
+  OwnerUpdatedEventObject
+>;
+
+export type OwnerUpdatedEventFilter = TypedEventFilter<OwnerUpdatedEvent>;
 
 export interface TheHydraRenderer extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -132,6 +204,11 @@ export interface TheHydraRenderer extends BaseContract {
   functions: {
     dataStore(overrides?: CallOverrides): Promise<[string]>;
 
+    dataStoreHistory(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     getOnChainSVG(
       _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -142,6 +219,8 @@ export interface TheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
     renderSVG(
       _data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -151,6 +230,21 @@ export interface TheHydraRenderer extends BaseContract {
       _data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    setDataStore(
+      _dataStore: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setExquisiteGraphics(
+      _xqstgfx: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setOwner(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     theHydra(overrides?: CallOverrides): Promise<[string]>;
 
@@ -165,10 +259,20 @@ export interface TheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    tokenURI_AsString(
+      _id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     xqstgfx(overrides?: CallOverrides): Promise<[string]>;
   };
 
   dataStore(overrides?: CallOverrides): Promise<string>;
+
+  dataStoreHistory(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getOnChainSVG(
     _id: PromiseOrValue<BigNumberish>,
@@ -180,6 +284,8 @@ export interface TheHydraRenderer extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
   renderSVG(
     _data: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
@@ -189,6 +295,21 @@ export interface TheHydraRenderer extends BaseContract {
     _data: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  setDataStore(
+    _dataStore: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setExquisiteGraphics(
+    _xqstgfx: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setOwner(
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   theHydra(overrides?: CallOverrides): Promise<string>;
 
@@ -203,10 +324,20 @@ export interface TheHydraRenderer extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  tokenURI_AsString(
+    _id: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   xqstgfx(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     dataStore(overrides?: CallOverrides): Promise<string>;
+
+    dataStoreHistory(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getOnChainSVG(
       _id: PromiseOrValue<BigNumberish>,
@@ -218,6 +349,8 @@ export interface TheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    owner(overrides?: CallOverrides): Promise<string>;
+
     renderSVG(
       _data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -227,6 +360,21 @@ export interface TheHydraRenderer extends BaseContract {
       _data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    setDataStore(
+      _dataStore: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setExquisiteGraphics(
+      _xqstgfx: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setOwner(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     theHydra(overrides?: CallOverrides): Promise<string>;
 
@@ -241,13 +389,32 @@ export interface TheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    tokenURI_AsString(
+      _id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
     xqstgfx(overrides?: CallOverrides): Promise<string>;
   };
 
-  filters: {};
+  filters: {
+    "OwnerUpdated(address,address)"(
+      user?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnerUpdatedEventFilter;
+    OwnerUpdated(
+      user?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnerUpdatedEventFilter;
+  };
 
   estimateGas: {
     dataStore(overrides?: CallOverrides): Promise<BigNumber>;
+
+    dataStoreHistory(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getOnChainSVG(
       _id: PromiseOrValue<BigNumberish>,
@@ -259,6 +426,8 @@ export interface TheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
     renderSVG(
       _data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -267,6 +436,21 @@ export interface TheHydraRenderer extends BaseContract {
     renderSVG_AsString(
       _data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    setDataStore(
+      _dataStore: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setExquisiteGraphics(
+      _xqstgfx: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setOwner(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     theHydra(overrides?: CallOverrides): Promise<BigNumber>;
@@ -282,11 +466,21 @@ export interface TheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    tokenURI_AsString(
+      _id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     xqstgfx(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     dataStore(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    dataStoreHistory(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getOnChainSVG(
       _id: PromiseOrValue<BigNumberish>,
@@ -298,6 +492,8 @@ export interface TheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     renderSVG(
       _data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
@@ -306,6 +502,21 @@ export interface TheHydraRenderer extends BaseContract {
     renderSVG_AsString(
       _data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    setDataStore(
+      _dataStore: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setExquisiteGraphics(
+      _xqstgfx: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setOwner(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     theHydra(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -317,6 +528,11 @@ export interface TheHydraRenderer extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     "tokenURI(uint256)"(
+      _id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    tokenURI_AsString(
       _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

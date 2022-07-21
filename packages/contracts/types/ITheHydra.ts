@@ -23,6 +23,7 @@ import type {
 
 export interface ITheHydraInterface extends utils.Interface {
   functions: {
+    "getEditionIndexFromId(uint256)": FunctionFragment;
     "getMaxEditionsPerOriginal()": FunctionFragment;
     "getOrigialTotalSupply()": FunctionFragment;
     "getOriginalId(uint256)": FunctionFragment;
@@ -31,12 +32,17 @@ export interface ITheHydraInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "getEditionIndexFromId"
       | "getMaxEditionsPerOriginal"
       | "getOrigialTotalSupply"
       | "getOriginalId"
       | "getTotalSupply"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "getEditionIndexFromId",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
     functionFragment: "getMaxEditionsPerOriginal",
     values?: undefined
@@ -54,6 +60,10 @@ export interface ITheHydraInterface extends utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "getEditionIndexFromId",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getMaxEditionsPerOriginal",
     data: BytesLike
@@ -101,6 +111,11 @@ export interface ITheHydra extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    getEditionIndexFromId(
+      _id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getMaxEditionsPerOriginal(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getOrigialTotalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -112,6 +127,11 @@ export interface ITheHydra extends BaseContract {
 
     getTotalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
+
+  getEditionIndexFromId(
+    _id: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getMaxEditionsPerOriginal(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -125,6 +145,11 @@ export interface ITheHydra extends BaseContract {
   getTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
+    getEditionIndexFromId(
+      _id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getMaxEditionsPerOriginal(overrides?: CallOverrides): Promise<BigNumber>;
 
     getOrigialTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
@@ -140,6 +165,11 @@ export interface ITheHydra extends BaseContract {
   filters: {};
 
   estimateGas: {
+    getEditionIndexFromId(
+      _id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getMaxEditionsPerOriginal(overrides?: CallOverrides): Promise<BigNumber>;
 
     getOrigialTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
@@ -153,6 +183,11 @@ export interface ITheHydra extends BaseContract {
   };
 
   populateTransaction: {
+    getEditionIndexFromId(
+      _id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getMaxEditionsPerOriginal(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

@@ -8,6 +8,25 @@ import type { ITheHydra, ITheHydraInterface } from "../ITheHydra";
 
 const _abi = [
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_id",
+        type: "uint256",
+      },
+    ],
+    name: "getEditionIndexFromId",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "getMaxEditionsPerOriginal",
     outputs: [

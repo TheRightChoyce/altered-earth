@@ -7,6 +7,25 @@ exports.ITheHydraDataStore__factory = void 0;
 const ethers_1 = require("ethers");
 const _abi = [
     {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "_originalId",
+                type: "uint256",
+            },
+        ],
+        name: "getData",
+        outputs: [
+            {
+                internalType: "bytes",
+                name: "",
+                type: "bytes",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
         inputs: [],
         name: "getOffChainBaseURI",
         outputs: [
@@ -14,25 +33,6 @@ const _abi = [
                 internalType: "string",
                 name: "",
                 type: "string",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "uint256",
-                name: "_photoId",
-                type: "uint256",
-            },
-        ],
-        name: "getPhotoData",
-        outputs: [
-            {
-                internalType: "bytes",
-                name: "",
-                type: "bytes",
             },
         ],
         stateMutability: "view",
@@ -55,7 +55,7 @@ const _abi = [
         inputs: [
             {
                 internalType: "uint256",
-                name: "_photoId",
+                name: "_originalId",
                 type: "uint256",
             },
             {
@@ -64,7 +64,7 @@ const _abi = [
                 type: "bytes",
             },
         ],
-        name: "storePhotoData",
+        name: "storeData",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",

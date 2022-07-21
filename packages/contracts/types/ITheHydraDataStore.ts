@@ -25,53 +25,47 @@ import type {
 
 export interface ITheHydraDataStoreInterface extends utils.Interface {
   functions: {
+    "getData(uint256)": FunctionFragment;
     "getOffChainBaseURI()": FunctionFragment;
-    "getPhotoData(uint256)": FunctionFragment;
     "setOffChainBaseURI(string)": FunctionFragment;
-    "storePhotoData(uint256,bytes)": FunctionFragment;
+    "storeData(uint256,bytes)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "getData"
       | "getOffChainBaseURI"
-      | "getPhotoData"
       | "setOffChainBaseURI"
-      | "storePhotoData"
+      | "storeData"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "getOffChainBaseURI",
-    values?: undefined
+    functionFragment: "getData",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getPhotoData",
-    values: [PromiseOrValue<BigNumberish>]
+    functionFragment: "getOffChainBaseURI",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "setOffChainBaseURI",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "storePhotoData",
+    functionFragment: "storeData",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>]
   ): string;
 
+  decodeFunctionResult(functionFragment: "getData", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getOffChainBaseURI",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getPhotoData",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "setOffChainBaseURI",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "storePhotoData",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "storeData", data: BytesLike): Result;
 
   events: {};
 }
@@ -103,58 +97,58 @@ export interface ITheHydraDataStore extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    getOffChainBaseURI(overrides?: CallOverrides): Promise<[string]>;
-
-    getPhotoData(
-      _photoId: PromiseOrValue<BigNumberish>,
+    getData(
+      _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    getOffChainBaseURI(overrides?: CallOverrides): Promise<[string]>;
 
     setOffChainBaseURI(
       _baseURI: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    storePhotoData(
-      _photoId: PromiseOrValue<BigNumberish>,
+    storeData(
+      _originalId: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
-  getOffChainBaseURI(overrides?: CallOverrides): Promise<string>;
-
-  getPhotoData(
-    _photoId: PromiseOrValue<BigNumberish>,
+  getData(
+    _originalId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getOffChainBaseURI(overrides?: CallOverrides): Promise<string>;
 
   setOffChainBaseURI(
     _baseURI: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  storePhotoData(
-    _photoId: PromiseOrValue<BigNumberish>,
+  storeData(
+    _originalId: PromiseOrValue<BigNumberish>,
     _data: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    getOffChainBaseURI(overrides?: CallOverrides): Promise<string>;
-
-    getPhotoData(
-      _photoId: PromiseOrValue<BigNumberish>,
+    getData(
+      _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getOffChainBaseURI(overrides?: CallOverrides): Promise<string>;
 
     setOffChainBaseURI(
       _baseURI: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    storePhotoData(
-      _photoId: PromiseOrValue<BigNumberish>,
+    storeData(
+      _originalId: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -163,32 +157,32 @@ export interface ITheHydraDataStore extends BaseContract {
   filters: {};
 
   estimateGas: {
-    getOffChainBaseURI(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPhotoData(
-      _photoId: PromiseOrValue<BigNumberish>,
+    getData(
+      _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getOffChainBaseURI(overrides?: CallOverrides): Promise<BigNumber>;
 
     setOffChainBaseURI(
       _baseURI: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    storePhotoData(
-      _photoId: PromiseOrValue<BigNumberish>,
+    storeData(
+      _originalId: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    getOffChainBaseURI(
+    getData(
+      _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getPhotoData(
-      _photoId: PromiseOrValue<BigNumberish>,
+    getOffChainBaseURI(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -197,8 +191,8 @@ export interface ITheHydraDataStore extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    storePhotoData(
-      _photoId: PromiseOrValue<BigNumberish>,
+    storeData(
+      _originalId: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

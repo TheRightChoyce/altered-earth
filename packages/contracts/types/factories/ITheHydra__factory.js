@@ -7,6 +7,25 @@ exports.ITheHydra__factory = void 0;
 const ethers_1 = require("ethers");
 const _abi = [
     {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "_id",
+                type: "uint256",
+            },
+        ],
+        name: "getEditionIndexFromId",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
         inputs: [],
         name: "getMaxEditionsPerOriginal",
         outputs: [
