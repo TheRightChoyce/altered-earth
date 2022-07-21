@@ -362,7 +362,11 @@ contract TheHydraTest is DSTest {
     }
 
     function testGetEditionIndexFromId() public {
-        assertTrue(false);
+        TheHydra _c = getNewContract();
+
+        for (uint256 i = 0; i < 50; i++) {
+            assertEq(_c.getEditionIndexFromId(50 + i), i+1);
+        }   
     }
 
     // --------------------------------------------------------

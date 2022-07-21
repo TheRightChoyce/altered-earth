@@ -253,12 +253,12 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         uint256 _id
     )
         public
-        view
+        pure
         CheckEditionIdBoundries(_id)
         returns (uint256)
     {
-        // TODO!
-        return _id;
+        /// @dev Take the reminder and then add 1 to convert from 0-based to 1-based counting
+        return (_id % editionsPerOriginal) + 1;
     }
 
     /// @notice Gets the number of available editions per original

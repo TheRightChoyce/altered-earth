@@ -238,6 +238,28 @@ contract TheHydraRendererTest is DSTest {
         vm.stopPrank();
     }
 
+    /// @dev This doesn't test, but it can export the raw json to the console for testing... so you can do something like `forge test --match-contract TheHydraRenderer --match-test testTokenURIForEdition_AsString -vvv > out.txt` and then manually confirm the json output. This is a handy tool to check: https://base64.guru/converter/decode/file the svg encoding
+    function testTokenURIForEdition_AsString() public {
+        // TheHydra _theHydra = getNewHydraContract();
+        // TheHydraDataStore _dataStore = getNewDataStore();
+
+        //  TheHydraRenderer _r = new TheHydraRenderer(
+        //     owner,
+        //     address(_theHydra),
+        //     address(_dataStore),
+        //     address(xqstgfx)
+        // );
+
+        // vm.startPrank(owner);
+
+        // // original 1
+        // _dataStore.storeData(0, ArtworkHelper.getXQSTFile1());
+        // string memory tokenJson = _r.tokenURI_AsString(51);
+        // console.log(tokenJson);
+
+        // vm.stopPrank();
+    }
+
     function testTokenURIIsPublic() public {
         TheHydraRenderer _r = getNewRenderer();
         

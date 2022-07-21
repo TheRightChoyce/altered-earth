@@ -85,12 +85,9 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     // ~~ ERC721 TokenURI implementation  ~~
     // --------------------------------------------------------
 
-    /// @notice Standard URI function to get the token metadata
-    /// @dev This is intended to be called from the main token contract, therefore there is no out of bounds check on the ID here. If calling directly, ensure the ID is valid!
-    /// @param _id Id of the token, either an original or an edition
-    function tokenURI(
+    function tokenURI_AsString(
         uint256 _id
-    ) override public view returns (
+    ) public view returns (
         string memory
     ) {
         /// @dev Originals return their tokenUri string
@@ -112,20 +109,12 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
 
         /// @dev Build the json for the metadata file
         bytes memory json = DynamicBuffer.allocate(2**20);
-        bytes memory jsonBase64 = DynamicBuffer.allocate(2**20);
 
-        bytes memory editionOf = abi.encodePacked(
-            theHydra.getEditionIndexFromId(_id),
-            ' of ',
-            theHydra.getMaxEditionsPerOriginal().toString()
-        );
         bytes memory name = abi.encodePacked(
             '"name":"The Hydra #', _id.toString(),'",'
         );
         bytes memory description = abi.encodePacked(
-            '"description":"An on-chain edition of The Hydra #', originalId.toString(),
-            '. This is edition ', string(editionOf),
-            '. Each edition is stored as an immutable SVG on the Ethereum blockchain.",'
+            '"description":"An altered reality existing forever on the Ethereum blockchain. This edition is a fully on-chain SVG version of The Hydra #', originalId.toString(), '. 50 editions exist for each original photo. Each token conforms to the ERC-721 standard.', '",'
         );
         bytes memory image = abi.encodePacked(
             '"image":"', string(svgBase64),'",'
@@ -135,7 +124,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         );
         bytes memory attributes = abi.encodePacked(
             '"attributes":[',
-                '{"trait_type":"Edition","value":"', editionOf, '"},',
+                '{"trait_type":"Edition","value":"', theHydra.getEditionIndexFromId(_id).toString(),' of ', theHydra.getMaxEditionsPerOriginal().toString(), '"},',
                 '{"trait_type":"Size","value":"64x64px"},',
                 '{"trait_type":"Colors","value":"256"}',
             ']'
@@ -153,8 +142,33 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
             )
         );
 
+        return string(json);
+    }
+
+    /// @notice Standard URI function to get the token metadata
+    /// @dev This is intended to be called from the main token contract, therefore there is no out of bounds check on the ID here. If calling directly, ensure the ID is valid!
+    /// @param _id Id of the token, either an original or an edition
+    function tokenURI(
+        uint256 _id
+    ) override public view returns (
+        string memory
+    ) {
+        /// @dev Originals return their tokenUri string
+        if (_id < theHydra.getOrigialTotalSupply() ) {
+            return string(abi.encodePacked(
+                dataStore.getOffChainBaseURI(),
+                _id.toString()
+            ));
+        }
+
+        /// @dev Editions build their tokenUri string on chain
+        string memory json = tokenURI_AsString(_id);
+        
+        /// @dev Build the json for the metadata file
+        bytes memory jsonBase64 = DynamicBuffer.allocate(2**20);
+
         jsonBase64.appendSafe("data:application/json;base64,");
-        jsonBase64.appendSafe(bytes(Base64.encode(json)));
+        jsonBase64.appendSafe(bytes(Base64.encode(bytes(json))));
 
         return string(jsonBase64);
     }
