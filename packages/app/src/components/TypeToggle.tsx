@@ -1,39 +1,58 @@
-export const TypeToggle = ({
+import { useRouter } from "next/router";
+import React from "react";
+
+const TypeNavigationLink = ({
   type,
-  setType,
+  currentType,
 }: {
-  type: string | undefined;
-  setType: (typeName: string) => void;
+  type: string;
+  currentType: string;
 }) => {
+  const router = useRouter();
+  const href = `?type=${type}`;
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { type: type },
+      },
+      {
+        pathname: router.pathname,
+        query: { type: type },
+      },
+      { scroll: false }
+    );
+  };
+
   return (
-    <div className="inline-flex my-[2vh] w-full bg-slate-900">
-      <a
-        href="#original"
-        aria-current="page"
-        className={`
+    <a
+      onClick={handleClick}
+      href={href}
+      aria-current="page"
+      className={`
               ${
-                type == "original"
-                  ? "text-slate-100 bg-slate-700"
+                type == currentType
+                  ? "text-slate-100"
                   : "text-slate-600 hover:text-slate-400"
-              } px-4 py-2 w-1/2 text-lg text-center transition-all duration-500
+              } px-4 py-2 lg:w-64 text-2xl transition-all duration-500
             `}
-        onClick={() => setType("original")}
-      >
-        Browse originals
-      </a>
-      <a
-        href="#edition"
-        className={`
-              ${
-                type == "edition"
-                  ? "text-slate-100 bg-slate-700"
-                  : "text-slate-600 hover:text-slate-400"
-              } px-4 py-2 w-1/2 text-lg text-center transition-all duration-500
-            `}
-        onClick={() => setType("edition")}
-      >
-        Browse editions
-      </a>
+    >
+      Browse {type}s
+    </a>
+  );
+};
+
+export const TypeToggle = ({ currentType }: { currentType: string }) => {
+  return (
+    <div className="flex flex-row my-8">
+      <div className="">
+        <TypeNavigationLink type={"original"} currentType={currentType} />
+      </div>
+      <div className="text-2xl">|</div>
+      <div>
+        <TypeNavigationLink type={"edition"} currentType={currentType} />
+      </div>
     </div>
   );
 };

@@ -1,22 +1,25 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../useIsMounted";
 import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
+import { TypeNavigationButton } from "./SideBar";
 import { TypeToggle } from "./TypeToggle";
 
 export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   const isMounted = useIsMounted();
+  const router = useRouter();
 
   const { address, isReconnecting, isDisconnected } = useAccount();
   const [imageClass, setImageClass] = useState(
     "grayscale-0 transition-all ease-in-out duration-5000"
   );
-  const [type, setType] = useState("original");
+  const [type, setType] = useState(router.query.type || "original");
 
   useEffect(() => {
     setImageClass(
@@ -24,7 +27,8 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
         ? "grayscale-0 transition-all ease-in-out duration-5000"
         : "grayscale"
     );
-  }, [address, isReconnecting, isDisconnected]);
+    setType(router.query.type || "original");
+  }, [address, isReconnecting, isDisconnected, router]);
 
   if (!isMounted) {
     return null;
@@ -69,44 +73,10 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
           </Link>
         </div>
         <div className="lg:w-full">
-          <a
-            onClick={() => setType("original")}
-            href="#edition"
-            className="py-12"
-          >
-            <div
-              className={`${
-                type == "original" ? "bg-slate-600" : "hover:bg-gray-700"
-              } text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center`}
-            >
-              <div className="pt-2 lg:pt-0">
-                <h1 className="text-5xl custom-major-mono">o</h1>
-              </div>
-              <div>
-                <small className="uppercase">Originals</small>
-              </div>
-            </div>
-          </a>
+          <TypeNavigationButton type="original" currentType={type.toString()} />
         </div>
         <div className="lg:w-full">
-          <a
-            onClick={() => setType("edition")}
-            href="#edition"
-            className="py-12"
-          >
-            <div
-              className={`${
-                type == "edition" ? "bg-slate-600" : "hover:bg-gray-700"
-              } text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center`}
-            >
-              <div className="pt-2 lg:pt-0">
-                <h1 className="text-5xl custom-major-mono">e</h1>
-              </div>
-              <div>
-                <small className="uppercase">Editions</small>
-              </div>
-            </div>
-          </a>
+          <TypeNavigationButton type="edition" currentType={type.toString()} />
         </div>
         <div className="invisible lg:visible lg:fixed lg:bottom-[2vh] lg:w-[10vw] lg:pl-2">
           <div className="flex justify-center">
@@ -194,7 +164,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
 
         <div className="mt-16">
           {/* Original / Edition toggle */}
-          <TypeToggle type={type} setType={setType} />
+          <TypeToggle currentType={type.toString()} />
 
           <div
             className={`${imageClass} px-[4vw] grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 justify-items-center`}
@@ -204,7 +174,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
                 key={photo.id}
                 className="h-64 w-48 md:h-96 md:w-64 lg:hover:scale-110 lg:transition-transform lg:duration-500"
               >
-                <Link href={`/the-hydra/${photo.id}#${type}`}>
+                <Link href={`/the-hydra/${photo.id}?type=${type}`}>
                   <a>
                     <div className="relative">
                       <Image

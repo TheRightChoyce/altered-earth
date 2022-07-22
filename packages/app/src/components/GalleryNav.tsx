@@ -6,9 +6,11 @@ import { PhotoCollection } from "./PhotoCollection";
 export const GalleryNav = ({
   collection,
   photoId,
+  photoType,
 }: {
   collection: PhotoCollection;
   photoId: number;
+  photoType: string;
 }) => {
   const navigatePreviousPhotoId =
     photoId === 0 ? collection.photos.length - 1 : photoId - 1;
@@ -18,7 +20,9 @@ export const GalleryNav = ({
   return (
     <div className="w-24">
       <div>
-        <Link href={`/the-hydra/${navigatePreviousPhotoId}#artwork`}>
+        <Link
+          href={`/the-hydra/${navigatePreviousPhotoId}?type=${photoType}#artwork`}
+        >
           <a>
             <Image
               src="/arrow-left.svg"
@@ -29,7 +33,9 @@ export const GalleryNav = ({
           </a>
         </Link>
         <div className="w-8 inline-block">&nbsp;</div>
-        <Link href={`/the-hydra/${navigateNextPhotoId}#artwork`}>
+        <Link
+          href={`/the-hydra/${navigateNextPhotoId}?type=${photoType}#artwork`}
+        >
           <a>
             <Image src="/arrow-right.svg" width={32} height={32} alt="Next" />
           </a>

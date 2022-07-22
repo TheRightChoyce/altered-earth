@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
@@ -12,6 +13,7 @@ import { GalleryMintButton } from "./GalleryMintButton";
 import { GalleryNav } from "./GalleryNav";
 import { OwnerName } from "./OwnerName";
 import { PhotoCollection } from "./PhotoCollection";
+import { TypeNavigationButton } from "./SideBar";
 import { Spinner } from "./Spinner";
 
 const notFound = (
@@ -28,10 +30,12 @@ export const GalleryDetail = ({
   photoId: number;
 }) => {
   const isMounted = useIsMounted();
+  const router = useRouter();
+
   const [hasOwner, setHasOwner] = useState(false);
   const [tokenLoaded, setTokenLoaded] = useState(false);
   const [previousPhoto, setPreviousPhoto] = useState(-1);
-  const [type, setType] = useState("original");
+  const [type, setType] = useState(router.query.type || "original");
 
   const { address, isReconnecting, isDisconnected } = useAccount();
   const [imageClass, setImageClass] = useState(
@@ -44,7 +48,8 @@ export const GalleryDetail = ({
         ? "grayscale-0 transition-all ease-in-out duration-5000"
         : "grayscale"
     );
-  }, [address, isReconnecting, isDisconnected]);
+    setType(router.query.type || "original");
+  }, [address, isReconnecting, isDisconnected, router]);
 
   const owner = useTheHydraContractRead({
     functionName: "ownerOfOrNull",
@@ -138,44 +143,10 @@ export const GalleryDetail = ({
           </Link>
         </div>
         <div className="lg:w-full">
-          <a
-            onClick={() => setType("original")}
-            href="#edition"
-            className="py-12"
-          >
-            <div
-              className={`${
-                type == "original" ? "bg-slate-600" : "hover:bg-gray-700"
-              } text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center`}
-            >
-              <div className="pt-2 lg:pt-0">
-                <h1 className="text-5xl custom-major-mono">o</h1>
-              </div>
-              <div>
-                <small className="uppercase">Originals</small>
-              </div>
-            </div>
-          </a>
+          <TypeNavigationButton type="original" currentType={type.toString()} />
         </div>
         <div className="lg:w-full">
-          <a
-            onClick={() => setType("edition")}
-            href="#edition"
-            className="py-12"
-          >
-            <div
-              className={`${
-                type == "edition" ? "bg-slate-600" : "hover:bg-gray-700"
-              } text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center`}
-            >
-              <div className="pt-2 lg:pt-0">
-                <h1 className="text-5xl custom-major-mono">e</h1>
-              </div>
-              <div>
-                <small className="uppercase">Editions</small>
-              </div>
-            </div>
-          </a>
+          <TypeNavigationButton type="edition" currentType={type.toString()} />
         </div>
         <div className="invisible lg:visible lg:fixed lg:bottom-[2vh] lg:w-[10vw] lg:pl-2">
           <div className="flex justify-center">
@@ -208,13 +179,17 @@ export const GalleryDetail = ({
                   <Link href="/the-hydra">
                     <a className="font-extrabold">THE HYDRA</a>
                   </Link>{" "}
-                  / ORIGINALS / {photo.id}
+                  / <span className="uppercase">{type}s</span> / {photo.id}
                 </h4>
               </div>
             </div>
 
             <div className="h-16 flex items-center">
-              <GalleryNav collection={collection} photoId={photoId} />
+              <GalleryNav
+                collection={collection}
+                photoId={photoId}
+                photoType={type.toString()}
+              />
             </div>
           </div>
 
@@ -377,58 +352,35 @@ export const GalleryDetail = ({
         {/* right / top -- image */}
         <div className="col-span-1 flex-auto h-[100vh] basis-1/2" id="artwork">
           <div className={`${imageClass} m-auto`}>
-            {tokenLoaded && type == "original" && (
-              <div className="">
+            <div className="relative min-h-[290]">
+              <Image
+                layout={"responsive"}
+                width={768}
+                height={1024}
+                src={photo.previewImageUri}
+                alt={photo.name}
+                priority={true}
+                className={`${
+                  type == "original" && tokenLoaded
+                    ? "opacity-100"
+                    : "opacity-20"
+                } ease-linear transition-all duration-500`}
+              />
+              <div
+                className={`${
+                  type == "original" ? "opacity-0" : "opacity-100"
+                } absolute w-[75%] h-[75%] top-[12.5%] left-[12.5%] ease-linear transition-all duration-300`}
+              >
                 <Image
                   layout={"responsive"}
                   width={768}
-                  height={1024}
-                  src={photo.previewImageUri}
+                  height={768}
+                  src={photo.svgPreviewUri}
                   alt={photo.name}
                   priority={true}
                 />
               </div>
-            )}
-            {!tokenLoaded && type == "original" && (
-              <div className="flex h-[100vh] items-center">
-                <div className="grow">
-                  <Spinner />
-                </div>
-              </div>
-            )}
-
-            {tokenLoaded && type == "edition" && (
-              <>
-                <div className="relative">
-                  <Image
-                    layout={"responsive"}
-                    width={768}
-                    height={1024}
-                    src={photo.previewImageUri}
-                    alt={photo.name}
-                    priority={true}
-                    className="opacity-20"
-                  />
-                  <div className="absolute w-[75%] h-[75%] top-[12.5%] left-[12.5%]">
-                    <Image
-                      layout={"responsive"}
-                      width={768}
-                      height={768}
-                      src={photo.svgPreviewUri}
-                      alt={photo.name}
-                      priority={true}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-            {!tokenLoaded && type == "edition" && (
-              <div className="flex w-[50vw] h-[50vw] lg:w-[512px] lg:h-[512px] items-center m-auto">
-                <div className="grow">
-                  <Spinner />
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
