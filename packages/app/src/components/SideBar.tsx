@@ -1,5 +1,19 @@
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+
+export const SideBar = ({ children }: { children?: React.ReactNode }) => {
+  return (
+    <div className="w-full h-24 custom-side-bar-bg flex flex-row items-center justify-around lg:justify-start lg:flex-col lg:w-[10vw] lg:h-[100vh] lg:fixed">
+      <div className="lg:w-full">
+        <AlteredEarthButton />
+      </div>
+      {children}
+      <TheRightChoyceFloatingButton />
+    </div>
+  );
+};
 
 export const TypeNavigationButton = ({
   type,
@@ -13,11 +27,7 @@ export const TypeNavigationButton = ({
   const title = type[0].toLowerCase();
   const { photoId } = router.query;
 
-  let url = "/the-hydra";
-
-  if (photoId) {
-    url += `/${photoId}?type=${type}`;
-  }
+  const url = `/the-hydra${photoId ? `/${photoId}` : ""}?type=${type}`;
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -40,5 +50,53 @@ export const TypeNavigationButton = ({
         </div>
       </div>
     </a>
+  );
+};
+
+export const AlteredEarthButton = () => {
+  return (
+    <Link href="/">
+      <a>
+        <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center">
+          <h1 className="text-4xl lg:text-5xl m-auto custom-major-mono">Ae</h1>
+        </div>
+      </a>
+    </Link>
+  );
+};
+
+export const TheRightChoyceFloatingButton = () => {
+  return (
+    <div className="invisible lg:visible lg:fixed lg:bottom-[2vh] lg:w-[10vw] lg:pl-2">
+      <div className="flex justify-center">
+        <div>
+          <a href="https://therightchoyce.com" target="_blank" rel="noreferrer">
+            <Image
+              src="/trc3-logo.svg"
+              width={128}
+              height={128}
+              alt="therightchoyce.eth"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const TheHydraButton = () => {
+  return (
+    <Link href="/the-hydra">
+      <a>
+        <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center">
+          <div className="pt-2 lg:pt-0">
+            <h1 className="text-5xl custom-major-mono">H</h1>
+          </div>
+          <div>
+            <small className="uppercase">The Hydra</small>
+          </div>
+        </div>
+      </a>
+    </Link>
   );
 };

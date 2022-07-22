@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ReactElement, useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
+import { SideBar } from "../components/SideBar";
 import Layout from "../layout/GalleryLayout";
 import type { NextPageWithLayout } from "./_app";
 
@@ -23,37 +24,7 @@ const HomePage: NextPageWithLayout = () => {
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left nav bar -- none */}
-      <div className="w-full h-24 custom-side-bar-bg flex flex-row items-center justify-around lg:justify-start lg:flex-col lg:w-[10vw] lg:h-[100vh] lg:fixed">
-        <div className="lg:w-full">
-          <Link href="/">
-            <a>
-              <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center">
-                <h1 className="text-4xl lg:text-5xl m-auto custom-major-mono">
-                  Ae
-                </h1>
-              </div>
-            </a>
-          </Link>
-        </div>
-        <div className="invisible lg:visible lg:fixed lg:bottom-[2vh] lg:w-[10vw] lg:pl-2">
-          <div className="flex justify-center">
-            <div>
-              <a
-                href="https://therightchoyce.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Image
-                  src="/trc3-logo.svg"
-                  width={128}
-                  height={128}
-                  alt="therightchoyce.eth"
-                />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SideBar />
 
       {/* content */}
       <div className="w-[100vw] lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">

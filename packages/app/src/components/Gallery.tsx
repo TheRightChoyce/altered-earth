@@ -8,7 +8,12 @@ import { useAccount } from "wagmi";
 import { useIsMounted } from "../useIsMounted";
 import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
-import { TypeNavigationButton } from "./SideBar";
+import {
+  SideBar,
+  TheHydraButton,
+  TheRightChoyceFloatingButton,
+  TypeNavigationButton,
+} from "./SideBar";
 import { TypeToggle } from "./TypeToggle";
 
 export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
@@ -45,32 +50,9 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left nav bar */}
-      <div className="w-full h-24 custom-side-bar-bg flex flex-row items-center justify-around lg:justify-start lg:flex-col lg:w-[10vw] lg:h-[100vh] lg:fixed">
+      <SideBar>
         <div className="lg:w-full">
-          <Link href="/">
-            <a>
-              <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center">
-                <h1 className="text-4xl lg:text-5xl m-auto custom-major-mono">
-                  Ae
-                </h1>
-              </div>
-            </a>
-          </Link>
-        </div>
-
-        <div className="lg:w-full">
-          <Link href="/the-hydra">
-            <a>
-              <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center">
-                <div className="pt-2 lg:pt-0">
-                  <h1 className="text-5xl custom-major-mono">H</h1>
-                </div>
-                <div>
-                  <small className="uppercase">The Hydra</small>
-                </div>
-              </div>
-            </a>
-          </Link>
+          <TheHydraButton />
         </div>
         <div className="lg:w-full">
           <TypeNavigationButton type="original" currentType={type.toString()} />
@@ -78,25 +60,8 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
         <div className="lg:w-full">
           <TypeNavigationButton type="edition" currentType={type.toString()} />
         </div>
-        <div className="invisible lg:visible lg:fixed lg:bottom-[2vh] lg:w-[10vw] lg:pl-2">
-          <div className="flex justify-center">
-            <div>
-              <a
-                href="https://therightchoyce.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Image
-                  src="/trc3-logo.svg"
-                  width={128}
-                  height={128}
-                  alt="therightchoyce.eth"
-                />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      </SideBar>
+
       {/* content */}
       <div className="w-[100vw] lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">
         <div className="flex flex-rows lg:mb-8 ml-4 lg:ml-0" id="nav">
