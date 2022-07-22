@@ -8,27 +8,28 @@ import {TheHydra} from "../src/TheHydra.sol";
 import {TheHydraDataStore} from "../src/TheHydraDataStore.sol";
 import {TheHydraRenderer} from "../src/TheHydraRenderer.sol";
 
-// Run this using the deploy-contracts.sh file in the project root!
+// Run this using the shell script from the contracts project root!
+// IE package/contracts/
 
-contract DeployRenderer is Script {
+contract DeployTheHydra is Script {
     
-    // Deployable contracts
+    // Deploy this!
     TheHydra public theHydra;
-    TheHydraDataStore public dataStore;
+
+    // Reference the existing renderer contract
     TheHydraRenderer public renderer;
 
     function setUp() external {
         Solenv.config("./packages/contracts/.env.local");
-        theHydra = TheHydra(vm.envAddress("THE_HYDRA_ADDRESS"));
-        dataStore = TheHydraDataStore(vm.envAddress("DATASTORE_ADDRESS"));
+        renderer = TheHydraRenderer(vm.envAddress("RENDERER_ADDRESS"));
     }
 
-    function deployRendererContract() public {
-        renderer = new TheHydraRenderer(
+    function deployTokenContract() public {
+        // Deploy the base contract 
+        theHydra = new TheHydra(
             vm.envAddress("OWNER"),
-            address(theHydra),
-            address(dataStore),
-            0xDf01A4040493B514605392620B3a0a05Eb8Cd295
+            vm.envUint("MINT_PRICE_ORIGINAL"),
+            vm.envUint("MINT_PRICE_EDITION")
         );
     }
 
@@ -36,14 +37,14 @@ contract DeployRenderer is Script {
         
         vm.startBroadcast();
 
-        deployRendererContract();
+        deployTokenContract();
 
         // Update token contract to point to the renderer
         theHydra.setRenderer(renderer);
 
         vm.stopBroadcast();
 
-        console.log("Deployed renderer to:", address(renderer));
+        console.log("Deployed TheHydra to:", address(theHydra));
         console.log("TheHydra renderer =>", address(theHydra.renderer()));
     }
 }
