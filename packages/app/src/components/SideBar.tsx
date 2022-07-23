@@ -5,7 +5,7 @@ import React from "react";
 
 export const SideBar = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <div className="w-full h-24 custom-side-bar-bg flex flex-row items-center justify-around lg:justify-start lg:flex-col lg:w-[10vw] lg:h-[100vh] lg:fixed">
+    <div className="w-[100vw] h-24 custom-side-bar-bg flex flex-row items-center justify-around lg:justify-start lg:flex-col lg:w-[10vw] lg:h-[100vh] lg:fixed">
       <div className="lg:w-full">
         <AlteredEarthButton />
       </div>
@@ -67,7 +67,7 @@ export const AlteredEarthButton = () => {
 
 export const TheRightChoyceFloatingButton = () => {
   return (
-    <div className="invisible lg:visible lg:fixed lg:bottom-[2vh] lg:w-[10vw] lg:pl-2">
+    <div className="hidden invisible lg:visible lg:block lg:fixed lg:bottom-[2vh] lg:w-[10vw] lg:pl-2">
       <div className="flex justify-center">
         <div>
           <a href="https://therightchoyce.com" target="_blank" rel="noreferrer">

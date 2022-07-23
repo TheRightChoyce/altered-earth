@@ -8,12 +8,7 @@ import { useAccount } from "wagmi";
 import { useIsMounted } from "../useIsMounted";
 import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
-import {
-  SideBar,
-  TheHydraButton,
-  TheRightChoyceFloatingButton,
-  TypeNavigationButton,
-} from "./SideBar";
+import { SideBar, TheHydraButton, TypeNavigationButton } from "./SideBar";
 import { TypeToggle } from "./TypeToggle";
 
 export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
@@ -63,7 +58,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
       </SideBar>
 
       {/* content */}
-      <div className="w-[100vw] lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">
+      <div className="w-[100vw] px-4 lg:px-8 lg:w-[90vw] lg:ml-[10vw]">
         <div className="flex flex-rows lg:mb-8 ml-4 lg:ml-0" id="nav">
           {/* breadcrumbs + arrow navigation */}
           <div className="h-16 flex items-center justify-between w-full">
@@ -78,21 +73,21 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
           </div>
         </div>
         <div className="flex flex-col lg:flex-row">
-          <div className="basis-1/2">
-            <h1 className="text-6xl leading-relaxed lg:text-7xl lg:mb-8 custom-major-mono text-center lg:text-left">
+          <div className="basis-1/2 lg:px-8">
+            <h1 className="text-6xl leading-relaxed xl:text-7xl mb-[5vh] lg:mb-8 custom-major-mono text-center lg:text-left -ml-4">
               {collection.name}
             </h1>
             {collection.headline && (
-              <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8">
+              <div className="container mb-4 tracking-wide text-md lg:text-xl lg:mb-8">
                 <p>{collection.headline}</p>
               </div>
             )}
             {collection.description && (
-              <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8">
+              <div className="container mb-4 tracking-wide text-md lg:text-xl lg:mb-8">
                 <p>{collection.description}</p>
               </div>
             )}
-            <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8">
+            <div className="container mb-4 pr-8 tracking-wide text-md lg:text-xl lg:mb-8">
               The collection consists of 50 1-of-1 original photos. Each photo
               then has 50 editions of an on-chain version available.
             </div>
@@ -156,7 +151,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
                       <div
                         className={`${
                           type == "original" ? "hidden" : "visible"
-                        } absolute w-[75%] h-[75%] top-[12.5%] left-[12.5%]`}
+                        } absolute w-[75%] h-[75%] top-[12.5%] left-[12.5%] ease-linear transition-all duration-300`}
                       >
                         <Image
                           layout={"responsive"}

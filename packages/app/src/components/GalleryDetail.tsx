@@ -6,6 +6,7 @@ import { useAccount } from "wagmi";
 
 import { theHydraContract, useTheHydraContractRead } from "../contracts";
 import { extractContractError } from "../extractContractError";
+import { LooksRareButton } from "../LooksRareButton";
 import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
 import { Address } from "./Address";
@@ -193,15 +194,14 @@ export const GalleryDetail = ({
 
                 {/* If our token is loaded AND it has an owner, show that */}
                 {type == "original" && tokenLoaded && hasOwner && (
-                  <div className="flex justify-center flex-row pt-4">
-                    <div className="basis-1/2">
-                      <OwnerName
-                        address={owner.data?.toString()}
-                        className="lg:text-lg ml-8"
-                      />
-                    </div>
-                    <div className="basis-1/2 m-auto">
-                      <OpenSeaButton tokenId={photo.id} />
+                  <div>
+                    <div className="flex flex-row pt-4 items-center">
+                      <div className="">
+                        <OwnerName
+                          address={owner.data?.toString()}
+                          className="lg:text-2xl ml-8"
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
@@ -245,6 +245,14 @@ export const GalleryDetail = ({
                 )}
               </div>
             </div>
+
+            {/* If this token is owned, show the links to it on OS */}
+            {hasOwner && (
+              <div className="">
+                <OpenSeaButton tokenId={photo.id} />
+                <LooksRareButton tokenId={photo.id} />
+              </div>
+            )}
 
             {/* info */}
             <div className="my-[2vh]">

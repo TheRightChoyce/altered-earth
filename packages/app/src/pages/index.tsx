@@ -28,9 +28,9 @@ const HomePage: NextPageWithLayout = () => {
 
       {/* content */}
       <div className="w-[100vw] lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">
-        <div className="px-2 mt-[5vh] mb-[5vh] text-center lg:text-left">
+        <div className="px-2 mt-[5vh] mb-[10vh] text-center lg:text-left">
           <div className="w-[100vw] md:w-[70vw] mx-auto lg:mx-0">
-            <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-8 custom-major-mono">
+            <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-2 custom-major-mono">
               Altered eArth
             </h1>
             <h2 className="text-lg md:text-xl lg:text-3xl">
