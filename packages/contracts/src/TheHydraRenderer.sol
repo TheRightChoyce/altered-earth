@@ -40,6 +40,9 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     /// @dev The address of the xqstgfx public rendering contract
     IExquisiteGraphics public xqstgfx;
 
+    /// @dev track the size of the buffer we want
+    uint256 immutable bufferSize = 2**20;
+
     // --------------------------------------------------------
     // ~~ Constructor  ~~
     // --------------------------------------------------------
@@ -84,33 +87,38 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     // ~~ ERC721 TokenURI implementation  ~~
     // --------------------------------------------------------
 
-    function tokenURI_AsString(
-        uint256 _id
+    /// @notice Builds the raw, on-chain json metadata file for an edition. If an originalId is passed in we just render that string like normal.
+    /// @dev This will grab the on-chain SVG and include it as a base64 version
+    /// @param _editionId The editionId. 
+    function buildOnChainMetaData(
+        uint256 _editionId
     ) public view returns (
         string memory
     ) {
         /// @dev Originals return their tokenUri string
-        if (_id < theHydra.getOrigialTotalSupply() ) {
+        if (_editionId < theHydra.getOrigialTotalSupply() ) {
             return string(abi.encodePacked(
                 dataStore.getOffChainBaseURI(),
-                _id.toString()
+                _editionId.toString()
             ));
         }
 
         /// @dev Editions build their tokenUri string on chain
-        uint256 originalId = theHydra.getOriginalId(_id);
-        bytes memory svg = renderSVG(dataStore.getData(originalId));
+        uint256 originalId = theHydra.getOriginalId(_editionId);
+        bytes memory svg = _renderSVG_AsBytes(
+            dataStore.getData(originalId)
+        );
 
         /// @dev Build the base64 encoded version of the SVG to reference in the imageUrl
-        bytes memory svgBase64 = DynamicBuffer.allocate(2**20);
+        bytes memory svgBase64 = DynamicBuffer.allocate(bufferSize);
         svgBase64.appendSafe("data:image/svg+xml;base64,");
         svgBase64.appendSafe(bytes(Base64.encode(svg)));
 
         /// @dev Build the json for the metadata file
-        bytes memory json = DynamicBuffer.allocate(2**20);
+        bytes memory json = DynamicBuffer.allocate(bufferSize);
 
         bytes memory name = abi.encodePacked(
-            '"name":"The Hydra #', _id.toString(),'",'
+            '"name":"The Hydra #', _editionId.toString(),'",'
         );
         bytes memory description = abi.encodePacked(
             '"description":"An altered reality existing forever on the Ethereum blockchain. This edition is a fully on-chain SVG version of The Hydra #', originalId.toString(), '. 50 editions exist for each original photo. Each token conforms to the ERC-721 standard.', '",'
@@ -119,11 +127,11 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
             '"image":"', string(svgBase64),'",'
         );
         bytes memory externalUrl = abi.encodePacked(
-            '"external_url":"https://altered-earth.xyz/the-hydra/', _id.toString(),'",'
+            '"external_url":"https://altered-earth.xyz/the-hydra/', _editionId.toString(),'",'
         );
         bytes memory attributes = abi.encodePacked(
             '"attributes":[',
-                '{"trait_type":"Edition","value":"', theHydra.getEditionIndexFromId(_id).toString(),' of ', theHydra.getMaxEditionsPerOriginal().toString(), '"},',
+                '{"trait_type":"Edition","value":"', theHydra.getEditionIndexFromId(_editionId).toString(),' of ', theHydra.getMaxEditionsPerOriginal().toString(), '"},',
                 '{"trait_type":"Size","value":"64x64px"},',
                 '{"trait_type":"Colors","value":"256"}',
             ']'
@@ -161,10 +169,10 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         }
 
         /// @dev Editions build their tokenUri string on chain
-        string memory json = tokenURI_AsString(_id);
+        string memory json = buildOnChainMetaData(_id);
         
         /// @dev Build the json for the metadata file
-        bytes memory jsonBase64 = DynamicBuffer.allocate(2**20);
+        bytes memory jsonBase64 = DynamicBuffer.allocate(bufferSize);
 
         jsonBase64.appendSafe("data:application/json;base64,");
         jsonBase64.appendSafe(bytes(Base64.encode(bytes(json))));
@@ -174,19 +182,19 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     
     /// @notice Get the tokenURI using a custom render type. This allows for retrevial of on-chain, off-chain, or a custom render.. I.E maybe there are multiple sizes
     /// @dev allow the caller to specific the type of render, e.g. on-chain, off-chain, 64px, etc..
-    /// @param _id Id of token
+    /// @param _editionId Id of token
     /// @param _renderType specific context for what to render
-    function tokenURI(
-        uint256 _id, 
-        string calldata _renderType
-    ) external view returns (string memory)
-    {
-        return string(abi.encodePacked(
-            dataStore.getOffChainBaseURI(),
-            _renderType,
-            _id.toString()
-        ));
-    }
+    // function tokenURI(
+    //     uint256 _editionId, 
+    //     string calldata _renderType
+    // ) external view returns (string memory)
+    // {
+    //     return string(abi.encodePacked(
+    //         dataStore.getOffChainBaseURI(),
+    //         _renderType,
+    //         _editionId.toString()
+    //     ));
+    // }
 
     // --------------------------------------------------------
     // ~~ Exquisite Graphics SVG Renderers  ~~
@@ -195,13 +203,13 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     /// @notice This takes in the raw byte data in .xqst format and renders a full SVG to bytes memory
     /// @dev Draws pixels using xqstgfx, allocates memory for the SVG data, and creates the svg
     /// @param _data The input data, in .xqst format
-    function renderSVG(
+    function _renderSVG_AsBytes(
         bytes memory _data
-    ) public view returns (
+    ) internal view returns (
         bytes memory
     ) {
         string memory rects = xqstgfx.drawPixelsUnsafe(_data);
-        bytes memory svg = DynamicBuffer.allocate(2**19);
+        bytes memory svg = DynamicBuffer.allocate(bufferSize);
 
         svg.appendSafe(
             abi.encodePacked(
@@ -216,36 +224,43 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     /// @notice This takes in the raw byte data in .xqst format and renders a full SVG as an easy to understand string
     /// @dev Draws pixels using xqstgfx, allocates memory for the SVG data, and creates the svg
     /// @param _data The input data, in .xqst format
-    function renderSVG_AsString(
+    function _renderSVG_AsString(
         bytes memory _data
-    ) public view returns (
+    ) internal view returns (
         string memory
     ) {
-        return string(renderSVG(_data));
+        return string(_renderSVG_AsBytes(_data));
     }
 
     // --------------------------------------------------------
     // ~~ User Friendly Renderers  ~~
     // --------------------------------------------------------
 
+    /// @notice External-only function to easily return the on chain SVG based on the original image
+    /// @dev Accepts the originalId, pulls the raw data from the store, and then converts it back into SVG format
+    /// @param _originalId The id of the original photo
     function getOnChainSVG(
-        uint256 _id
-    ) external view returns (
+        uint256 _originalId
+    ) public view returns (
         string memory
     ) {
-        bytes memory data = dataStore.getData(_id);
-        return renderSVG_AsString(data);
+        bytes memory data = dataStore.getData(_originalId);
+        return _renderSVG_AsString(data);
     }
 
+    /// @notice External-only function to easily return a base64 encoded version of the onchain SVG based on the original image
+    /// @dev Accepts the originalId, pulls the raw data from the store, and then converts it back into SVG format
+    /// @param _originalId The id of the original photo
     function getOnChainSVG_AsBase64(
-        uint256 _id
+        uint256 _originalId
     ) external view returns (
         string memory
     ) {
-        bytes memory data = dataStore.getData(_id);
-        bytes memory svg = renderSVG(data);
+        bytes memory svg = _renderSVG_AsBytes(
+            dataStore.getData(_originalId)
+        );
 
-        bytes memory svgBase64 = DynamicBuffer.allocate(2**19);
+        bytes memory svgBase64 = DynamicBuffer.allocate(bufferSize);
 
         svgBase64.appendSafe("data:image/svg+xml;base64,");
         svgBase64.appendSafe(bytes(Base64.encode(svg)));

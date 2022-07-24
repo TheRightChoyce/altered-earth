@@ -10,6 +10,8 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./interfaces/ITheHydra.sol";
 import "./interfaces/ITheHydraRenderer.sol";
 
+// TODO -- Did I add the metadata interface support?
+
 /// @title TheHydra is the genesis collection of the Altered Earth NFT series
 /// @author therightchoyce.eth
 /// @notice This implemeints the ERC721 standard

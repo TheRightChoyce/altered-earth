@@ -272,67 +272,24 @@ contract TheHydraRendererTest is DSTest {
         vm.prank(other);
         _r.tokenURI(1);
     }
-    function testTokenURIWithRenderType() public {
+    // function testTokenURIWithRenderType() public {
 
-        TheHydra _theHydra = getNewHydraContract();
-        TheHydraDataStore _dataStore = getNewDataStore();
+    //     TheHydra _theHydra = getNewHydraContract();
+    //     TheHydraDataStore _dataStore = getNewDataStore();
         
-        TheHydraRenderer _r = new TheHydraRenderer(
-            owner,
-            address(_theHydra),
-            address(_dataStore),
-            address(xqstgfx)
-        );
+    //     TheHydraRenderer _r = new TheHydraRenderer(
+    //         owner,
+    //         address(_theHydra),
+    //         address(_dataStore),
+    //         address(xqstgfx)
+    //     );
 
-        string memory result = _r.tokenURI(0, "128x128");
-        string memory expected = string(abi.encodePacked(_dataStore.getOffChainBaseURI(), "128x128", "0"));
-        assertEq(expected, result);
-    }
+    //     string memory result = _r.tokenURI(0, "128x128");
+    //     string memory expected = string(abi.encodePacked(_dataStore.getOffChainBaseURI(), "128x128", "0"));
+    //     assertEq(expected, result);
+    // }
 
-    // --------------------------------------------------------
-    // ~~ Exquisite Graphics SVG Renderers  ~~
-    // --------------------------------------------------------
-    function testRenderSVG() public {
-        TheHydraRenderer _r = getNewRenderer();
-        bytes memory result0 = _r.renderSVG(ArtworkHelper.getXQSTFile0());
-        assertTrue(result0.length > 0);
-
-        bytes memory result1 = _r.renderSVG(ArtworkHelper.getXQSTFile1());
-        assertTrue(result1.length > 0);
-    }
-    function testRenderSVGIsPublic() public {
-        TheHydraRenderer _r = getNewRenderer();
-        vm.prank(minter);
-        bytes memory result0 = _r.renderSVG(ArtworkHelper.getXQSTFile0());
-        assertTrue(result0.length > 0);
-
-        vm.prank(other);
-        _r.renderSVG(ArtworkHelper.getXQSTFile1());
-        bytes memory result1 = _r.renderSVG(ArtworkHelper.getXQSTFile1());
-        assertTrue(result1.length > 0);
-    }
-
-    function testRenderSVG_AsString() public {
-        TheHydraRenderer _r = getNewRenderer();
-        string memory result0 = _r.renderSVG_AsString(ArtworkHelper.getXQSTFile0());
-        assertTrue(bytes(result0).length > 0);
-
-        string memory result1 = _r.renderSVG_AsString(ArtworkHelper.getXQSTFile1());
-        assertTrue(bytes(result1).length > 0);
-    }
-    function testRenderSVG_AsStringIsPublic() public {
-        TheHydraRenderer _r = getNewRenderer();
-        vm.prank(minter);
-        string memory result0 = _r.renderSVG_AsString(ArtworkHelper.getXQSTFile0());
-        assertTrue(bytes(result0).length > 0);
-
-        vm.prank(other);
-        _r.renderSVG(ArtworkHelper.getXQSTFile1());
-        string memory result1 = _r.renderSVG_AsString(ArtworkHelper.getXQSTFile1());
-        assertTrue(bytes(result1).length > 0);
-    }
-
-    // --------------------------------------------------------
+// --------------------------------------------------------
     // ~~ User Friendly Renderers  ~~
     // --------------------------------------------------------
 
@@ -351,13 +308,23 @@ contract TheHydraRendererTest is DSTest {
         _dataStore.storeData(0, ArtworkHelper.getXQSTFile0());
         
         string memory result0 = _r.getOnChainSVG(0);
-        assertTrue(bytes(result0).length > 0);
+        bytes memory result0bytes = bytes(result0);
+        assertTrue(result0bytes.length > 0);
+        assertTrue(result0bytes[0] == bytes1("<"));
+        assertTrue(result0bytes[1] == bytes1("s"));
+        assertTrue(result0bytes[2] == bytes1("v"));
+        assertTrue(result0bytes[3] == bytes1("g"));
 
         vm.prank(owner);
         _dataStore.storeData(1, ArtworkHelper.getXQSTFile1());
         
         string memory result1 = _r.getOnChainSVG(1);
-        assertTrue(bytes(result1).length > 1);
+        bytes memory result1bytes = bytes(result1);
+        assertTrue(result1bytes.length > 0);
+        assertTrue(result1bytes[0] == bytes1("<"));
+        assertTrue(result1bytes[1] == bytes1("s"));
+        assertTrue(result1bytes[2] == bytes1("v"));
+        assertTrue(result1bytes[3] == bytes1("g"));
         
         /// @dev This test fails because I am only mocking a single output from xqitgfx.drawPixelsUnsafe
         // bytes32 hash0 = keccak256(abi.encodePacked(result0));
@@ -403,4 +370,47 @@ contract TheHydraRendererTest is DSTest {
         vm.expectRevert(stdError.arithmeticError);
         _r.getOnChainSVG_AsBase64(0);
     }
+
+    // --------------------------------------------------------
+    // ~~ Exquisite Graphics SVG Renderers  ~~
+    // --------------------------------------------------------
+    // function testRenderSVG() public {
+    //     TheHydraRenderer _r = getNewRenderer();
+    //     bytes memory result0 = _r.renderSVG(ArtworkHelper.getXQSTFile0());
+    //     assertTrue(result0.length > 0);
+
+    //     bytes memory result1 = _r.renderSVG(ArtworkHelper.getXQSTFile1());
+    //     assertTrue(result1.length > 0);
+    // }
+    // function testRenderSVGIsPublic() public {
+    //     TheHydraRenderer _r = getNewRenderer();
+    //     vm.prank(minter);
+    //     bytes memory result0 = _r.renderSVG(ArtworkHelper.getXQSTFile0());
+    //     assertTrue(result0.length > 0);
+
+    //     vm.prank(other);
+    //     _r.renderSVG(ArtworkHelper.getXQSTFile1());
+    //     bytes memory result1 = _r.renderSVG(ArtworkHelper.getXQSTFile1());
+    //     assertTrue(result1.length > 0);
+    // }
+
+    // function testRenderSVG_AsString() public {
+    //     TheHydraRenderer _r = getNewRenderer();
+    //     string memory result0 = _r.renderSVG_AsString(ArtworkHelper.getXQSTFile0());
+    //     assertTrue(bytes(result0).length > 0);
+
+    //     string memory result1 = _r.renderSVG_AsString(ArtworkHelper.getXQSTFile1());
+    //     assertTrue(bytes(result1).length > 0);
+    // }
+    // function testRenderSVG_AsStringIsPublic() public {
+    //     TheHydraRenderer _r = getNewRenderer();
+    //     vm.prank(minter);
+    //     string memory result0 = _r.renderSVG_AsString(ArtworkHelper.getXQSTFile0());
+    //     assertTrue(bytes(result0).length > 0);
+
+    //     vm.prank(other);
+    //     _r.renderSVG(ArtworkHelper.getXQSTFile1());
+    //     string memory result1 = _r.renderSVG_AsString(ArtworkHelper.getXQSTFile1());
+    //     assertTrue(bytes(result1).length > 0);
+    // }
 }

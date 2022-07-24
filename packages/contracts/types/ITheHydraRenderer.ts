@@ -25,9 +25,6 @@ export interface ITheHydraRendererInterface extends utils.Interface {
   functions: {
     "getOnChainSVG(uint256)": FunctionFragment;
     "getOnChainSVG_AsBase64(uint256)": FunctionFragment;
-    "renderSVG(bytes)": FunctionFragment;
-    "renderSVG_AsString(bytes)": FunctionFragment;
-    "tokenURI(uint256,string)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
   };
 
@@ -35,10 +32,7 @@ export interface ITheHydraRendererInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "getOnChainSVG"
       | "getOnChainSVG_AsBase64"
-      | "renderSVG"
-      | "renderSVG_AsString"
-      | "tokenURI(uint256,string)"
-      | "tokenURI(uint256)"
+      | "tokenURI"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -50,19 +44,7 @@ export interface ITheHydraRendererInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "renderSVG",
-    values: [PromiseOrValue<BytesLike>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "renderSVG_AsString",
-    values: [PromiseOrValue<BytesLike>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "tokenURI(uint256,string)",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "tokenURI(uint256)",
+    functionFragment: "tokenURI",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
 
@@ -74,19 +56,7 @@ export interface ITheHydraRendererInterface extends utils.Interface {
     functionFragment: "getOnChainSVG_AsBase64",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "renderSVG", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "renderSVG_AsString",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "tokenURI(uint256,string)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "tokenURI(uint256)",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
 
   events: {};
 }
@@ -128,23 +98,7 @@ export interface ITheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    renderSVG(
-      _data: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    renderSVG_AsString(
-      _data: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    "tokenURI(uint256,string)"(
-      _id: PromiseOrValue<BigNumberish>,
-      _renderType: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    "tokenURI(uint256)"(
+    tokenURI(
       _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
@@ -160,23 +114,7 @@ export interface ITheHydraRenderer extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  renderSVG(
-    _data: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  renderSVG_AsString(
-    _data: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  "tokenURI(uint256,string)"(
-    _id: PromiseOrValue<BigNumberish>,
-    _renderType: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  "tokenURI(uint256)"(
+  tokenURI(
     _id: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
@@ -192,23 +130,7 @@ export interface ITheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    renderSVG(
-      _data: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    renderSVG_AsString(
-      _data: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    "tokenURI(uint256,string)"(
-      _id: PromiseOrValue<BigNumberish>,
-      _renderType: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    "tokenURI(uint256)"(
+    tokenURI(
       _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
@@ -227,23 +149,7 @@ export interface ITheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    renderSVG(
-      _data: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    renderSVG_AsString(
-      _data: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "tokenURI(uint256,string)"(
-      _id: PromiseOrValue<BigNumberish>,
-      _renderType: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "tokenURI(uint256)"(
+    tokenURI(
       _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -260,23 +166,7 @@ export interface ITheHydraRenderer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    renderSVG(
-      _data: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    renderSVG_AsString(
-      _data: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "tokenURI(uint256,string)"(
-      _id: PromiseOrValue<BigNumberish>,
-      _renderType: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "tokenURI(uint256)"(
+    tokenURI(
       _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
