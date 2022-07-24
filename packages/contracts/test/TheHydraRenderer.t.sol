@@ -94,14 +94,16 @@ contract TheHydraRendererTest is DSTest {
     }
     function testSetDataStoreTracksHistory() public {
         TheHydraRenderer _renderer = getNewRenderer();
+        address originalDataStore = address(_renderer.dataStore());
+        assertEq(_renderer.dataStoreHistory(0), originalDataStore);
         
         // first
         TheHydraDataStore _dataStore1 = getNewDataStore();
         
         vm.prank(owner);
         _renderer.setDataStore(address(_dataStore1));
-        
-        assertEq(_renderer.dataStoreHistory(0), address(_dataStore1));
+        assertEq(_renderer.dataStoreHistory(0), originalDataStore);
+        assertEq(_renderer.dataStoreHistory(1), address(_dataStore1));
 
         // second
         TheHydraDataStore _dataStore2 = getNewDataStore();
@@ -109,8 +111,9 @@ contract TheHydraRendererTest is DSTest {
         vm.prank(owner);
         _renderer.setDataStore(address(_dataStore2));
 
-        assertEq(_renderer.dataStoreHistory(0), address(_dataStore1));
-        assertEq(_renderer.dataStoreHistory(1), address(_dataStore2));
+        assertEq(_renderer.dataStoreHistory(0), originalDataStore);
+        assertEq(_renderer.dataStoreHistory(1), address(_dataStore1));
+        assertEq(_renderer.dataStoreHistory(2), address(_dataStore2));
     }
 
     function testSetExquisiteGraphics() public {

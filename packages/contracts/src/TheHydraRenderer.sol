@@ -12,8 +12,6 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "boringsolidity/contracts/libraries/Base64.sol";
 import "solmate/auth/Owned.sol";
 
-// TODO -- ability to update datastore and xqstgfx contracts
-
 /// @author therightchoyce.eth
 /// @title  Upgradeable renderer interface
 /// @notice This leaves room for us to change how we return token metadata and
@@ -58,6 +56,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     ) Owned(_owner) {
         theHydra = ITheHydra(_theHydra);
         dataStore = ITheHydraDataStore(_theHydraDataStore);
+        dataStoreHistory.push(_theHydraDataStore);
         xqstgfx = IExquisiteGraphics(payable(_xqstgfx));
     }
 
