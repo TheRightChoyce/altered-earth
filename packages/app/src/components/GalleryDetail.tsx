@@ -33,24 +33,110 @@ export const GalleryDetail = ({
   const isMounted = useIsMounted();
   const router = useRouter();
 
-  const [hasOwner, setHasOwner] = useState(false);
-  const [tokenLoaded, setTokenLoaded] = useState(false);
-  const [previousPhoto, setPreviousPhoto] = useState(-1);
-  const [type, setType] = useState(router.query.type || "original");
+  // define some page states
+  enum TokenType {
+    Original = "original",
+    Edition = "edition",
+  }
 
+  enum MintState {
+    // loading / unknown
+    Unknown,
+
+    // For when type == original
+    OriginalAvailable,
+    OriginalOwned,
+
+    // for when type == edition AND a specific Id is passed, i.e. 51, 1025, etc..
+    EditionAvailable,
+    EditionOwned,
+
+    // for when type == edition and the original id is passsed i.e. anything below the orginal supply
+    GenericEditionAvailable,
+    GenericEditionSoldOut,
+  }
+
+  // Default the token type since we might need to manually adjust
+  let _type = router.query.type || TokenType.Original;
+
+  // Get the correct Ids
+  const originalId = collection.getOriginalId(photoId);
+  const galleryPhotoId = _type == TokenType.Original ? originalId : photoId;
+
+  // Default to the edition if an edition id was specifically provided
+  if (photoId > originalId) {
+    _type = "edition";
+  }
+
+  // load the photo we want to disply on this page using the original id
+  const photo = collection.getPhoto(originalId);
+
+  // The type we are viewing -- either edition or original
+  const [type, setType] = useState(_type);
+
+  // Token specific info
+  const [tokenLoaded, setTokenLoaded] = useState(false);
+  const [hasOwner, setHasOwner] = useState(false);
+  const [editionSoldOut, setEditionSoldOut] = useState(false);
+  const [mintState, setMintState] = useState(MintState.Unknown);
+  const [nextAvailableEditionId, setNextAvailableEditionId] =
+    useState("????????");
+
+  // Navigation helpers
+  const [previousPhoto, setPreviousPhoto] = useState(-1);
+
+  // User wallet
   const { address, isReconnecting, isDisconnected } = useAccount();
+
+  // UI helpers
   const [imageClass, setImageClass] = useState(
     "grayscale-0 transition-all ease-in-out duration-5000"
   );
 
   useEffect(() => {
+    // Adjust the grayscale of the images if user is not connected
     setImageClass(
       (isReconnecting || address) && !isDisconnected
         ? "grayscale-0 transition-all ease-in-out duration-5000"
         : "grayscale"
     );
-    setType(router.query.type || "original");
-  }, [address, isReconnecting, isDisconnected, router]);
+
+    // Set the type since this is a url param and might need a page rerender to be applied
+    setType(_type);
+
+    // set the mint state as it can change from various factors
+    if (!tokenLoaded) {
+      setMintState(MintState.Unknown);
+    } else {
+      if (type == TokenType.Original) {
+        if (hasOwner) setMintState(MintState.OriginalOwned);
+        else if (!hasOwner) setMintState(MintState.OriginalAvailable);
+      } else if (type == TokenType.Edition) {
+        if (galleryPhotoId > originalId) {
+          // a specific edition was requested
+          if (hasOwner) setMintState(MintState.EditionOwned);
+          if (!hasOwner) setMintState(MintState.EditionAvailable);
+        } else {
+          // use the generic edition page
+          if (editionSoldOut) setMintState(MintState.GenericEditionSoldOut);
+          else setMintState(MintState.GenericEditionAvailable);
+        }
+      }
+    }
+  }, [
+    address,
+    isReconnecting,
+    isDisconnected,
+    _type,
+    MintState,
+    TokenType,
+    galleryPhotoId,
+    originalId,
+    hasOwner,
+    editionSoldOut,
+    tokenLoaded,
+    type,
+  ]);
 
   const owner = useTheHydraContractRead({
     functionName: "ownerOfOrNull",
@@ -94,20 +180,14 @@ export const GalleryDetail = ({
     console.debug(owner, tx);
   };
 
-  if (previousPhoto != photoId) {
-    setPreviousPhoto(photoId);
+  if (previousPhoto != originalId) {
+    setPreviousPhoto(originalId);
     setTokenLoaded(false);
   }
 
   if (!isMounted) {
     return <div>...</div>;
   }
-
-  if (isNaN(photoId) || photoId < 0 || photoId > collection.photos.length) {
-    return notFound;
-  }
-
-  const photo = collection.photos[photoId];
 
   if (!photo) {
     return notFound;
@@ -121,10 +201,18 @@ export const GalleryDetail = ({
           <TheHydraButton />
         </div>
         <div className="lg:w-full">
-          <TypeNavigationButton type="original" currentType={type.toString()} />
+          <TypeNavigationButton
+            type="original"
+            currentType={type.toString()}
+            originalId={originalId}
+          />
         </div>
         <div className="lg:w-full">
-          <TypeNavigationButton type="edition" currentType={type.toString()} />
+          <TypeNavigationButton
+            type="edition"
+            currentType={type.toString()}
+            originalId={originalId}
+          />
         </div>
       </SideBar>
 
@@ -149,7 +237,7 @@ export const GalleryDetail = ({
             <div className="h-16 flex items-center">
               <GalleryNav
                 collection={collection}
-                photoId={photoId}
+                photoId={originalId}
                 photoType={type.toString()}
               />
             </div>
@@ -186,14 +274,15 @@ export const GalleryDetail = ({
               {/* Connected states */}
               <div className="h-24 bg-gray-800">
                 {/* If we're waiting on the RPC call, show loading state */}
-                {!tokenLoaded && (
+                {mintState == MintState.Unknown && (
                   <div className="pt-8">
                     <Spinner />
                   </div>
                 )}
 
-                {/* If our token is loaded AND it has an owner, show that */}
-                {type == "original" && tokenLoaded && hasOwner && (
+                {/* Original or specific edition is already owned */}
+                {(mintState == MintState.OriginalOwned ||
+                  mintState == MintState.EditionOwned) && (
                   <div>
                     <div className="flex flex-row pt-4 items-center">
                       <div className="">
@@ -206,8 +295,8 @@ export const GalleryDetail = ({
                   </div>
                 )}
 
-                {/* If our token is loaded AND it does not have an owner AND the user did not connect their wallet */}
-                {type == "original" && tokenLoaded && !hasOwner && (
+                {/* Original token is available */}
+                {mintState == MintState.OriginalAvailable && (
                   <div className="flex flex-col items-center">
                     <div className="w-full">
                       <GalleryMintButton
@@ -225,8 +314,9 @@ export const GalleryDetail = ({
                   </div>
                 )}
 
-                {/* For editions -- show the mint button */}
-                {type == "edition" && tokenLoaded && (
+                {/* Edition is available */}
+                {(mintState == MintState.EditionAvailable ||
+                  mintState == MintState.GenericEditionAvailable) && (
                   <div className="flex flex-col items-center">
                     <div className="w-full">
                       <GalleryMintButton
@@ -247,10 +337,37 @@ export const GalleryDetail = ({
             </div>
 
             {/* If this token is owned, show the links to it on OS */}
-            {hasOwner && (
-              <div className="">
-                <OpenSeaButton tokenId={photo.id} />
-                <LooksRareButton tokenId={photo.id} />
+            {(mintState == MintState.OriginalOwned ||
+              mintState == MintState.EditionOwned) && (
+              <div className="mb-[2vh] flex flex-row">
+                <div className="basis-1/2 mr-4">
+                  <OpenSeaButton tokenId={galleryPhotoId} />
+                </div>
+                <div className="basis-1/2">
+                  <LooksRareButton tokenId={galleryPhotoId} />
+                </div>
+              </div>
+            )}
+
+            {/* Editions disclaimer */}
+            {(mintState == MintState.EditionOwned ||
+              mintState == MintState.EditionAvailable) && (
+              <div className="bg-gray-700 border-gray-500 border-2 p-4 my-[4vh]">
+                <b>NOTE</b>: You are viewing the detail page specifically for
+                token #{photoId}, which is an edition of token #{originalId}. If
+                you wish to view the generic edition mint page,{" "}
+                <Link href={`/the-hydra/${originalId}?type=edition`}>
+                  <a className="font-bold hover:bg-gray-500">click here</a>
+                </Link>
+              </div>
+            )}
+
+            {/* Let the user which editionId is next available */}
+            {(mintState == MintState.EditionAvailable ||
+              mintState == MintState.GenericEditionAvailable) && (
+              <div>
+                If you minted now, you would receive token #
+                {nextAvailableEditionId}
               </div>
             )}
 

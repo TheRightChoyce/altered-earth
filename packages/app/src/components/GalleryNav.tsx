@@ -13,9 +13,9 @@ export const GalleryNav = ({
   photoType: string;
 }) => {
   const navigatePreviousPhotoId =
-    photoId === 0 ? collection.photos.length - 1 : photoId - 1;
+    photoId == 0 ? collection.photos.length - 1 : photoId - 1;
   const navigateNextPhotoId =
-    photoId === collection.photos.length - 1 ? 0 : photoId + 1;
+    photoId == collection.photos.length - 1 ? 0 : photoId + 1;
 
   return (
     <div className="w-24">

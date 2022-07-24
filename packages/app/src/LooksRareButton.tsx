@@ -7,7 +7,7 @@ export const LooksRareButton = ({ tokenId }: { tokenId: number }) => {
       href={`https://goerli.looksrare.org/collections/${theHydraContract.address}/${tokenId}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-gray-200 border-2 border-slate-800 hover:border-sky-400 py-2 px-8 leading-none rounded-md bg-slate-600"
+      className="text-gray-200 border-2 border-slate-800 hover:border-sky-400 py-2 px-2 leading-none bg-slate-600 block w-full text-center"
     >
       View on LooksRare
     </a>

@@ -18,25 +18,27 @@ export const SideBar = ({ children }: { children?: React.ReactNode }) => {
 export const TypeNavigationButton = ({
   type,
   currentType,
+  originalId,
 }: {
   type: string;
   currentType: string;
+  originalId?: number;
 }) => {
   const router = useRouter();
-  const href = `?type=${type}`;
   const title = type[0].toLowerCase();
-  const { photoId } = router.query;
 
-  const url = `/the-hydra${photoId ? `/${photoId}` : ""}?type=${type}`;
+  const url = `/the-hydra${
+    originalId !== null ? `/${originalId?.toString()}` : ""
+  }?type=${type}`;
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    router.push(url, undefined, { scroll: false, shallow: true });
+    router.push(url, url, { scroll: false, shallow: true });
   };
 
   return (
-    <a onClick={handleClick} href={href} className="py-12">
+    <a onClick={handleClick} href={url} className="py-12">
       <div
         className={`${
           currentType == type ? "bg-slate-600" : "hover:bg-gray-700"
