@@ -1,4 +1,5 @@
 import NFTGoerli from "@web3-scaffold/contracts/deploys/goerli/TheHydra.json";
+import NFTRinkeby from "@web3-scaffold/contracts/deploys/rinkeby/TheHydra.json";
 import { TheHydra__factory } from "@web3-scaffold/contracts/types";
 import { useContractRead } from "wagmi";
 
@@ -13,8 +14,13 @@ import { provider, targetChainId } from "./EthereumProviders";
 //   ExampleNFT__factory.abi
 // ) as ExampleNFT;
 
+console.log(process.env.NEXT_PUBLIC_CHAIN_ID?.toString());
+
+const NFTContract =
+  process.env.NEXT_PUBLIC_CHAIN_ID?.toString() == "4" ? NFTRinkeby : NFTGoerli;
+
 export const theHydraContract = TheHydra__factory.connect(
-  NFTGoerli.deployedTo,
+  NFTContract.deployedTo,
   provider({ chainId: targetChainId })
 );
 
@@ -26,6 +32,6 @@ export const useTheHydraContractRead = (
 ) =>
   useContractRead({
     ...readConfig,
-    addressOrName: NFTGoerli.deployedTo,
+    addressOrName: NFTContract.deployedTo,
     contractInterface: TheHydra__factory.abi,
   });

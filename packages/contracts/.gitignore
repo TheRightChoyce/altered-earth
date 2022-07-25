@@ -17,7 +17,7 @@ out/SolEnv.sol/**/*.abi.json
 
 .env.*
 
-# Ingore scripting output
+# Ignore scripting output
 out/*.s.sol/**/*
 
 # Ignore broadcast outputs
