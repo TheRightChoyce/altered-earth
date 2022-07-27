@@ -3,11 +3,11 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: ExampleNFT
-    network: goerli
+    name: TheHydra
+    network: rinkeby
     source:
-      abi: ExampleNFT
-      address: "0xe584409f2ba1ade9895485d90587fd46baa3c0d8"
+      abi: TheHydra
+      address: "0x4efee7e12195965b801145d91197dabec863c3ff"
       startBlock: 7034594
     mapping:
       kind: ethereum/events
@@ -16,8 +16,8 @@ dataSources:
       entities:
         - NFT
       abis:
-        - name: ExampleNFT
-          file: ../contracts/out/ExampleNFT.sol/ExampleNFT.abi.json
+        - name: TheHydra
+          file: ../contracts/out/TheHydra.sol/TheHydra.abi.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
