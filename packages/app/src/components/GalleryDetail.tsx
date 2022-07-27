@@ -11,6 +11,7 @@ import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
 import { Address } from "./Address";
 import { ExplorerButton } from "./ExplorerButton";
+import { GalleryBreadcrumbs } from "./GalleryBreadcrumbs";
 import { GalleryMintButton } from "./GalleryMintButton";
 import { GalleryNav } from "./GalleryNav";
 import { OwnerName } from "./OwnerName";
@@ -224,16 +225,10 @@ export const GalleryDetail = ({
           {/* nav */}
           <div className="flex flex-rows mb-8 ml-4 lg:ml-0" id="nav">
             {/* breadcrumbs + arrow navigation */}
-            <div className="h-16 flex items-center justify-between w-full">
-              <div className="">
-                <h4 className="lg:text-xl font-extralight leading-relaxed">
-                  <Link href="/the-hydra">
-                    <a className="font-extrabold">THE HYDRA</a>
-                  </Link>{" "}
-                  / <span className="uppercase">{type}s</span> / {photo.id}
-                </h4>
-              </div>
-            </div>
+            <GalleryBreadcrumbs
+              breadcrumb={`${type.toString()}s`}
+              photoId={photoId}
+            />
 
             <div className="h-16 flex items-center">
               <GalleryNav
