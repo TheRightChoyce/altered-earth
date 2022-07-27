@@ -10,6 +10,7 @@ import { LooksRareButton } from "../LooksRareButton";
 import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
 import { Address } from "./Address";
+import { ExplorerButton } from "./ExplorerButton";
 import { GalleryMintButton } from "./GalleryMintButton";
 import { GalleryNav } from "./GalleryNav";
 import { OwnerName } from "./OwnerName";
@@ -337,14 +338,26 @@ export const GalleryDetail = ({
             </div>
 
             {/* If this token is owned, show the links to it on OS */}
-            {(mintState == MintState.OriginalOwned ||
-              mintState == MintState.EditionOwned) && (
+            {mintState == MintState.OriginalOwned && (
               <div className="mb-[2vh] flex flex-row">
                 <div className="basis-1/2 mr-4">
                   <OpenSeaButton tokenId={galleryPhotoId} />
                 </div>
                 <div className="basis-1/2">
                   <LooksRareButton tokenId={galleryPhotoId} />
+                </div>
+              </div>
+            )}
+            {mintState == MintState.EditionOwned && (
+              <div className="mb-[2vh] flex flex-row">
+                <div className="basis-1/3 mr-4">
+                  <OpenSeaButton tokenId={galleryPhotoId} />
+                </div>
+                <div className="basis-1/3 mr-4">
+                  <LooksRareButton tokenId={galleryPhotoId} />
+                </div>
+                <div className="basis-1/3">
+                  <ExplorerButton tokenId={galleryPhotoId} />
                 </div>
               </div>
             )}
