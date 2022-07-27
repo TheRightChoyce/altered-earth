@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../useIsMounted";
+import { GalleryBreadcrumbs } from "./GalleryBreadcrumbs";
 import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
 import { SideBar, TheHydraButton, TypeNavigationButton } from "./SideBar";
@@ -61,16 +62,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
       <div className="w-[100vw] px-4 lg:px-8 lg:w-[90vw] lg:ml-[10vw]">
         <div className="flex flex-rows lg:mb-8 ml-4 lg:ml-0" id="nav">
           {/* breadcrumbs + arrow navigation */}
-          <div className="h-16 flex items-center justify-between w-full">
-            <div className="">
-              <h4 className="lg:text-xl font-extralight leading-relaxed">
-                <Link href="/the-hydra">
-                  <a className="font-extrabold">THE HYDRA</a>
-                </Link>{" "}
-                / ORIGINALS
-              </h4>
-            </div>
-          </div>
+          <GalleryBreadcrumbs photoId={undefined} breadcrumb={`${type}s`} />
         </div>
         <div className="flex flex-col lg:flex-row">
           <div className="basis-1/2 lg:px-8">

@@ -4,7 +4,7 @@ export const GalleryBreadcrumbs = ({
   photoId,
   breadcrumb,
 }: {
-  photoId: number;
+  photoId: number | undefined;
   breadcrumb: string;
 }) => {
   return (
@@ -14,7 +14,8 @@ export const GalleryBreadcrumbs = ({
           <Link href="/the-hydra">
             <a className="font-extrabold">THE HYDRA</a>
           </Link>{" "}
-          / <span className="uppercase">{breadcrumb}</span> / #{photoId}
+          / <span className="uppercase">{breadcrumb}</span>
+          {photoId && <span>#{photoId}</span>}
         </h4>
       </div>
     </div>
