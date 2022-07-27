@@ -188,7 +188,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         RealityNotAlreadyAltered(id)
     {
         _safeMint(msg.sender, id, "Welcome to TheHydra's Reality");
-        emit RealityAltered(msg.sender, id);
     }
 
     // --------------------------------------------------------
@@ -295,8 +294,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         ++editionMintCount[_originalId];
         
         _safeMint(msg.sender, editionId, "Welcome to TheHydra's Reality");
-        
-        emit RealityAltered(msg.sender, editionId);
     }
 
     /// @notice Send your AlteredEarth token back to Reality

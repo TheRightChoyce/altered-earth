@@ -36,7 +36,6 @@ contract TheHydraTest is DSTest {
 
     // Redfine any events
     event Transfer(address indexed from, address indexed to, uint256 indexed id);
-    event RealityAltered(address indexed from, uint256 tokenId);
     event TheHydraAwakens();
     event ConsciousnessActivated(address indexed renderer);
 
@@ -160,12 +159,12 @@ contract TheHydraTest is DSTest {
         
         vm.stopPrank();
     }
-    function testMintEmitsRealityAlteredEvent() public {
+    function testMintEmitsTransferEvent() public {
         TheHydra _c = getNewContract();
         vm.startPrank(minter);
         
         vm.expectEmit(true, true, false, true);
-        emit RealityAltered(minter, 0);
+        emit Transfer(address(0x0), minter, 0);
         
         _c.alterReality{value: mintPriceOriginal}(0);
         
@@ -230,22 +229,22 @@ contract TheHydraTest is DSTest {
         vm.expectRevert('NOT_MINTED');
         address(_c.ownerOf(0));
     }
-    function testEditionMintEventsRealityAlteredEvent() public {
+    function testEditionMintEventsTransferEvent() public {
         TheHydra _c = getNewContract();
         vm.startPrank(minter);
         
         vm.expectEmit(true, true, false, true);
-        emit RealityAltered(minter, 50);
+        emit Transfer(address(0x0), minter, 50);
         _c.alterSubReality{value: mintPriceEdition}(0);
 
         // next
         vm.expectEmit(true, true, false, true);
-        emit RealityAltered(minter, 51);
+        emit Transfer(address(0x0), minter, 51);
         _c.alterSubReality{value: mintPriceEdition}(0);
 
         // next original
         vm.expectEmit(true, true, false, true);
-        emit RealityAltered(minter, 100);
+        emit Transfer(address(0x0), minter, 100);
         _c.alterSubReality{value: mintPriceEdition}(1);
         
         vm.stopPrank();
