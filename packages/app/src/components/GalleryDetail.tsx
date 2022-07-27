@@ -63,11 +63,12 @@ export const GalleryDetail = ({
 
   // Get the correct Ids
   const originalId = collection.getOriginalId(photoId);
-  const galleryPhotoId = _type == TokenType.Original ? originalId : photoId;
+  let galleryPhotoId = _type == TokenType.Original ? originalId : photoId;
 
   // Default to the edition if an edition id was specifically provided
   if (photoId > originalId) {
     _type = "edition";
+    galleryPhotoId = photoId;
   }
 
   // load the photo we want to disply on this page using the original id
@@ -95,18 +96,22 @@ export const GalleryDetail = ({
     "grayscale-0 transition-all ease-in-out duration-5000"
   );
 
+  // Adjust the grayscale of the images if user is not connected
   useEffect(() => {
-    // Adjust the grayscale of the images if user is not connected
     setImageClass(
       (isReconnecting || address) && !isDisconnected
         ? "grayscale-0 transition-all ease-in-out duration-5000"
         : "grayscale"
     );
+  }, [address, isReconnecting, isDisconnected]);
 
-    // Set the type since this is a url param and might need a page rerender to be applied
+  // Set the type since this is a url param and might need a page rerender to be applied
+  useEffect(() => {
     setType(_type);
+  }, [_type]);
 
-    // set the mint state as it can change from various factors
+  // set the mint state as it can change from various factors
+  useEffect(() => {
     if (!tokenLoaded) {
       setMintState(MintState.Unknown);
     } else {
@@ -126,10 +131,6 @@ export const GalleryDetail = ({
       }
     }
   }, [
-    address,
-    isReconnecting,
-    isDisconnected,
-    _type,
     MintState,
     TokenType,
     galleryPhotoId,
@@ -141,39 +142,37 @@ export const GalleryDetail = ({
   ]);
 
   const owner = useTheHydraContractRead({
-    functionName: "ownerOfOrNull",
+    functionName: "ownerOf",
     args: photoId?.toString(),
-    watch: true,
-    onError(error) {
+    watch: false,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError(error: any) {
       setTokenLoaded(true);
-      const contractError = extractContractError(error);
-      if (contractError !== "NOT_MINTED") {
+
+      if (error.reason === "NOT_MINTED") {
+        setHasOwner(false);
+      } else {
         throw error;
       }
     },
-    onSettled(data, error) {
-      console.debug(`onSettled ${data}`);
-      if (error) {
-        const contractError = extractContractError(error);
-        if (contractError !== "NOT_MINTED") {
-          throw error;
-        }
-        setTokenLoaded(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onSettled(data, error: any) {
+      setTokenLoaded(true);
+
+      if (!error) {
+        setHasOwner(true);
+        return;
       }
-      setHasOwner(
-        data?.toString() === "0x0000000000000000000000000000000000000000"
-          ? false
-          : true
-      );
-      setTokenLoaded(true);
+
+      if (error.reason === "NOT_MINTED") {
+        setHasOwner(false);
+      } else {
+        throw error;
+      }
     },
-    onSuccess(data) {
-      setHasOwner(
-        data?.toString() === "0x0000000000000000000000000000000000000000"
-          ? false
-          : true
-      );
+    onSuccess() {
       setTokenLoaded(true);
+      setHasOwner(true);
     },
   });
 
