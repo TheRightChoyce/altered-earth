@@ -14,5 +14,6 @@
   "solidity.packageDefaultDependenciesDirectory": "packages/contracts/lib",
   "search.exclude": {
     "packages/contracts/lib": true
-  }
+  },
+  "editor.tabSize": 2
 }

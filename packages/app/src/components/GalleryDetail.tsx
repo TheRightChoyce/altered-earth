@@ -358,13 +358,13 @@ export const GalleryDetail = ({
                 you wish to view the generic edition mint page,{" "}
                 <Link href={`/the-hydra/${originalId}?type=edition`}>
                   <a className="font-bold hover:bg-gray-500">click here</a>
-                </Link>
+                </Link>{" "}
+                and you will be able to mint the next available edition.
               </div>
             )}
 
             {/* Let the user which editionId is next available */}
-            {(mintState == MintState.EditionAvailable ||
-              mintState == MintState.GenericEditionAvailable) && (
+            {mintState == MintState.GenericEditionAvailable && (
               <div>
                 If you minted now, you would receive token #
                 {nextAvailableEditionId}
