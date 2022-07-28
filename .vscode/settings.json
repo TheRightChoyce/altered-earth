@@ -15,5 +15,8 @@
   "search.exclude": {
     "packages/contracts/lib": true
   },
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
+  }
 }

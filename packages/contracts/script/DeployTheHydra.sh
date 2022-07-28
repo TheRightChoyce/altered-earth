@@ -13,9 +13,11 @@ fi
 CONTRACT_NAME="TheHydra"
 DEPLOY_OUTPUT="deploys/$CHAIN_NAME/$CONTRACT_NAME.json"
 
-forge script script/DeployTheHydra.s.sol:DeployTheHydra -vvvv --ffi --chain-id $CHAIN_ID \
+forge script script/DeployTheHydra.s.sol:DeployTheHydra -vvvv 
+    --ffi \
+    --chain-id $CHAIN_ID \
     --rpc-url $RPC_URL \
-    --private-key $DEPLOYER_PRIVATE_KEY
+    --private-key $DEPLOYER_PRIVATE_KEY \
     # --broadcast \
     # --verify --etherscan-api-key $ETHERSCAN_API_KEY
 
