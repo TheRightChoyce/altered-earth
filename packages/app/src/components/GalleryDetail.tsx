@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { theHydraContract, useTheHydraContractRead } from "../contracts";
-import { extractContractError } from "../extractContractError";
 import { LooksRareButton } from "../LooksRareButton";
 import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
@@ -149,7 +148,7 @@ export const GalleryDetail = ({
     onError(error: any) {
       setTokenLoaded(true);
 
-      if (error.reason === "NOT_MINTED") {
+      if (error.reason === "NOT_MINTED" || error.code === "CALL_EXCEPTION") {
         setHasOwner(false);
       } else {
         throw error;
@@ -164,7 +163,7 @@ export const GalleryDetail = ({
         return;
       }
 
-      if (error.reason === "NOT_MINTED") {
+      if (error.reason === "NOT_MINTED" || error.code === "CALL_EXCEPTION") {
         setHasOwner(false);
       } else {
         throw error;

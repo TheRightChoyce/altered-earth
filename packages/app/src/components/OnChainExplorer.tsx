@@ -42,13 +42,18 @@ export const OnChainExplorer = ({ photoId }: { photoId: number }) => {
     watch: false,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError(error: any) {
-      if (error.errorName === "BeyondTheScopeOfConsciousness") {
+      console.dir(error);
+      if (
+        error.errorName === "BeyondTheScopeOfConsciousness" ||
+        error.code === "CALL_EXCEPTION"
+      ) {
         setPageState(PageState.TokenNotMinted);
       } else if (error.code === "INVALID_ARGUMENT") {
         // this means the photoId didn't get loaded from the router
         setPageState(PageState.Loading);
       } else {
         // else throw this error
+        setPageState(PageState.TokenNotMinted);
         throw error;
       }
     },
