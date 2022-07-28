@@ -16,6 +16,7 @@ import "./interfaces/ITheHydraRenderer.sol";
 /// @author therightchoyce.eth
 /// @notice This implemeints the ERC721 standard
 /// @dev Modified ERC721 for minting and managing tokens
+
 contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Enable toString and other string functions on uint256
     using Strings for uint256;
@@ -27,35 +28,65 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Renderer contract for metadata * on-chain artwork
     ITheHydraRenderer public renderer;
 
+    /// @dev Easily organize all the edition information
+    struct EditionInfo {
+        /// @dev The maximum available editions per original.
+        uint256 supplyPerOriginal;
+        /// @dev The maximum available editions per original.
+        uint256 maxCountPerOriginal;
+        uint256 totalSupply;
+        uint256 maxTokenId;
+        uint256 mintPrice;
+    }
+
+    /// @dev Easily organize all the original information
+    struct OriginalInfo {
+        uint256 totalSupply;
+        uint256 mintPrice;
+        uint256 maxTokendId;
+    }
+
+    // --------------------------------------------------------
+    // ~~ Edition configuration ~~
+    // --------------------------------------------------------
+
     /// @dev The maximum available editions per original.
-    uint256 immutable editionsPerOriginal = 50;
+    uint256 constant editionsPerOriginal = 50;
 
     /// @dev Max edition count per origial
-    uint256 immutable maxEditionCountPerOriginal = 49;
+    uint256 constant editionsCountPerOriginal = 49;
 
     /// @dev The total number of 1-of-1 original NFTs available
-    uint256 immutable totalOriginalSupply = 50;
+    uint256 constant editionsSupply = 2500;
+
+    /// @dev This is the maximium Id available for the editions.. I.E if there are 2500 editions and 50 originals, the max editionId is 2549. Used to save gas during when doing > or < logic.
+    uint256 immutable editionsMaxId = 2549;
+
+    /// @dev The default mint price for an on-chain edition
+    uint256 public immutable editionsMintPrice;
+
+    /// @dev Easily track the number of editions minted for each original contract. Using a counter instead of tracking the starting index because if we tracked the starting index for each edition, then there would be a need to initilize each starting index to a particular sequenced number vs. just allowing default value of 0 here.
+    mapping(uint256 => uint256) editionsMinted;
+
+    // --------------------------------------------------------
+    // ~~ Original configuration ~~
+    // --------------------------------------------------------
 
     /// @dev The total number of 1-of-1 original NFTs available
-    uint256 immutable totalEditionSupply = 2500;
+    uint256 constant originalsSupply = 50;
+
+    /// @dev This is the maximium Id available for the originals.. I.E with 50 available and starting from 0, the originalsMaxId should be 49. Used to save gas during when doing > or < logic.
+    uint256 constant originalsMaxId = 49;
+
+    /// @dev The default mint price for a 1-of-1 original
+    uint256 public immutable originalsMintPrice;
+
+    // --------------------------------------------------------
+    // ~~ Other ~~
+    // --------------------------------------------------------
 
     /// @dev Track the total supply available to mint in this collection, this includes all originals + editions => originals + (originals * editionsPer)
     uint256 public immutable totalSupply = 2550;
-
-    /// @dev Easily track the number of editions minted for each original contract. Using a counter instead of tracking the starting index because if we tracked the starting index for each edition, then there would be a need to initilize each starting index to a particular sequenced number vs. just allowing default value of 0 here.
-    mapping(uint256 => uint256) editionMintCount;
-
-    /// @dev The default mint price for a 1-of-1 original
-    uint256 public mintPriceOriginal;
-
-    /// @dev The default mint price for an on-chain edition
-    uint256 public mintPriceEdition;
-
-    /// @dev This is the maximium Id available for the originals.. I.E with 50 available and starting from 0, the maxOriginalId should be 49. Used to save gas during when doing > or < logic.
-    uint256 immutable maxOriginalId = 49;
-
-    /// @dev This is the maximium Id available for the editions.. I.E if there are 2500 editions and 50 originals, the max editionId is 2549. Used to save gas during when doing > or < logic.
-    uint256 immutable maxEditionId = 2549;
 
     // --------------------------------------------------------
     // ~~ Events ~~
@@ -96,14 +127,14 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @param _id The token id to check
     modifier CheckConsciousness(uint256 _id) {
         // currently allowing zero-based ids
-        if (_id > maxOriginalId) revert BeyondTheScopeOfConsciousness();
+        if (_id > originalsMaxId) revert BeyondTheScopeOfConsciousness();
         _;
     }
     /// @dev Fail if an edition has reached its mint capacity
     /// @param _originalId The edition id to check
     modifier CheckSubConsciousness(uint256 _originalId) {
         // currently allowing zero-based ids
-        if (editionMintCount[_originalId] > maxEditionCountPerOriginal)
+        if (editionsMinted[_originalId] > editionsCountPerOriginal)
             revert BeyondTheScopeOfConsciousness();
         _;
     }
@@ -111,9 +142,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Fail if the editionId is actually an originalId, or if it is beyond the max number of editions
     /// @param _editionId The tokenId of this edition
     modifier CheckEditionIdBoundries(uint256 _editionId) {
-        if (_editionId < totalOriginalSupply)
+        if (_editionId < originalsSupply)
             revert BeyondTheScopeOfConsciousness();
-        if (_editionId > maxEditionId) revert BeyondTheScopeOfConsciousness();
+        if (_editionId > editionsMaxId) revert BeyondTheScopeOfConsciousness();
         _;
     }
 
@@ -127,12 +158,12 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
 
     /// @param _owner The owner of the contract, when deployed
-    /// @param _mintPriceOriginal The mint price for a single NFT, in ether
-    /// @param _mintPriceEdition The mint price for an on-chain edition, in either
+    /// @param _originalsMintPrice Mint price for each origial
+    /// @param _editionsMintPrice Mint price for each edition
     constructor(
         address _owner,
-        uint256 _mintPriceOriginal,
-        uint256 _mintPriceEdition
+        uint256 _originalsMintPrice,
+        uint256 _editionsMintPrice
     ) ERC721("Altered Earth: The Hydra Collection", "ALTERED") Owned(_owner) {
         // therightchoyce.eth and 10% -- can be changed later
         royalties = Royalties(
@@ -141,8 +172,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         );
 
         // Setup initial mint prices
-        mintPriceOriginal = _mintPriceOriginal;
-        mintPriceEdition = _mintPriceEdition;
+        originalsMintPrice = _originalsMintPrice;
+        editionsMintPrice = _editionsMintPrice;
 
         emit TheHydraAwakens();
     }
@@ -177,7 +208,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     function alterReality(uint256 id)
         external
         payable
-        ElevatingConsciousnessHasACost(mintPriceOriginal)
+        ElevatingConsciousnessHasACost(originalsMintPrice)
         CheckConsciousness(id)
         RealityNotAlreadyAltered(id)
     {
@@ -191,12 +222,12 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @notice Returns the original id based on any original or edition Id provided
     /// @param _id TokenId of an original 1-of-1, or edition NFT
     function editionGetOriginalId(uint256 _id) public pure returns (uint256) {
-        if (_id > maxEditionId) revert BeyondTheScopeOfConsciousness();
+        if (_id > editionsMaxId) revert BeyondTheScopeOfConsciousness();
 
-        if (_id < totalOriginalSupply) {
+        if (_id < originalsSupply) {
             return _id;
         }
-        return (_id - totalOriginalSupply) / editionsPerOriginal;
+        return (_id - originalsSupply) / editionsPerOriginal;
     }
 
     /// @notice Gets the starting index for the editions based off an original
@@ -208,7 +239,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         returns (uint256)
     {
         /// @dev (originalId * editionsPerOriginal) + numOriginals
-        return (_originalId * editionsPerOriginal) + totalOriginalSupply;
+        return (_originalId * editionsPerOriginal) + originalsSupply;
     }
 
     /// @notice Gets the next sequental id available to mint for a particular edition
@@ -223,8 +254,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         /// @dev same as editionGetStartId + add the counter
         return
             (_originalId * editionsPerOriginal) +
-            totalOriginalSupply +
-            editionMintCount[_originalId];
+            originalsSupply +
+            editionsMinted[_originalId];
     }
 
     /// @notice Gets the current number of editions minted for this original
@@ -235,7 +266,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         CheckConsciousness(_originalId)
         returns (uint256)
     {
-        return editionMintCount[_originalId];
+        return editionsMinted[_originalId];
     }
 
     /// @notice Given any editionId, determine the index of that edition.. I.E is it edition 1 of 50, 10 of 50, etc..
@@ -259,7 +290,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @notice Gets the total supply of the originals
     /// @dev Define this as a function since we need to expose it over the interface for external contract calls.
     function getOrigialTotalSupply() public pure returns (uint256) {
-        return totalOriginalSupply;
+        return originalsSupply;
     }
 
     /// @notice Gets the total supply of all originals + editions
@@ -275,11 +306,11 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         external
         payable
         CheckConsciousness(_originalId)
-        ElevatingConsciousnessHasACost(mintPriceEdition)
+        ElevatingConsciousnessHasACost(editionsMintPrice)
     {
         uint256 editionId = editionGetNextId(_originalId);
 
-        ++editionMintCount[_originalId];
+        ++editionsMinted[_originalId];
 
         _safeMint(msg.sender, editionId, "Welcome to TheHydra's Reality");
     }

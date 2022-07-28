@@ -42,7 +42,6 @@ export const OnChainExplorer = ({ photoId }: { photoId: number }) => {
     watch: false,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError(error: any) {
-      console.dir(error);
       if (
         error.errorName === "BeyondTheScopeOfConsciousness" ||
         error.code === "CALL_EXCEPTION"
