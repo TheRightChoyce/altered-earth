@@ -15,7 +15,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "getEditionIndexFromId",
+    name: "editionGetIndexFromId",
     outputs: [
       {
         internalType: "uint256",
@@ -24,6 +24,82 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_originalId",
+        type: "uint256",
+      },
+    ],
+    name: "editionGetMintCount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_originalId",
+        type: "uint256",
+      },
+    ],
+    name: "editionGetNextId",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_id",
+        type: "uint256",
+      },
+    ],
+    name: "editionGetOriginalId",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_originalId",
+        type: "uint256",
+      },
+    ],
+    name: "editionGetStartId",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "pure",
     type: "function",
   },
   {
@@ -42,25 +118,6 @@ const _abi = [
   {
     inputs: [],
     name: "getOrigialTotalSupply",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_id",
-        type: "uint256",
-      },
-    ],
-    name: "getOriginalId",
     outputs: [
       {
         internalType: "uint256",

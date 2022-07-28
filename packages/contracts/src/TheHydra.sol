@@ -17,7 +17,6 @@ import "./interfaces/ITheHydraRenderer.sol";
 /// @notice This implemeints the ERC721 standard
 /// @dev Modified ERC721 for minting and managing tokens
 contract TheHydra is Owned, ERC721, ITheHydra {
-
     /// @dev Enable toString and other string functions on uint256
     using Strings for uint256;
 
@@ -39,13 +38,13 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @dev The total number of 1-of-1 original NFTs available
     uint256 immutable totalEditionSupply = 2500;
-    
+
     /// @dev Track the total supply available to mint in this collection, this includes all originals + editions => originals + (originals * editionsPer)
-    uint256 immutable public totalSupply = 2550;
+    uint256 public immutable totalSupply = 2550;
 
     /// @dev Easily track the number of editions minted for each original contract. Using a counter instead of tracking the starting index because if we tracked the starting index for each edition, then there would be a need to initilize each starting index to a particular sequenced number vs. just allowing default value of 0 here.
-    mapping (uint256 => uint256) editionMintCount;
-    
+    mapping(uint256 => uint256) editionMintCount;
+
     /// @dev The default mint price for a 1-of-1 original
     uint256 public mintPriceOriginal;
 
@@ -58,14 +57,13 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev This is the maximium Id available for the editions.. I.E if there are 2500 editions and 50 originals, the max editionId is 2549. Used to save gas during when doing > or < logic.
     uint256 immutable maxEditionId = 2549;
 
-
     // --------------------------------------------------------
     // ~~ Events ~~
     // --------------------------------------------------------
 
     /// @dev When this contract is created
     event TheHydraAwakens();
-    
+
     /// @dev When a new Hydra artwork is acquired, reality becomes altered
     event RealityAltered(address indexed from, uint256 tokenId);
 
@@ -93,7 +91,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         if (msg.value != costToMint) revert CouldNotAlterReality();
         _;
     }
-    
+
     /// @dev Ensures tokenId is within the valid range token range
     /// @param _id The token id to check
     modifier CheckConsciousness(uint256 _id) {
@@ -105,14 +103,16 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @param _originalId The edition id to check
     modifier CheckSubConsciousness(uint256 _originalId) {
         // currently allowing zero-based ids
-        if (editionMintCount[_originalId] > maxEditionCountPerOriginal) revert BeyondTheScopeOfConsciousness();
+        if (editionMintCount[_originalId] > maxEditionCountPerOriginal)
+            revert BeyondTheScopeOfConsciousness();
         _;
     }
 
     /// @dev Fail if the editionId is actually an originalId, or if it is beyond the max number of editions
     /// @param _editionId The tokenId of this edition
     modifier CheckEditionIdBoundries(uint256 _editionId) {
-        if (_editionId < totalOriginalSupply) revert BeyondTheScopeOfConsciousness();
+        if (_editionId < totalOriginalSupply)
+            revert BeyondTheScopeOfConsciousness();
         if (_editionId > maxEditionId) revert BeyondTheScopeOfConsciousness();
         _;
     }
@@ -130,13 +130,10 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @param _mintPriceOriginal The mint price for a single NFT, in ether
     /// @param _mintPriceEdition The mint price for an on-chain edition, in either
     constructor(
-
         address _owner,
         uint256 _mintPriceOriginal,
         uint256 _mintPriceEdition
-    
-    ) ERC721('Altered Earth: The Hydra Collection', 'ALTERED') Owned(_owner) {
-
+    ) ERC721("Altered Earth: The Hydra Collection", "ALTERED") Owned(_owner) {
         // therightchoyce.eth and 10% -- can be changed later
         royalties = Royalties(
             address(0x18836acedeF35D4A6C00Aae46a36fAdE12ee5FF7),
@@ -164,23 +161,20 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @notice Standard URI function to get the token metadata
     /// @param id Id of token requested
-    function tokenURI(uint256 id) override public view returns (string memory) {
-
+    function tokenURI(uint256 id) public view override returns (string memory) {
         /// @dev Ensure this id is in a dream state
         if (_ownerOf[id] == address(0)) revert BeyondTheScopeOfConsciousness();
 
         /// @dev Ensure a rendering contract is set
-        if(address(renderer) == address(0)) revert ConsciousnessNotActivated();
-        
+        if (address(renderer) == address(0)) revert ConsciousnessNotActivated();
+
         return renderer.tokenURI(id);
     }
 
     // --------------------------------------------------------
     // ~~ Mint Functions => Originals ~~
     // --------------------------------------------------------
-    function alterReality(
-        uint256 id
-    )
+    function alterReality(uint256 id)
         external
         payable
         ElevatingConsciousnessHasACost(mintPriceOriginal)
@@ -193,25 +187,21 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
     // ~~ Mint Functions => Editions ~~
     // --------------------------------------------------------
-    
+
     /// @notice Returns the original id based on any original or edition Id provided
     /// @param _id TokenId of an original 1-of-1, or edition NFT
-    function getOriginalId(
-        uint256 _id
-    ) public pure returns (uint256) {
-        if (_id > maxEditionId ) revert BeyondTheScopeOfConsciousness();
-        
-        if (_id < totalOriginalSupply) { 
+    function editionGetOriginalId(uint256 _id) public pure returns (uint256) {
+        if (_id > maxEditionId) revert BeyondTheScopeOfConsciousness();
+
+        if (_id < totalOriginalSupply) {
             return _id;
         }
         return (_id - totalOriginalSupply) / editionsPerOriginal;
     }
-    
+
     /// @notice Gets the starting index for the editions based off an original
     /// @param _originalId TokenId of the original 1-of-1 NFT
-    function getEditionStartId(
-        uint256 _originalId
-    ) 
+    function editionGetStartId(uint256 _originalId)
         public
         pure
         CheckConsciousness(_originalId)
@@ -220,26 +210,26 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         /// @dev (originalId * editionsPerOriginal) + numOriginals
         return (_originalId * editionsPerOriginal) + totalOriginalSupply;
     }
+
     /// @notice Gets the next sequental id available to mint for a particular edition
     /// @param _originalId TokenId of the original 1-of-1 NFT
-    function getNextEditionId(
-        uint256 _originalId
-    )
+    function editionGetNextId(uint256 _originalId)
         public
         view
         CheckConsciousness(_originalId)
         CheckSubConsciousness(_originalId)
         returns (uint256)
     {
-        /// @dev same as getEditionStartId + add the counter
-        return (_originalId * editionsPerOriginal) + totalOriginalSupply + editionMintCount[_originalId];
+        /// @dev same as editionGetStartId + add the counter
+        return
+            (_originalId * editionsPerOriginal) +
+            totalOriginalSupply +
+            editionMintCount[_originalId];
     }
 
     /// @notice Gets the current number of editions minted for this original
     /// @param _originalId TokenId of the original 1-of-1 NFT
-    function getEditionMintCount(
-        uint256 _originalId
-    )
+    function editionGetMintCount(uint256 _originalId)
         public
         view
         CheckConsciousness(_originalId)
@@ -250,9 +240,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @notice Given any editionId, determine the index of that edition.. I.E is it edition 1 of 50, 10 of 50, etc..
     /// @param _id TokenId of the edition
-    function getEditionIndexFromId(
-        uint256 _id
-    )
+    function editionGetIndexFromId(uint256 _id)
         public
         pure
         CheckEditionIdBoundries(_id)
@@ -267,11 +255,13 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     function getMaxEditionsPerOriginal() public pure returns (uint256) {
         return editionsPerOriginal;
     }
+
     /// @notice Gets the total supply of the originals
     /// @dev Define this as a function since we need to expose it over the interface for external contract calls.
     function getOrigialTotalSupply() public pure returns (uint256) {
         return totalOriginalSupply;
     }
+
     /// @notice Gets the total supply of all originals + editions
     /// @dev Define this as a function since we need to expose it over the interface for external contract calls.
     function getTotalSupply() public pure returns (uint256) {
@@ -279,20 +269,18 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     }
 
     /// @notice Mint an edition of an original
-    /// @dev This will revert if trying to revert more than 50 of an edition. This check is inside of CheckSubConsciousness, which is checked in the call to getNextEditionId. Not checking here as to not duplicate work
+    /// @dev This will revert if trying to revert more than 50 of an edition. This check is inside of CheckSubConsciousness, which is checked in the call to editionGetNextId. Not checking here as to not duplicate work
     /// @param _originalId TokenId of the original 1-of-1 NFT
-    function alterSubReality(
-        uint256 _originalId
-    )
+    function alterSubReality(uint256 _originalId)
         external
         payable
         CheckConsciousness(_originalId)
         ElevatingConsciousnessHasACost(mintPriceEdition)
     {
-        uint256 editionId = getNextEditionId(_originalId);
-        
+        uint256 editionId = editionGetNextId(_originalId);
+
         ++editionMintCount[_originalId];
-        
+
         _safeMint(msg.sender, editionId, "Welcome to TheHydra's Reality");
     }
 
@@ -300,7 +288,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Burns it
     /// @param id Id of the NFT to burn
     function returnToReality(uint256 id) public {
-
         // TODO -- It looks like if a token is burned, someone else could then come back and mint it again.. need to ensure there isn't a way to do that.
 
         if (_ownerOf[id] != msg.sender) revert InvalidDreamState();
@@ -310,7 +297,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
     // ~~ ERC165 Support ~~
     // --------------------------------------------------------
-    
+
     function supportsInterface(bytes4 interfaceId)
         public
         view
@@ -318,8 +305,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         returns (bool)
     {
         return
-            interfaceId == 0x2a55205a // ERC2981
-            || super.supportsInterface(interfaceId);
+            interfaceId == 0x2a55205a || // ERC2981
+            super.supportsInterface(interfaceId);
     }
 
     // --------------------------------------------------------
@@ -342,14 +329,11 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         receiver = royalties.receiver;
         royaltyAmount = (_salePrice * royalties.amount) / 10_000;
     }
-    
+
     /// @notice Update royalty information
     /// @param _receiver The receiver of royalty payments
     /// @param _amount The royalty percentage with two decimals (10000 = 100)
-    function setRoyaltyInfo(
-        address _receiver,
-        uint256 _amount
-    )
+    function setRoyaltyInfo(address _receiver, uint256 _amount)
         external
         onlyOwner
     {
@@ -374,11 +358,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev This is implemented as a helper for the dapp -- this funtion will not revert when a token is unowned, making it easier to check ownership from the front-end
     /// @param id The id of the token
     /// @return owner address Either the current owner or address(0)
-    function ownerOfOrNull(uint256 id) public view returns (address owner)
-    {
+    function ownerOfOrNull(uint256 id) public view returns (address owner) {
         return _ownerOf[id];
     }
-
 
     // --------------------------------------------------------
     // ~~ Proxy i.e. Gas-less listings on exchanges or      ~~
