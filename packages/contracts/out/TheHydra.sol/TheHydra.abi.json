@@ -249,7 +249,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_id",
+        "name": "_editionId",
         "type": "uint256"
       }
     ],

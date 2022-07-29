@@ -315,6 +315,7 @@ contract TheHydraTest is DSTest {
             assertEq(address(_c.ownerOf(next)), minter);
         }
 
+        console.log("at expect rever");
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
         _c.editionGetNextId(0);
 

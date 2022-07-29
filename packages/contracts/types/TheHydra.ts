@@ -39,14 +39,14 @@ export interface TheHydraInterface extends utils.Interface {
     "editionGetNextId(uint256)": FunctionFragment;
     "editionGetOriginalId(uint256)": FunctionFragment;
     "editionGetStartId(uint256)": FunctionFragment;
+    "editionsMintPrice()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getMaxEditionsPerOriginal()": FunctionFragment;
     "getOrigialTotalSupply()": FunctionFragment;
     "getTotalSupply()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mintPriceEdition()": FunctionFragment;
-    "mintPriceOriginal()": FunctionFragment;
     "name()": FunctionFragment;
+    "originalsMintPrice()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "ownerOfOrNull(uint256)": FunctionFragment;
@@ -78,14 +78,14 @@ export interface TheHydraInterface extends utils.Interface {
       | "editionGetNextId"
       | "editionGetOriginalId"
       | "editionGetStartId"
+      | "editionsMintPrice"
       | "getApproved"
       | "getMaxEditionsPerOriginal"
       | "getOrigialTotalSupply"
       | "getTotalSupply"
       | "isApprovedForAll"
-      | "mintPriceEdition"
-      | "mintPriceOriginal"
       | "name"
+      | "originalsMintPrice"
       | "owner"
       | "ownerOf"
       | "ownerOfOrNull"
@@ -143,6 +143,10 @@ export interface TheHydraInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "editionsMintPrice",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getApproved",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -162,15 +166,11 @@ export interface TheHydraInterface extends utils.Interface {
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "mintPriceEdition",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintPriceOriginal",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "originalsMintPrice",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
@@ -279,6 +279,10 @@ export interface TheHydraInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "editionsMintPrice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
@@ -298,15 +302,11 @@ export interface TheHydraInterface extends utils.Interface {
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "mintPriceEdition",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "mintPriceOriginal",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "originalsMintPrice",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
@@ -504,7 +504,7 @@ export interface TheHydra extends BaseContract {
     ): Promise<[BigNumber]>;
 
     editionGetIndexFromId(
-      _id: PromiseOrValue<BigNumberish>,
+      _editionId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -528,6 +528,8 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    editionsMintPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getApproved(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -545,11 +547,9 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    mintPriceEdition(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    mintPriceOriginal(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     name(overrides?: CallOverrides): Promise<[string]>;
+
+    originalsMintPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -664,7 +664,7 @@ export interface TheHydra extends BaseContract {
   ): Promise<BigNumber>;
 
   editionGetIndexFromId(
-    _id: PromiseOrValue<BigNumberish>,
+    _editionId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -688,6 +688,8 @@ export interface TheHydra extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  editionsMintPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
   getApproved(
     arg0: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -705,11 +707,9 @@ export interface TheHydra extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  mintPriceEdition(overrides?: CallOverrides): Promise<BigNumber>;
-
-  mintPriceOriginal(overrides?: CallOverrides): Promise<BigNumber>;
-
   name(overrides?: CallOverrides): Promise<string>;
+
+  originalsMintPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -824,7 +824,7 @@ export interface TheHydra extends BaseContract {
     ): Promise<BigNumber>;
 
     editionGetIndexFromId(
-      _id: PromiseOrValue<BigNumberish>,
+      _editionId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -848,6 +848,8 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    editionsMintPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
     getApproved(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -865,11 +867,9 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mintPriceEdition(overrides?: CallOverrides): Promise<BigNumber>;
-
-    mintPriceOriginal(overrides?: CallOverrides): Promise<BigNumber>;
-
     name(overrides?: CallOverrides): Promise<string>;
+
+    originalsMintPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -1048,7 +1048,7 @@ export interface TheHydra extends BaseContract {
     ): Promise<BigNumber>;
 
     editionGetIndexFromId(
-      _id: PromiseOrValue<BigNumberish>,
+      _editionId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1072,6 +1072,8 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    editionsMintPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
     getApproved(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1089,11 +1091,9 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    mintPriceEdition(overrides?: CallOverrides): Promise<BigNumber>;
-
-    mintPriceOriginal(overrides?: CallOverrides): Promise<BigNumber>;
-
     name(overrides?: CallOverrides): Promise<BigNumber>;
+
+    originalsMintPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1207,7 +1207,7 @@ export interface TheHydra extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     editionGetIndexFromId(
-      _id: PromiseOrValue<BigNumberish>,
+      _editionId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1231,6 +1231,8 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    editionsMintPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getApproved(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1252,11 +1254,11 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    mintPriceEdition(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    mintPriceOriginal(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    originalsMintPrice(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
