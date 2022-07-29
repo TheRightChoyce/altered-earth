@@ -101,9 +101,13 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
                 );
         }
 
+        ITheHydra.EditionInfo memory editionInfo = theHydra
+            .editionsGetInfoFromEdition(_editionId);
+
         /// @dev Editions build their tokenUri string on chain
-        uint256 originalId = theHydra.editionGetOriginalId(_editionId);
-        bytes memory svg = _renderSVG_AsBytes(dataStore.getData(originalId));
+        bytes memory svg = _renderSVG_AsBytes(
+            dataStore.getData(editionInfo.originalId)
+        );
 
         /// @dev Build the base64 encoded version of the SVG to reference in the imageUrl
         bytes memory svgBase64 = DynamicBuffer.allocate(bufferSize);
@@ -120,7 +124,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         );
         bytes memory description = abi.encodePacked(
             '"description":"An altered reality existing forever on the Ethereum blockchain. This edition is a fully on-chain SVG version of The Hydra #',
-            originalId.toString(),
+            editionInfo.originalId.toString(),
             ". 50 editions exist for each original photo. Each token conforms to the ERC-721 standard.",
             '",'
         );
@@ -137,9 +141,9 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         bytes memory attributes = abi.encodePacked(
             '"attributes":[',
             '{"trait_type":"Edition","value":"',
-            theHydra.editionGetIndexFromId(_editionId).toString(),
+            editionInfo.localIndex.toString(),
             " of ",
-            theHydra.getMaxEditionsPerOriginal().toString(),
+            editionInfo.maxPerOriginal.toString(),
             '"},',
             '{"trait_type":"Size","value":"64x64px"},',
             '{"trait_type":"Colors","value":"256"}',

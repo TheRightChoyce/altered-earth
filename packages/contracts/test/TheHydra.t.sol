@@ -193,36 +193,312 @@ contract TheHydraTest is DSTest {
     // --------------------------------------------------------
     // ~~ Minting -- Editions
     // --------------------------------------------------------
-    function testEditioneditionGetStartId() public {
+    function testEditionGetInfoFromOriginal0() public {
         TheHydra _c = getNewContract();
-        assertEq(_c.editionGetStartId(0), 50);
-        assertEq(_c.editionGetStartId(1), 100);
-        assertEq(_c.editionGetStartId(2), 150);
-        assertEq(_c.editionGetStartId(48), 2450);
-        assertEq(_c.editionGetStartId(49), 2500);
+        TheHydra.EditionInfo memory info = _c.editionsGetInfoFromOriginal(0);
+
+        assertEq(info.originalId, 0);
+        assertEq(info.startId, 50);
+        assertEq(info.endId, 99);
+        assertEq(info.minted, 0);
+        assertEq(info.nextId, 50);
+        assertEq(info.localIndex, 1);
+        assertEq(info.maxPerOriginal, 50);
+    }
+
+    function testEditionGetInfoFromOriginal1() public {
+        TheHydra _c = getNewContract();
+        TheHydra.EditionInfo memory info = _c.editionsGetInfoFromOriginal(1);
+
+        assertEq(info.originalId, 1);
+        assertEq(info.startId, 100);
+        assertEq(info.endId, 149);
+        assertEq(info.minted, 0);
+        assertEq(info.nextId, 100);
+        assertEq(info.localIndex, 1);
+        assertEq(info.maxPerOriginal, 50);
+    }
+
+    function testEditionGetInfoFromOriginal49() public {
+        TheHydra _c = getNewContract();
+        TheHydra.EditionInfo memory info = _c.editionsGetInfoFromOriginal(49);
+
+        assertEq(info.originalId, 49);
+        assertEq(info.startId, 2500);
+        assertEq(info.endId, 2549);
+        assertEq(info.minted, 0);
+        assertEq(info.nextId, 2500);
+        assertEq(info.localIndex, 1);
+        assertEq(info.maxPerOriginal, 50);
+    }
+
+    function testEditionGetInfoFromOriginal50() public {
+        // no original 50, expect revert
+        TheHydra _c = getNewContract();
+
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _c.editionsGetInfoFromOriginal(50);
+    }
+
+    function testEditionGetInfoFromOriginalAfterMinting() public {
+        TheHydra _c = getNewContract();
+        TheHydra.EditionInfo memory info;
+        TheHydra.EditionInfo memory info1;
+        TheHydra.EditionInfo memory info49;
+
+        // original 0
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(0);
+        info = _c.editionsGetInfoFromOriginal(0);
+        assertEq(info.nextId, 51);
+        assertEq(info.minted, 1);
+
+        // original 0 x 2
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(0);
+        info = _c.editionsGetInfoFromOriginal(0);
+        assertEq(info.nextId, 52);
+        assertEq(info.minted, 2);
+
+        // original 1
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(1);
+        info = _c.editionsGetInfoFromOriginal(0);
+        info1 = _c.editionsGetInfoFromOriginal(1);
+        assertEq(info.nextId, 52);
+        assertEq(info.minted, 2);
+        assertEq(info1.nextId, 101);
+        assertEq(info1.minted, 1);
+
+        // original 1 x2
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(1);
+        info = _c.editionsGetInfoFromOriginal(0);
+        info1 = _c.editionsGetInfoFromOriginal(1);
+        assertEq(info.nextId, 52);
+        assertEq(info.minted, 2);
+        assertEq(info1.nextId, 102);
+        assertEq(info1.minted, 2);
+
+        // original 49
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(49);
+        info = _c.editionsGetInfoFromOriginal(0);
+        info1 = _c.editionsGetInfoFromOriginal(1);
+        info49 = _c.editionsGetInfoFromOriginal(49);
+        assertEq(info.nextId, 52);
+        assertEq(info.minted, 2);
+        assertEq(info1.nextId, 102);
+        assertEq(info1.minted, 2);
+        assertEq(info49.nextId, 2501);
+        assertEq(info49.minted, 1);
+
+        // original 49 x 2
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(49);
+        info = _c.editionsGetInfoFromOriginal(0);
+        info1 = _c.editionsGetInfoFromOriginal(1);
+        info49 = _c.editionsGetInfoFromOriginal(49);
+        assertEq(info.nextId, 52);
+        assertEq(info.minted, 2);
+        assertEq(info1.nextId, 102);
+        assertEq(info1.minted, 2);
+        assertEq(info49.nextId, 2502);
+        assertEq(info49.minted, 2);
+    }
+
+    function testEditionGetInfoFromOriginalAfterEditionsLimit() public {
+        TheHydra _c = getNewContract();
+        TheHydra.EditionInfo memory info;
+
+        vm.startPrank(minter);
+        for (uint256 i = 0; i < 50; i++) {
+            info = _c.editionsGetInfoFromOriginal(0);
+            _c.alterSubReality{value: editionsMintPrice}(0);
+            assertEq(address(_c.ownerOf(info.nextId)), minter);
+        }
+
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _c.editionsGetNextId(0);
+
+        info = _c.editionsGetInfoFromOriginal(0);
+        assertEq(info.nextId, type(uint256).max);
+        assertEq(info.minted, 50);
+
+        // Original 49
+        for (uint256 i = 0; i < 50; i++) {
+            info = _c.editionsGetInfoFromOriginal(49);
+            _c.alterSubReality{value: editionsMintPrice}(49);
+            assertEq(address(_c.ownerOf(info.nextId)), minter);
+        }
+
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _c.editionsGetNextId(49);
+
+        info = _c.editionsGetInfoFromOriginal(49);
+        assertEq(info.nextId, type(uint256).max);
+        assertEq(info.minted, 50);
+
+        vm.stopPrank();
+    }
+
+    function testEditionGetInfoFromEdition50() public {
+        TheHydra _c = getNewContract();
+        TheHydra.EditionInfo memory info = _c.editionsGetInfoFromEdition(50);
+
+        assertEq(info.originalId, 0);
+        assertEq(info.startId, 50);
+        assertEq(info.endId, 99);
+        assertEq(info.minted, 0);
+        assertEq(info.nextId, 50);
+        assertEq(info.localIndex, 1);
+        assertEq(info.maxPerOriginal, 50);
+    }
+
+    function testEditionGetInfoFromEdition51() public {
+        TheHydra _c = getNewContract();
+        TheHydra.EditionInfo memory info = _c.editionsGetInfoFromEdition(51);
+
+        assertEq(info.originalId, 0);
+        assertEq(info.startId, 50);
+        assertEq(info.endId, 99);
+        assertEq(info.minted, 0);
+        assertEq(info.nextId, 50);
+        assertEq(info.localIndex, 2);
+        assertEq(info.maxPerOriginal, 50);
+    }
+
+    function testEditionGetInfoFromEdition100() public {
+        TheHydra _c = getNewContract();
+        TheHydra.EditionInfo memory info = _c.editionsGetInfoFromEdition(100);
+
+        assertEq(info.originalId, 1);
+        assertEq(info.startId, 100);
+        assertEq(info.endId, 149);
+        assertEq(info.minted, 0);
+        assertEq(info.nextId, 100);
+        assertEq(info.localIndex, 1);
+        assertEq(info.maxPerOriginal, 50);
+    }
+
+    function testEditionGetInfoFromEditionAfterMinting() public {
+        TheHydra _c = getNewContract();
+        TheHydra.EditionInfo memory info50;
+        TheHydra.EditionInfo memory info100;
+        TheHydra.EditionInfo memory info2500;
+
+        // edition50
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(0);
+        info50 = _c.editionsGetInfoFromEdition(50);
+        assertEq(info50.nextId, 51);
+        assertEq(info50.minted, 1);
+
+        // edition50 x 2
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(0);
+        info50 = _c.editionsGetInfoFromEdition(50);
+        assertEq(info50.nextId, 52);
+        assertEq(info50.minted, 2);
+
+        // edition100
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(1);
+        info50 = _c.editionsGetInfoFromEdition(50);
+        info100 = _c.editionsGetInfoFromEdition(100);
+        assertEq(info50.nextId, 52);
+        assertEq(info50.minted, 2);
+        assertEq(info100.nextId, 101);
+        assertEq(info100.minted, 1);
+
+        // edition100 x 2
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(1);
+        info50 = _c.editionsGetInfoFromEdition(50);
+        info100 = _c.editionsGetInfoFromEdition(100);
+        assertEq(info50.nextId, 52);
+        assertEq(info50.minted, 2);
+        assertEq(info100.nextId, 102);
+        assertEq(info100.minted, 2);
+
+        // edition2500
+        vm.prank(minter);
+        _c.alterSubReality{value: editionsMintPrice}(49);
+        info2500 = _c.editionsGetInfoFromEdition(2500);
+        assertEq(info2500.nextId, 2501);
+        assertEq(info2500.minted, 1);
+    }
+
+    function testEditionGetInfoFromEditionAfterEditionsLimit() public {
+        TheHydra _c = getNewContract();
+        TheHydra.EditionInfo memory info;
+
+        vm.startPrank(minter);
+        for (uint256 i = 0; i < 50; i++) {
+            info = _c.editionsGetInfoFromEdition(50 + i);
+            _c.alterSubReality{value: editionsMintPrice}(0);
+            assertEq(address(_c.ownerOf(info.nextId)), minter);
+            assertEq(info.localIndex, i + 1);
+        }
+
+        // TODO -- should be the mint function we're checking
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _c.editionsGetNextId(0);
+
+        info = _c.editionsGetInfoFromEdition(50);
+        assertEq(info.nextId, type(uint256).max);
+        assertEq(info.minted, 50);
+
+        // Original 49
+        for (uint256 i = 0; i < 50; i++) {
+            info = _c.editionsGetInfoFromEdition(49 * 50 + 50 + i);
+            _c.alterSubReality{value: editionsMintPrice}(49);
+            assertEq(info.originalId, 49);
+            assertEq(address(_c.ownerOf(info.nextId)), minter);
+            assertEq(info.localIndex, i + 1);
+        }
+
+        // TODO -- should be the mint function we're checking
+        vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
+        _c.editionsGetNextId(49);
+
+        info = _c.editionsGetInfoFromEdition(2500);
+        assertEq(info.nextId, type(uint256).max);
+        assertEq(info.minted, 50);
+
+        vm.stopPrank();
+    }
+
+    function testEditioneditionsGetStartId() public {
+        TheHydra _c = getNewContract();
+        assertEq(_c.editionsGetStartId(0), 50);
+        assertEq(_c.editionsGetStartId(1), 100);
+        assertEq(_c.editionsGetStartId(2), 150);
+        assertEq(_c.editionsGetStartId(48), 2450);
+        assertEq(_c.editionsGetStartId(49), 2500);
     }
 
     function testEditionGetEditionStartIdRevertsWhenOutOfBounds() public {
         TheHydra _c = getNewContract();
 
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
-        _c.editionGetStartId(50);
+        _c.editionsGetStartId(50);
     }
 
     function testEditionGetNextEditionIdWhenNoEditionsMinted() public {
         TheHydra _c = getNewContract();
-        assertEq(_c.editionGetNextId(0), 50);
-        assertEq(_c.editionGetNextId(1), 100);
-        assertEq(_c.editionGetNextId(2), 150);
-        assertEq(_c.editionGetNextId(48), 2450);
-        assertEq(_c.editionGetNextId(49), 2500);
+        assertEq(_c.editionsGetNextId(0), 50);
+        assertEq(_c.editionsGetNextId(1), 100);
+        assertEq(_c.editionsGetNextId(2), 150);
+        assertEq(_c.editionsGetNextId(48), 2450);
+        assertEq(_c.editionsGetNextId(49), 2500);
     }
 
     function testEditionGetNextEditionIdRevertsWhenOutOfBounds() public {
         TheHydra _c = getNewContract();
 
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
-        _c.editionGetNextId(50);
+        _c.editionsGetNextId(50);
     }
 
     function testEditionMintFailsWithInvalidPrice() public {
@@ -278,46 +554,47 @@ contract TheHydraTest is DSTest {
         vm.stopPrank();
     }
 
+    // TODO
     function testEditionGetNextEditionIdAfterMinting() public {
         TheHydra _c = getNewContract();
-        assertEq(_c.editionGetNextId(0), 50);
+        assertEq(_c.editionsGetNextId(0), 50);
 
         vm.prank(minter);
         _c.alterSubReality{value: editionsMintPrice}(0);
-        assertEq(_c.editionGetNextId(0), 51);
+        assertEq(_c.editionsGetNextId(0), 51);
 
         vm.prank(minter);
         _c.alterSubReality{value: editionsMintPrice}(0);
-        assertEq(_c.editionGetNextId(0), 52);
+        assertEq(_c.editionsGetNextId(0), 52);
 
         // next
-        assertEq(_c.editionGetNextId(1), 100);
+        assertEq(_c.editionsGetNextId(1), 100);
         vm.prank(minter);
         _c.alterSubReality{value: editionsMintPrice}(1);
 
-        assertEq(_c.editionGetNextId(0), 52);
-        assertEq(_c.editionGetNextId(1), 101);
+        assertEq(_c.editionsGetNextId(0), 52);
+        assertEq(_c.editionsGetNextId(1), 101);
 
         // one more time
         vm.prank(minter);
         _c.alterSubReality{value: editionsMintPrice}(1);
 
-        assertEq(_c.editionGetNextId(0), 52);
-        assertEq(_c.editionGetNextId(1), 102);
+        assertEq(_c.editionsGetNextId(0), 52);
+        assertEq(_c.editionsGetNextId(1), 102);
     }
 
+    // TODO
     function testEditionGetNextEditionIdRevertsAtEditionLimit() public {
         TheHydra _c = getNewContract();
         vm.startPrank(minter);
         for (uint256 i = 0; i < 50; i++) {
-            uint256 next = _c.editionGetNextId(0);
+            uint256 next = _c.editionsGetNextId(0);
             _c.alterSubReality{value: editionsMintPrice}(0);
             assertEq(address(_c.ownerOf(next)), minter);
         }
 
-        console.log("at expect rever");
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
-        _c.editionGetNextId(0);
+        _c.editionsGetNextId(0);
 
         vm.stopPrank();
     }
@@ -334,7 +611,7 @@ contract TheHydraTest is DSTest {
 
         // now check another token to be sure
         for (uint256 i = 0; i < 50; i++) {
-            uint256 next = _c.editionGetNextId(1);
+            uint256 next = _c.editionsGetNextId(1);
             _c.alterSubReality{value: editionsMintPrice}(1);
             assertEq(address(_c.ownerOf(next)), minter);
         }
@@ -345,7 +622,7 @@ contract TheHydraTest is DSTest {
         // now check the last token
         // now check another token to be sure
         for (uint256 i = 0; i < 50; i++) {
-            uint256 next = _c.editionGetNextId(49);
+            uint256 next = _c.editionsGetNextId(49);
             _c.alterSubReality{value: editionsMintPrice}(49);
             assertEq(address(_c.ownerOf(next)), minter);
         }
@@ -356,48 +633,50 @@ contract TheHydraTest is DSTest {
         vm.stopPrank();
     }
 
+    // TODO - remove
     function testEditionGetOriginalIdWhenEdition() public {
         TheHydra _c = getNewContract();
-        assertEq(_c.editionGetOriginalId(50), 0);
-        assertEq(_c.editionGetOriginalId(99), 0);
+        assertEq(_c.editionsGetOriginalId(50), 0);
+        assertEq(_c.editionsGetOriginalId(99), 0);
 
-        assertEq(_c.editionGetOriginalId(100), 1);
-        assertEq(_c.editionGetOriginalId(149), 1);
+        assertEq(_c.editionsGetOriginalId(100), 1);
+        assertEq(_c.editionsGetOriginalId(149), 1);
 
-        assertEq(_c.editionGetOriginalId(150), 2);
-        assertEq(_c.editionGetOriginalId(199), 2);
+        assertEq(_c.editionsGetOriginalId(150), 2);
+        assertEq(_c.editionsGetOriginalId(199), 2);
 
-        assertEq(_c.editionGetOriginalId(2450), 48);
-        assertEq(_c.editionGetOriginalId(2499), 48);
+        assertEq(_c.editionsGetOriginalId(2450), 48);
+        assertEq(_c.editionsGetOriginalId(2499), 48);
 
-        assertEq(_c.editionGetOriginalId(2500), 49);
-        assertEq(_c.editionGetOriginalId(2549), 49);
+        assertEq(_c.editionsGetOriginalId(2500), 49);
+        assertEq(_c.editionsGetOriginalId(2549), 49);
     }
 
+    // TODO - remove
     function testEditionGetOriginalIdWhenOriginal() public {
         TheHydra _c = getNewContract();
-        assertEq(0, _c.editionGetOriginalId(0));
-        assertEq(1, _c.editionGetOriginalId(1));
-        assertEq(2, _c.editionGetOriginalId(2));
-        assertEq(48, _c.editionGetOriginalId(48));
-        assertEq(49, _c.editionGetOriginalId(49));
+        assertEq(0, _c.editionsGetOriginalId(0));
+        assertEq(1, _c.editionsGetOriginalId(1));
+        assertEq(2, _c.editionsGetOriginalId(2));
+        assertEq(48, _c.editionsGetOriginalId(48));
+        assertEq(49, _c.editionsGetOriginalId(49));
     }
 
     function testEditionGetOriginalIdWhenOutOfBounds() public {
         TheHydra _c = getNewContract();
 
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
-        _c.editionGetOriginalId(2550);
+        _c.editionsGetOriginalId(2550);
 
         vm.expectRevert(TheHydra.BeyondTheScopeOfConsciousness.selector);
-        _c.editionGetOriginalId(2551);
+        _c.editionsGetOriginalId(2551);
     }
 
     function testGetEditionIndexFromId() public {
         TheHydra _c = getNewContract();
 
         for (uint256 i = 0; i < 50; i++) {
-            assertEq(_c.editionGetIndexFromId(50 + i), i + 1);
+            assertEq(_c.editionsGetIndexFromId(50 + i), i + 1);
         }
     }
 

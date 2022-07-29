@@ -10,8 +10,14 @@ if [ -z "$CHAIN_ID" ]; then
   exit 1
 fi
 
-forge script script/DeployRenderer.s.sol:DeployRenderer -vvvv --ffi --chain-id $CHAIN_ID \
+CONTRACT_NAME="TheHydraRenderer"
+DEPLOY_OUTPUT="deploys/$CHAIN_NAME/$CONTRACT_NAME.json"
+SCRIPT_NAME="DeployRenderer"
+
+forge script script/$SCRIPT_NAME.s.sol:$SCRIPT_NAME -vvvv --ffi --chain-id $CHAIN_ID \
     --rpc-url $RPC_URL \
     --private-key $DEPLOYER_PRIVATE_KEY \
     --broadcast \
     --verify --etherscan-api-key $ETHERSCAN_API_KEY
+
+jq '{deployedTo: .transactions[0].contractAddress, deployer: .transactions[0].tx.from, transactionHash: .transactions[0].hash}' ./broadcast/$SCRIPT_NAME.s.sol/$CHAIN_ID/run-latest.json > $DEPLOY_OUTPUT

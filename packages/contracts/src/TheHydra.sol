@@ -21,6 +21,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Enable toString and other string functions on uint256
     using Strings for uint256;
 
+    /// @dev Store the MAX_INT as a constant and we then use this as an invalid ID value
+    uint256 constant MAX_INT = type(uint256).max;
+
     // --------------------------------------------------------
     // ~~ Core state variables ~~
     // --------------------------------------------------------
@@ -137,8 +140,10 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Fail if the editionId is actually an originalId, or if it is beyond the max number of editions
     /// @param _editionId The tokenId of this edition
     modifier CheckEditionIdBoundries(uint256 _editionId) {
+        /// @dev If this is actually an original
         if (_editionId < originalsSupply)
             revert BeyondTheScopeOfConsciousness();
+        /// @dev if this is higher then the editions we have available
         if (_editionId > editionsMaxId) revert BeyondTheScopeOfConsciousness();
         _;
     }
@@ -213,10 +218,52 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
     // ~~ Mint Functions => Editions ~~
     // --------------------------------------------------------
+    function editionsGetInfoFromOriginal(uint256 _originalId)
+        public
+        view
+        CheckConsciousness(_originalId)
+        returns (EditionInfo memory)
+    {
+        uint256 startId = (_originalId * editionsPerOriginal) + originalsSupply;
+        uint256 endId = startId + editionsCountPerOriginal;
+        uint256 minted = editionsMinted[_originalId];
+        bool soldOut = (minted == 50);
+        uint256 nextId = soldOut ? MAX_INT : startId + minted;
+        /// @dev Take the reminder and then add 1 to convert from 0-based to 1-based counting
+        uint256 localIndex = soldOut
+            ? MAX_INT
+            : (nextId % editionsPerOriginal) + 1;
+
+        return
+            EditionInfo(
+                _originalId,
+                startId,
+                endId,
+                minted,
+                soldOut,
+                nextId,
+                localIndex,
+                editionsPerOriginal
+            );
+    }
+
+    function editionsGetInfoFromEdition(uint256 _editionId)
+        public
+        view
+        CheckEditionIdBoundries(_editionId)
+        returns (EditionInfo memory)
+    {
+        uint256 originalId = (_editionId - originalsSupply) /
+            editionsPerOriginal;
+        EditionInfo memory edition = editionsGetInfoFromOriginal(originalId);
+        edition.localIndex = (_editionId % editionsPerOriginal) + 1;
+
+        return edition;
+    }
 
     /// @notice Returns the original id based on any original or edition Id provided
     /// @param _id TokenId of an original 1-of-1, or edition NFT
-    function editionGetOriginalId(uint256 _id) public pure returns (uint256) {
+    function editionsGetOriginalId(uint256 _id) public pure returns (uint256) {
         if (_id > editionsMaxId) revert BeyondTheScopeOfConsciousness();
 
         if (_id < originalsSupply) {
@@ -227,26 +274,25 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @notice Gets the starting index for the editions based off an original
     /// @param _originalId TokenId of the original 1-of-1 NFT
-    function editionGetStartId(uint256 _originalId)
+    function editionsGetStartId(uint256 _originalId)
         public
         pure
         CheckConsciousness(_originalId)
         returns (uint256)
     {
-        /// @dev (originalId * editionsPerOriginal) + numOriginals
         return (_originalId * editionsPerOriginal) + originalsSupply;
     }
 
-    /// @notice Gets the next sequental id available to mint for a particular edition
+    /// @notice Gets the next sequental id available to mint for a particular edition, or raises an error if there are no more editions available
+    /// @dev CheckSubConsciousness ensures there are editions left to mint for this original
     /// @param _originalId TokenId of the original 1-of-1 NFT
-    function editionGetNextId(uint256 _originalId)
+    function editionsGetNextId(uint256 _originalId)
         public
         view
         CheckConsciousness(_originalId)
         CheckSubConsciousness(_originalId)
         returns (uint256)
     {
-        /// @dev same as editionGetStartId + add the counter
         return
             (_originalId * editionsPerOriginal) +
             originalsSupply +
@@ -255,7 +301,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @notice Gets the current number of editions minted for this original
     /// @param _originalId TokenId of the original 1-of-1 NFT
-    function editionGetMintCount(uint256 _originalId)
+    function editionsGetMintCount(uint256 _originalId)
         public
         view
         CheckConsciousness(_originalId)
@@ -266,7 +312,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @notice Given any editionId, determine the index of that edition.. I.E is it edition 1 of 50, 10 of 50, etc..
     /// @param _editionId TokenId of the edition
-    function editionGetIndexFromId(uint256 _editionId)
+    function editionsGetIndexFromId(uint256 _editionId)
         public
         pure
         CheckEditionIdBoundries(_editionId)
@@ -278,7 +324,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @notice Gets the number of available editions per original
     /// @dev Define this as a function since we need to expose it over the interface for external contract calls.
-    function getMaxEditionsPerOriginal() public pure returns (uint256) {
+    function editionsGetMaxPerOriginal() public pure returns (uint256) {
         return editionsPerOriginal;
     }
 
@@ -295,7 +341,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     }
 
     /// @notice Mint an edition of an original
-    /// @dev This will revert if trying to mint more than 50 of an edition. CheckSubConsciousness is called inside of editionGetNextId and does not need to be added to this function
+    /// @dev This will revert if trying to mint more than 50 of an edition. CheckSubConsciousness is called inside of editionsGetNextId and does not need to be added to this function
     /// @param _originalId TokenId of the original 1-of-1 NFT
     function alterSubReality(uint256 _originalId)
         external
@@ -303,7 +349,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         CheckConsciousness(_originalId)
         ElevatingConsciousnessHasACost(editionsMintPrice)
     {
-        uint256 editionId = editionGetNextId(_originalId);
+        uint256 editionId = editionsGetNextId(_originalId);
 
         ++editionsMinted[_originalId];
 

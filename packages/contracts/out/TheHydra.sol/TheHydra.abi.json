@@ -253,7 +253,142 @@
         "type": "uint256"
       }
     ],
-    "name": "editionGetIndexFromId",
+    "name": "editionsGetIndexFromId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_editionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "editionsGetInfoFromEdition",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "originalId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minted",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "soldOut",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nextId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "localIndex",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxPerOriginal",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ITheHydra.EditionInfo",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_originalId",
+        "type": "uint256"
+      }
+    ],
+    "name": "editionsGetInfoFromOriginal",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "originalId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minted",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "soldOut",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nextId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "localIndex",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxPerOriginal",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ITheHydra.EditionInfo",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "editionsGetMaxPerOriginal",
     "outputs": [
       {
         "internalType": "uint256",
@@ -272,7 +407,7 @@
         "type": "uint256"
       }
     ],
-    "name": "editionGetMintCount",
+    "name": "editionsGetMintCount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -291,7 +426,7 @@
         "type": "uint256"
       }
     ],
-    "name": "editionGetNextId",
+    "name": "editionsGetNextId",
     "outputs": [
       {
         "internalType": "uint256",
@@ -310,7 +445,7 @@
         "type": "uint256"
       }
     ],
-    "name": "editionGetOriginalId",
+    "name": "editionsGetOriginalId",
     "outputs": [
       {
         "internalType": "uint256",
@@ -329,7 +464,7 @@
         "type": "uint256"
       }
     ],
-    "name": "editionGetStartId",
+    "name": "editionsGetStartId",
     "outputs": [
       {
         "internalType": "uint256",
@@ -370,19 +505,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getMaxEditionsPerOriginal",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "pure",
     "type": "function"
   },
   {
