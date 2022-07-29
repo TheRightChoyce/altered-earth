@@ -34,8 +34,8 @@ export const MintButton = ({
       const signer = await connector.getSigner();
       const contract = theHydraContract.connect(signer);
       const price = isOriginal
-        ? await contract.mintPriceOriginal()
-        : await contract.mintPriceEdition();
+        ? await contract.originalsMintPrice()
+        : await contract.editionsMintPrice();
 
       try {
         onProgress(`Minting token #${id}…`);
