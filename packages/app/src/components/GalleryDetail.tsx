@@ -17,6 +17,7 @@ import { OwnerName } from "./OwnerName";
 import { PhotoCollection } from "./PhotoCollection";
 import { SideBar, TheHydraButton, TypeNavigationButton } from "./SideBar";
 import { Spinner } from "./Spinner";
+import { useNetworkCheck } from "./useNetworkCheck";
 
 const notFound = (
   <div className="flex flex-col w-full text-center">
@@ -33,6 +34,7 @@ export const GalleryDetail = ({
 }) => {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const { isCorrectNetwork, networkName } = useNetworkCheck();
 
   // define some page states
   enum TokenType {
@@ -66,7 +68,7 @@ export const GalleryDetail = ({
 
   // Default to the edition if an edition id was specifically provided
   if (photoId > originalId) {
-    _type = "edition";
+    _type = TokenType.Edition;
     galleryPhotoId = photoId;
   }
 
@@ -81,8 +83,9 @@ export const GalleryDetail = ({
   const [hasOwner, setHasOwner] = useState(false);
   const [editionSoldOut, setEditionSoldOut] = useState(false);
   const [mintState, setMintState] = useState(MintState.Unknown);
-  const [nextAvailableEditionId, setNextAvailableEditionId] =
-    useState("????????");
+  const [nextAvailableEditionId, setNextAvailableEditionId] = useState<
+    number | undefined
+  >(undefined);
 
   // Navigation helpers
   const [previousPhoto, setPreviousPhoto] = useState(-1);
@@ -140,10 +143,13 @@ export const GalleryDetail = ({
     type,
   ]);
 
+  console.log(`isCorrectNetwork: ${isCorrectNetwork}`);
+
   const owner = useTheHydraContractRead({
     functionName: "ownerOf",
     args: photoId?.toString(),
     watch: false,
+    enabled: true,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError(error: any) {
       setTokenLoaded(true);
@@ -174,6 +180,42 @@ export const GalleryDetail = ({
       setHasOwner(true);
     },
   });
+
+  console.log(`originalId: ${originalId}`);
+
+  // Get the next available editionId
+  // const editionGetNextId = useTheHydraContractRead({
+  //   functionName: "editionGetNextId",
+  //   args: originalId,
+  //   watch: true,
+  //   enabled: isCorrectNetwork,
+  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   onError(error: any) {
+  //     if (error.reason === "BeyondTheScopeOfConsciousness") {
+  //       setNextAvailableEditionId(undefined);
+  //     } else {
+  //       throw error;
+  //     }
+  //   },
+  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   onSettled(data, error: any) {
+  //     console.log(data);
+  //     console.log(error);
+  //     if (!error) {
+  //       setNextAvailableEditionId(data?.data);
+  //       return;
+  //     }
+
+  //     if (error.reason === "BeyondTheScopeOfConsciousness") {
+  //       setNextAvailableEditionId(undefined);
+  //     } else {
+  //       throw error;
+  //     }
+  //   },
+  //   onSuccess(data) {
+  //     setNextAvailableEditionId(data?.data);
+  //   },
+  // });
 
   const onMintSuccess = (owner: string, tx: string) => {
     setHasOwner(true);
@@ -298,12 +340,15 @@ export const GalleryDetail = ({
                         address={address}
                         isOriginal={true}
                         onSuccess={onMintSuccess}
+                        isCorrectNetwork={isCorrectNetwork}
                       />
                     </div>
                     <div className="pt-3 text-sm italic">
-                      {address
-                        ? "(Mint this original)"
-                        : "(Connect your wallet to enter a dream state)"}
+                      {isCorrectNetwork
+                        ? address
+                          ? "(Mint this original)"
+                          : "(Connect your wallet to enter a dream state)"
+                        : `You are connected to the ${networkName} network`}
                     </div>
                   </div>
                 )}
@@ -318,12 +363,15 @@ export const GalleryDetail = ({
                         address={address}
                         isOriginal={false}
                         onSuccess={onMintSuccess}
+                        isCorrectNetwork={isCorrectNetwork}
                       />
                     </div>
                     <div className="pt-3 text-sm italic">
-                      {address
-                        ? "(Mint this edition)"
-                        : "(Connect your wallet to enter a dream state)"}
+                      {isCorrectNetwork
+                        ? address
+                          ? "(Mint this edition)"
+                          : "(Connect your wallet to enter a dream state)"
+                        : `You are connected to the ${networkName} network`}
                     </div>
                   </div>
                 )}

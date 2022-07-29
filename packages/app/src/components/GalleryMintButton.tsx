@@ -94,20 +94,54 @@ const CustomConnectButton = () => {
   );
 };
 
+const NetworkSwitchButton = () => {
+  return (
+    <ConnectButton.Custom>
+      {({ openChainModal, mounted }) => {
+        return (
+          <div
+            {...(!mounted && {
+              "aria-hidden": true,
+              style: {
+                opacity: 0,
+                pointerEvents: "none",
+                userSelect: "none",
+              },
+            })}
+          >
+            {(() => {
+              return (
+                <Button onClick={openChainModal} type="button">
+                  <div className="m-0 w-full">
+                    Connect to {process.env.NEXT_PUBLIC_CHAIN_NAME}
+                  </div>
+                </Button>
+              );
+            })()}
+          </div>
+        );
+      }}
+    </ConnectButton.Custom>
+  );
+};
+
 export const GalleryMintButton = ({
   photo,
   address,
+  isCorrectNetwork,
   isOriginal,
   onSuccess,
 }: {
   photo: Photo;
   address: string | undefined;
+  isCorrectNetwork: boolean | undefined;
   isOriginal: boolean;
   onSuccess: (owner: string, tx: string) => void;
 }) => {
   return (
     <>
-      {address && (
+      {!isCorrectNetwork && <NetworkSwitchButton />}
+      {isCorrectNetwork && address && (
         <>
           <MintButton
             tokenId={photo.id}
