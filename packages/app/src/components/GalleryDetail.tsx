@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
-import { theHydraContract, useTheHydraContractRead } from "../contracts";
+import { theHydraContract } from "../contracts";
 import { LooksRareButton } from "../LooksRareButton";
 import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
@@ -19,6 +19,7 @@ import { SideBar, TheHydraButton, TypeNavigationButton } from "./SideBar";
 import { Spinner } from "./Spinner";
 import { useEditionInfo } from "./useEditionInfo";
 import { useNetworkCheck } from "./useNetworkCheck";
+import { useOwnerOf } from "./useOwnerOf";
 
 const notFound = (
   <div className="flex flex-col w-full text-center">
@@ -81,7 +82,7 @@ export const GalleryDetail = ({
 
   // Token specific info
   const [tokenLoaded, setTokenLoaded] = useState(false);
-  const [hasOwner, setHasOwner] = useState(false);
+  const [owner, setOwner] = useState<string | undefined>(undefined);
   const [editionSoldOut, setEditionSoldOut] = useState(false);
   const [mintState, setMintState] = useState(MintState.Unknown);
   const [nextAvailableEditionId, setNextAvailableEditionId] = useState<
@@ -99,41 +100,8 @@ export const GalleryDetail = ({
     "grayscale-0 transition-all ease-in-out duration-5000"
   );
 
-  const owner = useTheHydraContractRead({
-    functionName: "ownerOf",
-    args: photoId?.toString(),
-    watch: false,
-    enabled: true,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError(error: any) {
-      setTokenLoaded(true);
-
-      if (error.reason === "NOT_MINTED" || error.code === "CALL_EXCEPTION") {
-        setHasOwner(false);
-      } else {
-        throw error;
-      }
-    },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onSettled(data, error: any) {
-      setTokenLoaded(true);
-
-      if (!error) {
-        setHasOwner(true);
-        return;
-      }
-
-      if (error.reason === "NOT_MINTED" || error.code === "CALL_EXCEPTION") {
-        setHasOwner(false);
-      } else {
-        throw error;
-      }
-    },
-    onSuccess() {
-      setTokenLoaded(true);
-      setHasOwner(true);
-    },
-  });
+  // Use and watch the owner of this token
+  useOwnerOf(photoId, setTokenLoaded, setOwner);
 
   // Use and watch the edition info
   useEditionInfo(originalId, setNextAvailableEditionId, setEditionSoldOut);
@@ -158,13 +126,13 @@ export const GalleryDetail = ({
       setMintState(MintState.Unknown);
     } else {
       if (type == TokenType.Original) {
-        if (hasOwner) setMintState(MintState.OriginalOwned);
-        else if (!hasOwner) setMintState(MintState.OriginalAvailable);
+        if (owner !== undefined) setMintState(MintState.OriginalOwned);
+        else if (owner === undefined) setMintState(MintState.OriginalAvailable);
       } else if (type == TokenType.Edition) {
         if (galleryPhotoId > originalId) {
           // a specific edition was requested
-          if (hasOwner) setMintState(MintState.EditionOwned);
-          if (!hasOwner) setMintState(MintState.EditionAvailable);
+          if (owner !== undefined) setMintState(MintState.EditionOwned);
+          if (owner === undefined) setMintState(MintState.EditionAvailable);
         } else {
           // use the generic edition page
           if (editionSoldOut) setMintState(MintState.GenericEditionSoldOut);
@@ -177,14 +145,14 @@ export const GalleryDetail = ({
     TokenType,
     galleryPhotoId,
     originalId,
-    hasOwner,
     editionSoldOut,
     tokenLoaded,
     type,
+    owner,
   ]);
 
   const onMintSuccess = (owner: string, tx: string) => {
-    setHasOwner(true);
+    // setHasOwner(true);
     console.debug(owner, tx);
   };
 
@@ -289,7 +257,7 @@ export const GalleryDetail = ({
                     <div className="flex flex-row pt-4 items-center">
                       <div className="">
                         <OwnerName
-                          address={owner.data?.toString()}
+                          address={owner}
                           className="lg:text-2xl ml-8"
                         />
                       </div>
