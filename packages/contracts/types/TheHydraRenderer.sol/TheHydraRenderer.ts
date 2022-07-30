@@ -38,7 +38,6 @@ export interface TheHydraRendererInterface extends utils.Interface {
     "setDataStore(address)": FunctionFragment;
     "setExquisiteGraphics(address)": FunctionFragment;
     "setOwner(address)": FunctionFragment;
-    "theHydra()": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "xqstgfx()": FunctionFragment;
   };
@@ -54,7 +53,6 @@ export interface TheHydraRendererInterface extends utils.Interface {
       | "setDataStore"
       | "setExquisiteGraphics"
       | "setOwner"
-      | "theHydra"
       | "tokenURI"
       | "xqstgfx"
   ): FunctionFragment;
@@ -89,7 +87,6 @@ export interface TheHydraRendererInterface extends utils.Interface {
     functionFragment: "setOwner",
     values: [PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(functionFragment: "theHydra", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "tokenURI",
     values: [PromiseOrValue<BigNumberish>]
@@ -123,7 +120,6 @@ export interface TheHydraRendererInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setOwner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "theHydra", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "xqstgfx", data: BytesLike): Result;
 
@@ -211,8 +207,6 @@ export interface TheHydraRenderer extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    theHydra(overrides?: CallOverrides): Promise<[string]>;
-
     tokenURI(
       _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -260,8 +254,6 @@ export interface TheHydraRenderer extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  theHydra(overrides?: CallOverrides): Promise<string>;
-
   tokenURI(
     _id: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -308,8 +300,6 @@ export interface TheHydraRenderer extends BaseContract {
       newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    theHydra(overrides?: CallOverrides): Promise<string>;
 
     tokenURI(
       _id: PromiseOrValue<BigNumberish>,
@@ -370,8 +360,6 @@ export interface TheHydraRenderer extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    theHydra(overrides?: CallOverrides): Promise<BigNumber>;
-
     tokenURI(
       _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -419,8 +407,6 @@ export interface TheHydraRenderer extends BaseContract {
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
-
-    theHydra(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     tokenURI(
       _id: PromiseOrValue<BigNumberish>,

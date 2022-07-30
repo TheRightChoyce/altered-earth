@@ -8,11 +8,6 @@
       },
       {
         "internalType": "address",
-        "name": "_theHydra",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_theHydraDataStore",
         "type": "address"
       },
@@ -183,19 +178,6 @@
     "name": "setOwner",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "theHydra",
-    "outputs": [
-      {
-        "internalType": "contract ITheHydra",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {

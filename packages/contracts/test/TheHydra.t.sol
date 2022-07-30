@@ -54,11 +54,10 @@ contract TheHydraTest is DSTest {
         return new TheHydraDataStore(owner, "ipfs://test/");
     }
 
-    function getNewRenderer(TheHydra _c) public returns (TheHydraRenderer) {
+    function getNewRenderer() public returns (TheHydraRenderer) {
         return
             new TheHydraRenderer(
                 owner,
-                address(_c),
                 address(getNewDataStore()),
                 address(xqstgfx)
             );
@@ -689,7 +688,7 @@ contract TheHydraTest is DSTest {
         TheHydra _c = getNewContract();
         assertEq(address(_c.renderer()), address(0));
 
-        TheHydraRenderer _renderer = getNewRenderer(_c);
+        TheHydraRenderer _renderer = getNewRenderer();
 
         vm.expectEmit(true, false, false, true);
         emit ConsciousnessActivated(address(_renderer));
@@ -698,14 +697,13 @@ contract TheHydraTest is DSTest {
 
         assertEq(address(_c.renderer()), address(_renderer));
         assertTrue(address(_c.renderer()) != address(_renderer.dataStore()));
-        assertEq(address(_renderer.theHydra()), address(_c));
 
         vm.stopPrank();
     }
 
     function testSetRendererOnlyOwner() public {
         TheHydra _c = getNewContract();
-        TheHydraRenderer _renderer = getNewRenderer(_c);
+        TheHydraRenderer _renderer = getNewRenderer();
 
         vm.startPrank(minter);
         vm.expectRevert("UNAUTHORIZED");
@@ -732,7 +730,7 @@ contract TheHydraTest is DSTest {
 
     function testTokenURIForExistingToken() public {
         TheHydra _c = getNewContract();
-        TheHydraRenderer _r = getNewRenderer(_c);
+        TheHydraRenderer _r = getNewRenderer();
 
         vm.prank(owner);
         _c.setRenderer(_r);

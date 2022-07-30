@@ -24,11 +24,19 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     using DynamicBuffer for bytes;
 
     // --------------------------------------------------------
-    // ~~ Internal storage  ~~
+    // ~~ Constants  ~~
     // --------------------------------------------------------
 
-    /// @dev The address of the token ownership contract
-    ITheHydra public theHydra;
+    /// @dev Store the MAX_INT as a constant and we then use this as an invalid ID value
+    uint256 constant MAX_INT = type(uint256).max;
+
+    /// @dev Imported constants from the main NFT contract
+    uint256 constant originalsSupply = 50;
+    uint256 constant editionsPerOriginal = 50;
+
+    // --------------------------------------------------------
+    // ~~ Internal storage  ~~
+    // --------------------------------------------------------
 
     /// @dev The address of the on-chain data storage contract
     ITheHydraDataStore public dataStore;
@@ -47,16 +55,13 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     // --------------------------------------------------------
 
     /// @param _owner The owner of the contract, when deployed
-    /// @param _theHydra The address of the token ownership contract
     /// @param _theHydraDataStore The address of the on-chain data storage contract
     /// @param _xqstgfx The address of the xqstgfx public rendering contract
     constructor(
         address _owner,
-        address _theHydra,
         address _theHydraDataStore,
         address _xqstgfx
     ) Owned(_owner) {
-        theHydra = ITheHydra(_theHydra);
         dataStore = ITheHydraDataStore(_theHydraDataStore);
         dataStoreHistory.push(_theHydraDataStore);
         xqstgfx = IExquisiteGraphics(payable(_xqstgfx));
@@ -91,7 +96,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         returns (string memory)
     {
         /// @dev Originals return their tokenUri string
-        if (_editionId < theHydra.getOrigialTotalSupply()) {
+        if (_editionId < originalsSupply) {
             return
                 string(
                     abi.encodePacked(
@@ -101,13 +106,12 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
                 );
         }
 
-        ITheHydra.EditionInfo memory editionInfo = theHydra
-            .editionsGetInfoFromEdition(_editionId);
+        uint256 originalId = (_editionId - originalsSupply) /
+            editionsPerOriginal;
+        uint256 editionIndex = (_editionId % editionsPerOriginal) + 1;
 
         /// @dev Editions build their tokenUri string on chain
-        bytes memory svg = _renderSVG_AsBytes(
-            dataStore.getData(editionInfo.originalId)
-        );
+        bytes memory svg = _renderSVG_AsBytes(dataStore.getData(originalId));
 
         /// @dev Build the base64 encoded version of the SVG to reference in the imageUrl
         bytes memory svgBase64 = DynamicBuffer.allocate(bufferSize);
@@ -124,7 +128,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         );
         bytes memory description = abi.encodePacked(
             '"description":"An altered reality existing forever on the Ethereum blockchain. This edition is a fully on-chain SVG version of The Hydra #',
-            editionInfo.originalId.toString(),
+            originalId.toString(),
             ". 50 editions exist for each original photo. Each token conforms to the ERC-721 standard.",
             '",'
         );
@@ -141,9 +145,9 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         bytes memory attributes = abi.encodePacked(
             '"attributes":[',
             '{"trait_type":"Edition","value":"',
-            editionInfo.localIndex.toString(),
+            editionIndex.toString(),
             " of ",
-            editionInfo.maxPerOriginal.toString(),
+            editionsPerOriginal.toString(),
             '"},',
             '{"trait_type":"Size","value":"64x64px"},',
             '{"trait_type":"Colors","value":"256"}',
@@ -175,7 +179,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         returns (string memory)
     {
         /// @dev Originals return their tokenUri string
-        if (_id < theHydra.getOrigialTotalSupply()) {
+        if (_id < originalsSupply) {
             return
                 string(
                     abi.encodePacked(

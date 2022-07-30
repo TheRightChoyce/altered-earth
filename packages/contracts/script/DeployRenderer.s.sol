@@ -11,7 +11,6 @@ import {TheHydraRenderer} from "../src/TheHydraRenderer.sol";
 // Run this using the deploy-contracts.sh file in the project root!
 
 contract DeployRenderer is Script {
-    
     // Deployable contracts
     TheHydra public theHydra;
     TheHydraDataStore public dataStore;
@@ -26,14 +25,12 @@ contract DeployRenderer is Script {
     function deployRendererContract() public {
         renderer = new TheHydraRenderer(
             vm.envAddress("OWNER"),
-            address(theHydra),
             address(dataStore),
             0xDf01A4040493B514605392620B3a0a05Eb8Cd295
         );
     }
 
     function run() public {
-        
         vm.startBroadcast();
 
         deployRendererContract();
