@@ -99,6 +99,45 @@ export const GalleryDetail = ({
     "grayscale-0 transition-all ease-in-out duration-5000"
   );
 
+  const owner = useTheHydraContractRead({
+    functionName: "ownerOf",
+    args: photoId?.toString(),
+    watch: false,
+    enabled: true,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError(error: any) {
+      setTokenLoaded(true);
+
+      if (error.reason === "NOT_MINTED" || error.code === "CALL_EXCEPTION") {
+        setHasOwner(false);
+      } else {
+        throw error;
+      }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onSettled(data, error: any) {
+      setTokenLoaded(true);
+
+      if (!error) {
+        setHasOwner(true);
+        return;
+      }
+
+      if (error.reason === "NOT_MINTED" || error.code === "CALL_EXCEPTION") {
+        setHasOwner(false);
+      } else {
+        throw error;
+      }
+    },
+    onSuccess() {
+      setTokenLoaded(true);
+      setHasOwner(true);
+    },
+  });
+
+  // Use and watch the edition info
+  useEditionInfo(originalId, setNextAvailableEditionId, setEditionSoldOut);
+
   // Adjust the grayscale of the images if user is not connected
   useEffect(() => {
     setImageClass(
@@ -144,47 +183,6 @@ export const GalleryDetail = ({
     type,
   ]);
 
-  const owner = useTheHydraContractRead({
-    functionName: "ownerOf",
-    args: photoId?.toString(),
-    watch: false,
-    enabled: true,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError(error: any) {
-      setTokenLoaded(true);
-
-      if (error.reason === "NOT_MINTED" || error.code === "CALL_EXCEPTION") {
-        setHasOwner(false);
-      } else {
-        throw error;
-      }
-    },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onSettled(data, error: any) {
-      setTokenLoaded(true);
-
-      if (!error) {
-        setHasOwner(true);
-        return;
-      }
-
-      if (error.reason === "NOT_MINTED" || error.code === "CALL_EXCEPTION") {
-        setHasOwner(false);
-      } else {
-        throw error;
-      }
-    },
-    onSuccess() {
-      setTokenLoaded(true);
-      setHasOwner(true);
-    },
-  });
-
-  const editionInfo = useEditionInfo(
-    originalId,
-    setNextAvailableEditionId,
-    setEditionSoldOut
-  );
   const onMintSuccess = (owner: string, tx: string) => {
     setHasOwner(true);
     console.debug(owner, tx);

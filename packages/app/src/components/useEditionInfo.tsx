@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useNetwork } from "wagmi";
+import { useEffect } from "react";
 
 import { useTheHydraContractRead } from "../contracts";
 
@@ -20,10 +19,8 @@ export function useEditionInfo(
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSettled(data, error: any) {
-      if (!error) {
-        return;
-      }
-      if (error.reason !== "BeyondTheScopeOfConsciousness") {
+      console.log("onSettled", data);
+      if (error && error.reason !== "BeyondTheScopeOfConsciousness") {
         throw error;
       }
       setNextAvailableEditionId(data?.nextId.toNumber());
@@ -34,6 +31,10 @@ export function useEditionInfo(
       setEditionSoldOut(data?.soldOut);
     },
   });
+
+  useEffect(() => {
+    setNextAvailableEditionId(data?.nextId.toNumber());
+  }, [data, setNextAvailableEditionId]);
 
   return data;
 }
