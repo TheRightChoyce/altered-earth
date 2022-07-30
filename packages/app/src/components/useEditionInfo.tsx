@@ -19,7 +19,6 @@ export function useEditionInfo(
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSettled(data, error: any) {
-      console.log("onSettled", data);
       if (error && error.reason !== "BeyondTheScopeOfConsciousness") {
         throw error;
       }

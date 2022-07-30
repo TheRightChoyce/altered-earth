@@ -6,8 +6,6 @@ export function useNetworkCheck() {
 
   const [isCorrect, setIsCorrect] = useState(false);
 
-  chain?.name;
-
   useEffect(
     () =>
       setIsCorrect(
