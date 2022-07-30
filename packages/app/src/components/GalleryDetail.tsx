@@ -17,6 +17,7 @@ import { OwnerName } from "./OwnerName";
 import { PhotoCollection } from "./PhotoCollection";
 import { SideBar, TheHydraButton, TypeNavigationButton } from "./SideBar";
 import { Spinner } from "./Spinner";
+import { useEditionInfo } from "./useEditionInfo";
 import { useNetworkCheck } from "./useNetworkCheck";
 
 const notFound = (
@@ -143,8 +144,6 @@ export const GalleryDetail = ({
     type,
   ]);
 
-  console.log(`isCorrectNetwork: ${isCorrectNetwork}`);
-
   const owner = useTheHydraContractRead({
     functionName: "ownerOf",
     args: photoId?.toString(),
@@ -181,42 +180,11 @@ export const GalleryDetail = ({
     },
   });
 
-  console.log(`originalId: ${originalId}`);
-
-  // Get the next available editionId
-  // const editionGetNextId = useTheHydraContractRead({
-  //   functionName: "editionGetNextId",
-  //   args: originalId,
-  //   watch: true,
-  //   enabled: isCorrectNetwork,
-  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //   onError(error: any) {
-  //     if (error.reason === "BeyondTheScopeOfConsciousness") {
-  //       setNextAvailableEditionId(undefined);
-  //     } else {
-  //       throw error;
-  //     }
-  //   },
-  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //   onSettled(data, error: any) {
-  //     console.log(data);
-  //     console.log(error);
-  //     if (!error) {
-  //       setNextAvailableEditionId(data?.data);
-  //       return;
-  //     }
-
-  //     if (error.reason === "BeyondTheScopeOfConsciousness") {
-  //       setNextAvailableEditionId(undefined);
-  //     } else {
-  //       throw error;
-  //     }
-  //   },
-  //   onSuccess(data) {
-  //     setNextAvailableEditionId(data?.data);
-  //   },
-  // });
-
+  const editionInfo = useEditionInfo(
+    originalId,
+    setNextAvailableEditionId,
+    setEditionSoldOut
+  );
   const onMintSuccess = (owner: string, tx: string) => {
     setHasOwner(true);
     console.debug(owner, tx);
@@ -330,6 +298,23 @@ export const GalleryDetail = ({
                     </div>
                   </div>
                 )}
+                {mintState === MintState.GenericEditionSoldOut && (
+                  <div className="flex flex-col items-center">
+                    <div className="w-full">
+                      <GalleryMintButton
+                        photo={photo}
+                        address={address}
+                        isOriginal={false}
+                        onSuccess={onMintSuccess}
+                        isCorrectNetwork={isCorrectNetwork}
+                        disabled={true}
+                      />
+                    </div>
+                    <div className="pt-3 text-sm italic">
+                      This edition is sold old!
+                    </div>
+                  </div>
+                )}
 
                 {/* Original token is available */}
                 {mintState == MintState.OriginalAvailable && (
@@ -430,7 +415,7 @@ export const GalleryDetail = ({
               <div className="mb-4">
                 <h6 className="uppercase">Price</h6>
                 <div className="text-lg font-bold">
-                  {type == "original" ? "0.25" : "0.5"} eth
+                  {type == "original" ? "0.25" : "0.05"} eth
                 </div>
               </div>
 
@@ -452,7 +437,9 @@ export const GalleryDetail = ({
                 <h6 className="uppercase">Contract</h6>
                 <div className="text-lg font-bold">
                   <a
-                    href={`https://goerli.etherscan.io/address/${theHydraContract.address}`}
+                    href={`https://${process.env.NEXT_PUBLIC_CHAIN_NAME?.toLowerCase()}.etherscan.io/address/${
+                      theHydraContract.address
+                    }`}
                     target="_blank"
                     rel="noreferrer"
                   >

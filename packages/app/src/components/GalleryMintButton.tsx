@@ -131,12 +131,14 @@ export const GalleryMintButton = ({
   isCorrectNetwork,
   isOriginal,
   onSuccess,
+  disabled,
 }: {
   photo: Photo;
   address: string | undefined;
   isCorrectNetwork: boolean | undefined;
   isOriginal: boolean;
   onSuccess: (owner: string, tx: string) => void;
+  disabled?: boolean | undefined;
 }) => {
   return (
     <>
@@ -145,7 +147,7 @@ export const GalleryMintButton = ({
         <>
           <MintButton
             tokenId={photo.id}
-            disabled={address ? false : true}
+            disabled={disabled ? disabled : address ? false : true}
             label="Alter your Reality"
             isOriginal={isOriginal}
             onSuccess={onSuccess}

@@ -1,23 +1,22 @@
-import NFTGoerli from "@web3-scaffold/contracts/deploys/goerli/TheHydra.json";
-import NFTRinkeby from "@web3-scaffold/contracts/deploys/rinkeby/TheHydra.json";
+import FoundryContract from "@web3-scaffold/contracts/deploys/foundry/TheHydra.json";
+import GoerliContract from "@web3-scaffold/contracts/deploys/goerli/TheHydra.json";
+import RinkebyContract from "@web3-scaffold/contracts/deploys/rinkeby/TheHydra.json";
 import { TheHydra__factory } from "@web3-scaffold/contracts/types";
 import { useContractRead } from "wagmi";
 
 import { provider, targetChainId } from "./EthereumProviders";
 
-// I would have used `ExampleNFT__factory.connect` to create this, but we may
-// not have a provider ready to go. Any interactions with this contract should
-// use `exampleNFTContract.connect(providerOrSigner)` first.
-
-// export const exampleNFTContract = new Contract(
-//   ExampleNFTGoerli.deployedTo,
-//   ExampleNFT__factory.abi
-// ) as ExampleNFT;
-
-console.log(process.env.NEXT_PUBLIC_CHAIN_ID?.toString());
-
-const NFTContract =
-  process.env.NEXT_PUBLIC_CHAIN_ID?.toString() == "4" ? NFTRinkeby : NFTGoerli;
+// TODO -- need to add main net
+let NFTContract: { deployedTo: string };
+if (targetChainId === 4) {
+  NFTContract = RinkebyContract;
+} else if (targetChainId === 5) {
+  NFTContract = GoerliContract;
+} else if (targetChainId === 31337) {
+  NFTContract = FoundryContract;
+} else {
+  NFTContract = RinkebyContract;
+}
 
 export const theHydraContract = TheHydra__factory.connect(
   NFTContract.deployedTo,
