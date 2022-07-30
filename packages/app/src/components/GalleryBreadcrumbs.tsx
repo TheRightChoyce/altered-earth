@@ -15,7 +15,7 @@ export const GalleryBreadcrumbs = ({
             <a className="font-extrabold">THE HYDRA</a>
           </Link>{" "}
           / <span className="uppercase">{breadcrumb}</span>
-          {photoId && <span> / #{photoId}</span>}
+          {photoId !== undefined && <span> / #{photoId}</span>}
         </h4>
       </div>
     </div>
