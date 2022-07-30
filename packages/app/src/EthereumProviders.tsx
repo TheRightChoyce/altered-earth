@@ -6,6 +6,8 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import {
+  allChains,
+  chainId,
   configureChains,
   createClient,
   defaultChains,
@@ -23,6 +25,14 @@ export const targetChainId =
 const targetChains = defaultChains.filter(
   (chain) => chain.id === 1 || chain.id === targetChainId
 );
+
+// For development purposes / we're using a local network
+if (targetChainId === chainId["foundry"]) {
+  const foundry = allChains.find((chain) => chain.name === "Foundry");
+  if (foundry) {
+    targetChains.push(foundry);
+  }
+}
 
 export const { chains, provider, webSocketProvider } = configureChains(
   targetChains,
