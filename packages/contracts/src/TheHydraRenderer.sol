@@ -27,9 +27,6 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     // ~~ Constants  ~~
     // --------------------------------------------------------
 
-    /// @dev Store the MAX_INT as a constant and we then use this as an invalid ID value
-    uint256 constant MAX_INT = type(uint256).max;
-
     /// @dev Imported constants from the main NFT contract
     uint256 constant originalsSupply = 50;
     uint256 constant editionsPerOriginal = 50;

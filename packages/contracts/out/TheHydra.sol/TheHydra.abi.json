@@ -37,17 +37,17 @@
   },
   {
     "inputs": [],
+    "name": "EditionSoldOut",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "InvalidDreamState",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "PayeeNotInDreamState",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "RealityAlreadyAltered",
     "type": "error"
   },
   {
@@ -130,25 +130,6 @@
       }
     ],
     "name": "OwnerUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "RealityAltered",
     "type": "event"
   },
   {
@@ -243,25 +224,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_editionId",
-        "type": "uint256"
-      }
-    ],
-    "name": "editionsGetIndexFromId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -388,95 +350,6 @@
   },
   {
     "inputs": [],
-    "name": "editionsGetMaxPerOriginal",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_originalId",
-        "type": "uint256"
-      }
-    ],
-    "name": "editionsGetMintCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_originalId",
-        "type": "uint256"
-      }
-    ],
-    "name": "editionsGetNextId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_id",
-        "type": "uint256"
-      }
-    ],
-    "name": "editionsGetOriginalId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_originalId",
-        "type": "uint256"
-      }
-    ],
-    "name": "editionsGetStartId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "editionsMintPrice",
     "outputs": [
       {
@@ -505,32 +378,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getOrigialTotalSupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getTotalSupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "pure",
     "type": "function"
   },
   {

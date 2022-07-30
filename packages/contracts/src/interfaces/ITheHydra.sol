@@ -19,11 +19,11 @@ interface ITheHydra {
         uint256 maxPerOriginal;
     }
 
-    function getOrigialTotalSupply() external pure returns (uint256);
+    // function getOrigialTotalSupply() external pure returns (uint256);
 
-    function getTotalSupply() external pure returns (uint256);
+    // function getTotalSupply() external pure returns (uint256);
 
-    function editionsGetMaxPerOriginal() external pure returns (uint256);
+    // function editionsGetMaxPerOriginal() external pure returns (uint256);
 
     function editionsGetInfoFromOriginal(uint256 _originalId)
         external
@@ -35,25 +35,25 @@ interface ITheHydra {
         view
         returns (EditionInfo memory);
 
-    function editionsGetOriginalId(uint256 _id) external pure returns (uint256);
+    // function editionsGetOriginalId(uint256 _id) external pure returns (uint256);
 
-    function editionsGetStartId(uint256 _originalId)
-        external
-        pure
-        returns (uint256);
+    // function editionsGetStartId(uint256 _originalId)
+    //     external
+    //     pure
+    //     returns (uint256);
 
-    function editionsGetNextId(uint256 _originalId)
-        external
-        view
-        returns (uint256);
+    // function editionsGetNextId(uint256 _originalId)
+    //     external
+    //     view
+    //     returns (uint256);
 
-    function editionsGetMintCount(uint256 _originalId)
-        external
-        view
-        returns (uint256);
+    // function editionsGetMintCount(uint256 _originalId)
+    //     external
+    //     view
+    //     returns (uint256);
 
-    function editionsGetIndexFromId(uint256 _id)
-        external
-        view
-        returns (uint256);
+    // function editionsGetIndexFromId(uint256 _id)
+    //     external
+    //     view
+    //     returns (uint256);
 }

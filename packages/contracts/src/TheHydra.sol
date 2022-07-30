@@ -52,7 +52,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @dev Easily track the number of editions minted for each original contract. Using a counter instead of tracking the starting index because if we tracked the starting index for each edition, then there would be a need to initilize each starting index to a particular sequenced number vs. just allowing default value of 0 here.
     mapping(uint256 => uint256) editionsMinted;
-    // TODO -- can I just calculate this from existing storage slots? IE. nextId - startId??
 
     // --------------------------------------------------------
     // ~~ Original configuration ~~
@@ -81,9 +80,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev When this contract is created
     event TheHydraAwakens();
 
-    /// @dev When a new Hydra artwork is acquired, reality becomes altered
-    event RealityAltered(address indexed from, uint256 tokenId);
-
     /// @dev When the renderer contract is set and available
     event ConsciousnessActivated(address indexed renderer);
 
@@ -97,8 +93,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev When an originalId is out of bounds, or an edition has reached its mint limit
     error BeyondTheScopeOfConsciousness();
 
-    /// @dev When a token is already minted
-    error RealityAlreadyAltered();
+    /// @dev When all editions for an original are minted
+    error EditionSoldOut();
 
     /// @dev When a h4ck3r tries to steal out tokens
     error PayeeNotInDreamState();
@@ -133,7 +129,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     modifier CheckSubConsciousness(uint256 _originalId) {
         // currently allowing zero-based ids
         if (editionsMinted[_originalId] > editionsCountPerOriginal)
-            revert BeyondTheScopeOfConsciousness();
+            revert EditionSoldOut();
         _;
     }
 
@@ -218,6 +214,32 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
     // ~~ Mint Functions => Editions ~~
     // --------------------------------------------------------
+
+    /// @notice Mint an edition of an original
+    /// @dev This will revert if trying to mint more than 50 of an edition
+    /// @param _originalId TokenId of the original 1-of-1 NFT
+    function alterSubReality(uint256 _originalId)
+        external
+        payable
+        CheckConsciousness(_originalId)
+        CheckSubConsciousness(_originalId)
+        ElevatingConsciousnessHasACost(editionsMintPrice)
+    {
+        uint256 nextEditionId = (_originalId * editionsPerOriginal) +
+            originalsSupply +
+            editionsMinted[_originalId];
+
+        ++editionsMinted[_originalId];
+
+        _safeMint(msg.sender, nextEditionId, "Welcome to TheHydra's Reality");
+    }
+
+    // --------------------------------------------------------
+    // ~~ Editions Info & Status ~~
+    // --------------------------------------------------------
+    /// @notice Gets all the information about the editions for this original
+    /// @dev Returns a struct containing edition startId, endId, minted count, soldOut status, next EditionId to be minted, and the localindx (ie. 3 of 50)
+    /// @param _originalId The tokenId of the the original
     function editionsGetInfoFromOriginal(uint256 _originalId)
         public
         view
@@ -247,6 +269,10 @@ contract TheHydra is Owned, ERC721, ITheHydra {
             );
     }
 
+    // TODO -- I think I can also remove this!
+    /// @notice Gets all the information a particular edition
+    /// @dev Returns a struct containing edition startId, endId, minted count, soldOut status, next EditionId to be minted, and the localindx of this edition (ie. 3 of 50)
+    /// @param _editionId The tokenId of the the edition
     function editionsGetInfoFromEdition(uint256 _editionId)
         public
         view
@@ -259,101 +285,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         edition.localIndex = (_editionId % editionsPerOriginal) + 1;
 
         return edition;
-    }
-
-    /// @notice Returns the original id based on any original or edition Id provided
-    /// @param _id TokenId of an original 1-of-1, or edition NFT
-    function editionsGetOriginalId(uint256 _id) public pure returns (uint256) {
-        if (_id > editionsMaxId) revert BeyondTheScopeOfConsciousness();
-
-        if (_id < originalsSupply) {
-            return _id;
-        }
-        return (_id - originalsSupply) / editionsPerOriginal;
-    }
-
-    /// @notice Gets the starting index for the editions based off an original
-    /// @param _originalId TokenId of the original 1-of-1 NFT
-    function editionsGetStartId(uint256 _originalId)
-        public
-        pure
-        CheckConsciousness(_originalId)
-        returns (uint256)
-    {
-        return (_originalId * editionsPerOriginal) + originalsSupply;
-    }
-
-    /// @notice Gets the next sequental id available to mint for a particular edition, or raises an error if there are no more editions available
-    /// @dev CheckSubConsciousness ensures there are editions left to mint for this original
-    /// @param _originalId TokenId of the original 1-of-1 NFT
-    function editionsGetNextId(uint256 _originalId)
-        public
-        view
-        CheckConsciousness(_originalId)
-        CheckSubConsciousness(_originalId)
-        returns (uint256)
-    {
-        return
-            (_originalId * editionsPerOriginal) +
-            originalsSupply +
-            editionsMinted[_originalId];
-    }
-
-    /// @notice Gets the current number of editions minted for this original
-    /// @param _originalId TokenId of the original 1-of-1 NFT
-    function editionsGetMintCount(uint256 _originalId)
-        public
-        view
-        CheckConsciousness(_originalId)
-        returns (uint256)
-    {
-        return editionsMinted[_originalId];
-    }
-
-    /// @notice Given any editionId, determine the index of that edition.. I.E is it edition 1 of 50, 10 of 50, etc..
-    /// @param _editionId TokenId of the edition
-    function editionsGetIndexFromId(uint256 _editionId)
-        public
-        pure
-        CheckEditionIdBoundries(_editionId)
-        returns (uint256)
-    {
-        /// @dev Take the reminder and then add 1 to convert from 0-based to 1-based counting
-        return (_editionId % editionsPerOriginal) + 1;
-    }
-
-    /// @notice Gets the number of available editions per original
-    /// @dev Define this as a function since we need to expose it over the interface for external contract calls.
-    function editionsGetMaxPerOriginal() public pure returns (uint256) {
-        return editionsPerOriginal;
-    }
-
-    /// @notice Gets the total supply of the originals
-    /// @dev Define this as a function since we need to expose it over the interface for external contract calls.
-    function getOrigialTotalSupply() public pure returns (uint256) {
-        return originalsSupply;
-    }
-
-    /// @notice Gets the total supply of all originals + editions
-    /// @dev Define this as a function since we need to expose it over the interface for external contract calls.
-    function getTotalSupply() public pure returns (uint256) {
-        return totalSupply;
-    }
-
-    /// @notice Mint an edition of an original
-    /// @dev This will revert if trying to mint more than 50 of an edition. CheckSubConsciousness is called inside of editionsGetNextId and does not need to be added to this function
-    /// @param _originalId TokenId of the original 1-of-1 NFT
-    function alterSubReality(uint256 _originalId)
-        external
-        payable
-        CheckConsciousness(_originalId)
-        ElevatingConsciousnessHasACost(editionsMintPrice)
-    {
-        uint256 editionId = editionsGetNextId(_originalId);
-
-        ++editionsMinted[_originalId];
-
-        _safeMint(msg.sender, editionId, "Welcome to TheHydra's Reality");
     }
 
     // --------------------------------------------------------
