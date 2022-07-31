@@ -4,6 +4,7 @@ import { useTheHydraContractRead } from "../contracts";
 
 export function useEditionInfo(
   originalId: number,
+  enabled: boolean,
   setNextAvailableEditionId: (nextId: number | undefined) => void,
   setEditionSoldOut: (nextId: boolean) => void
 ) {
@@ -11,6 +12,7 @@ export function useEditionInfo(
     functionName: "editionsGetInfoFromOriginal",
     args: originalId.toString(),
     watch: true,
+    enabled: enabled,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError(error: any) {
       if (error.reason !== "BeyondTheScopeOfConsciousness") {

@@ -4,6 +4,7 @@ import { useTheHydraContractRead } from "../contracts";
 
 export function useOwnerOf(
   photoId: number | undefined,
+  enabled: boolean,
   setTokenLoaded: (isLoaded: boolean) => void,
   setOwner: (owner: string | undefined) => void
 ) {
@@ -11,6 +12,7 @@ export function useOwnerOf(
     functionName: "ownerOf",
     args: photoId?.toString(),
     watch: true,
+    enabled: enabled,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError(error: any) {
       setTokenLoaded(true);
@@ -25,10 +27,13 @@ export function useOwnerOf(
     onSettled(data, error: any) {
       setTokenLoaded(true);
 
-      if (error && error.reason === "NOT_MINTED") {
-        setOwner(undefined);
-      } else if (!error) {
+      if (!error) {
         setOwner(data?.toString());
+        return;
+      }
+
+      if (error?.reason === "NOT_MINTED") {
+        setOwner(undefined);
       } else {
         throw error;
       }

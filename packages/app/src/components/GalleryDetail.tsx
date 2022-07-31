@@ -48,6 +48,9 @@ export const GalleryDetail = ({
     // loading / unknown
     Unknown,
 
+    // Connected to the wrong chain/network
+    WrongNetwork,
+
     // For when type == original
     OriginalAvailable,
     OriginalOwned,
@@ -101,10 +104,15 @@ export const GalleryDetail = ({
   );
 
   // Use and watch the owner of this token
-  useOwnerOf(photoId, setTokenLoaded, setOwner);
+  useOwnerOf(photoId, isCorrectNetwork, setTokenLoaded, setOwner);
 
   // Use and watch the edition info
-  useEditionInfo(originalId, setNextAvailableEditionId, setEditionSoldOut);
+  useEditionInfo(
+    originalId,
+    isCorrectNetwork,
+    setNextAvailableEditionId,
+    setEditionSoldOut
+  );
 
   // Adjust the grayscale of the images if user is not connected
   useEffect(() => {
@@ -122,7 +130,9 @@ export const GalleryDetail = ({
 
   // set the mint state as it can change from various factors
   useEffect(() => {
-    if (!tokenLoaded) {
+    if (!isCorrectNetwork) {
+      setMintState(MintState.WrongNetwork);
+    } else if (!tokenLoaded) {
       setMintState(MintState.Unknown);
     } else {
       if (type == TokenType.Original) {
@@ -149,6 +159,7 @@ export const GalleryDetail = ({
     tokenLoaded,
     type,
     owner,
+    isCorrectNetwork,
   ]);
 
   const onMintSuccess = (owner: string, tx: string) => {
@@ -247,6 +258,24 @@ export const GalleryDetail = ({
                 {mintState == MintState.Unknown && (
                   <div className="pt-8">
                     <Spinner />
+                  </div>
+                )}
+                {/* Wallet connected to the wrong network */}
+                {mintState == MintState.WrongNetwork && (
+                  <div className="flex flex-col items-center">
+                    <div className="w-full">
+                      <GalleryMintButton
+                        photo={photo}
+                        address={address}
+                        isOriginal={true}
+                        onSuccess={onMintSuccess}
+                        isCorrectNetwork={isCorrectNetwork}
+                      />
+                    </div>
+                    <div className="pt-3 text-sm italic">
+                      Please connect your wallet to the
+                      {process.env.NEXT_PUBLIC_CHAIN_NAME} network
+                    </div>
                   </div>
                 )}
 
