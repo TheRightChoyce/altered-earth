@@ -10,7 +10,7 @@ import {TheHydraRenderer} from "../src/TheHydraRenderer.sol";
 
 // Run this using the deploy-contracts.sh file in the project root!
 
-contract DeployAll is Script, ConfiguredDeployment {
+contract DeployTheHydraRenderer is Script, ConfiguredDeployment {
     /// @dev Easily allow for some chain-specific deployments
     ConfiguredDeployment deployment;
 
@@ -24,42 +24,31 @@ contract DeployAll is Script, ConfiguredDeployment {
         /// @dev Deconstruct the config params
         (
             address owner_,
-            uint256 mintPriceOriginal_,
-            uint256 mintPriceEdition_,
-            string memory baseUri_,
+            ,
+            ,
+            ,
             address xsqtgfx_,
             address dataStore_,
             ,
-
+            address theHydra_
         ) = deployment.currentNetworkConfiguration();
 
-        // Deploy the dataStore -- does not have any dependencies
-        TheHydraDataStore dataStore = new TheHydraDataStore(owner_, baseUri_);
-        dataStore_ = address(dataStore);
-
-        // Deploy the render -- depends on dataStore
+        // Deploy the render -- depends on dataStore and we'll use whatever is specificed in the ENV/config
         TheHydraRenderer renderer = new TheHydraRenderer(
             owner_,
             dataStore_,
             xsqtgfx_
         );
 
-        // Deploy the base contract -- needs the render address
-        TheHydra theHydra = new TheHydra(
-            owner_,
-            mintPriceOriginal_,
-            mintPriceEdition_
-        );
-
-        // Update token contract to point to the renderer
-        theHydra.setRenderer(renderer);
-
-        vm.stopBroadcast();
-
-        console.log("Deployed contract to:", address(theHydra));
-        console.log("Deployed data store to:", dataStore_);
         console.log("Deployed renderer to:", address(renderer));
 
-        console.log("TheHydra renderer =>", address(theHydra.renderer()));
+        if (theHydra_ != address(0)) {
+            // Update token contract to point to the renderer
+            TheHydra theHydra = TheHydra(theHydra_);
+            theHydra.setRenderer(renderer);
+            console.log("TheHydra renderer =>", address(theHydra.renderer()));
+        }
+
+        vm.stopBroadcast();
     }
 }

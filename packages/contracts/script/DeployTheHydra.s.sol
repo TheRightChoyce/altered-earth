@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Script.sol";
 
-import {Solenv} from "solenv/Solenv.sol";
+import {ConfiguredDeployment} from "./ConfiguredDeployment.s.sol";
 import {TheHydra} from "../src/TheHydra.sol";
 import {TheHydraDataStore} from "../src/TheHydraDataStore.sol";
 import {TheHydraRenderer} from "../src/TheHydraRenderer.sol";
@@ -12,39 +12,46 @@ import {TheHydraRenderer} from "../src/TheHydraRenderer.sol";
 // IE package/contracts/
 
 contract DeployTheHydra is Script {
-    
-    // Deploy this!
-    TheHydra public theHydra;
-
-    // Reference the existing renderer contract
-    TheHydraRenderer public renderer;
+    /// @dev Easily allow for some chain-specific deployments
+    ConfiguredDeployment deployment;
 
     function setUp() external {
-        Solenv.config("./packages/contracts/.env.local");
-        renderer = TheHydraRenderer(vm.envAddress("RENDERER_ADDRESS"));
-    }
-
-    function deployTokenContract() public {
-        // Deploy the base contract 
-        theHydra = new TheHydra(
-            vm.envAddress("OWNER"),
-            vm.envUint("MINT_PRICE_ORIGINAL"),
-            vm.envUint("MINT_PRICE_EDITION")
-        );
+        deployment = new ConfiguredDeployment();
     }
 
     function run() public {
-        
         vm.startBroadcast();
 
-        deployTokenContract();
+        /// @dev Deconstruct the config params
+        (
+            address owner_,
+            uint256 mintPriceOriginal_,
+            uint256 mintPriceEdition_,
+            ,
+            address xsqtgfx_,
+            ,
+            address renderer_,
 
-        // Update token contract to point to the renderer
-        theHydra.setRenderer(renderer);
+        ) = deployment.currentNetworkConfiguration();
 
-        vm.stopBroadcast();
+        // Deploy the base contract
+        TheHydra theHydra = new TheHydra(
+            owner_,
+            mintPriceOriginal_,
+            mintPriceEdition_
+        );
 
         console.log("Deployed TheHydra to:", address(theHydra));
-        console.log("TheHydra renderer =>", address(theHydra.renderer()));
+
+        // Update token contract to point to the renderer
+        if (renderer_ != address(0)) {
+            theHydra.setRenderer(TheHydraRenderer(renderer_));
+            console.log(
+                "TheHydra renderer set to =>",
+                address(theHydra.renderer())
+            );
+        }
+
+        vm.stopBroadcast();
     }
 }

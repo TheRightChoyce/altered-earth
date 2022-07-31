@@ -13,6 +13,9 @@ contract ConfiguredDeployment is Script {
         uint256 mintPriceEdition;
         string baseUri;
         address xsqtgfx;
+        address dataStore;
+        address renderer;
+        address theHydra;
     }
 
     /// @dev Map each chain to its own config
@@ -39,7 +42,10 @@ contract ConfiguredDeployment is Script {
                 vm.envUint("MINT_PRICE_ORIGINAL"),
                 vm.envUint("MINT_PRICE_EDITION"),
                 vm.envString("BASE_URI"),
-                address(0xDf01A4040493B514605392620B3a0a05Eb8Cd295)
+                address(0xDf01A4040493B514605392620B3a0a05Eb8Cd295),
+                vm.envAddress("DATASTORE_ADDRESS"),
+                vm.envAddress("RENDERER_ADDRESS"),
+                vm.envAddress("THE_HYDRA_ADDRESS")
             );
     }
 
