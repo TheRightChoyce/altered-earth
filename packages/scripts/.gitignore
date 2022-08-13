@@ -2,9 +2,10 @@
 
 # ignore input / output photo assets
 /data/raw/*.jpg
+/data/renamed/*.jpg
 /data/pixel-png/*.png
 /data/svg/*.svg
-/data/svg-storage/*.txt
+/data/xqstgfx/*.txt
 /data/metadata/testnets/*
 
 # dependencies

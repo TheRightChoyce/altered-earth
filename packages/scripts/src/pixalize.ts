@@ -6,33 +6,36 @@ import fs from "fs";
 import path from "path";
 import sharp from "sharp";
 
-const inputDir = path.join("data", "raw");
+const inputDir = path.join("data", "renamed");
 const outputDir = path.join("data", "pixel-png");
 
-const main = async () => {
+export const pixalize = async () => {
   const files = fs
     .readdirSync(inputDir)
     .filter((file) => file.indexOf(".jpg") > -1);
 
-  const promises = [];
-  files.forEach((fileName) => {
-    const _promise = new Promise<string>((resolve, reject) => {
-      const file = fs.readFileSync(path.join(inputDir, fileName));
-      sharp(file)
-        .resize(64, 64, { fits: "inside", kernel: sharp.kernel.nearest })
-        .png({ colors: 256, palette: true, quality: 75 })
-        .toFile(path.join(outputDir, fileName.replace("jpg", "png")))
-        .then(() => {
-          resolve(fileName);
-          console.log(`.. ${fileName}`);
-        })
-        .catch((error) => reject(error));
-    });
+  await Promise.all(
+    files.map((fileName) => {
+      const _promise = new Promise<string>((resolve, reject) => {
+        const file = fs.readFileSync(path.join(inputDir, fileName));
+        sharp(file)
+          .resize(64, 64, { fits: "inside", kernel: sharp.kernel.nearest })
+          .png({ colors: 256, palette: true, quality: 75 })
+          .toFile(path.join(outputDir, fileName.replace("jpg", "png")))
+          .then(() => {
+            resolve(fileName);
+            console.log(`.. ${fileName}`);
+          })
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .catch((error: any) => {
+            console.log(`.. ${error}`);
+            reject(error);
+          });
+      });
 
-    promises.push(_promise);
-  });
+      return _promise;
+    })
+  );
 
-  Promise.all(promises).then(() => console.log("done!"));
+  console.log(".. done!");
 };
-
-main();
