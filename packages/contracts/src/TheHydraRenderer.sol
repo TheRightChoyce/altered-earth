@@ -45,7 +45,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     IExquisiteGraphics public xqstgfx;
 
     /// @dev track the size of the buffer we want
-    uint256 immutable bufferSize = 2**20;
+    uint256 constant bufferSize = 2**19;
 
     // --------------------------------------------------------
     // ~~ Constructor  ~~
@@ -67,7 +67,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     // --------------------------------------------------------
     // ~~ Setters  ~~
     // --------------------------------------------------------
-    /// @notice Allows the owner to update the data store
+    /// @notice Allows the owner to update the data store. If updated, we also track the history of each datastore for historical purposes.
     /// @param _dataStore New address for the datastore
     function setDataStore(address _dataStore) external onlyOwner {
         dataStore = ITheHydraDataStore(_dataStore);
@@ -124,10 +124,9 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
             '",'
         );
         bytes memory description = abi.encodePacked(
-            '"description":"An altered reality existing forever on the Ethereum blockchain. This edition is a fully on-chain SVG version of The Hydra #',
+            '"description":"An altered reality forever wandering on the Ethereum blockchain. This edition is an on-chain SVG version The Hydra #',
             originalId.toString(),
-            ". 50 editions exist for each original photo. Each token conforms to the ERC-721 standard.",
-            '",'
+            '. Its has 256 colors and is a 64x64 pixel representation of the original 1-of-1 artwork. The metadata and SVG are immutable, conform to the ERC-721 standard, and exist entirely on the Ethereum blockchain."'
         );
         bytes memory image = abi.encodePacked(
             '"image":"',
@@ -139,15 +138,22 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
             _editionId.toString(),
             '",'
         );
+        bytes memory originalUrl = abi.encodePacked(
+            '"original_url":"https://altered-earth.xyz/the-hydra/',
+            originalId.toString(),
+            '",'
+        );
         bytes memory attributes = abi.encodePacked(
             '"attributes":[',
+            '{"trait_type":"Type","value":Edition',
             '{"trait_type":"Edition","value":"',
             editionIndex.toString(),
             " of ",
             editionsPerOriginal.toString(),
             '"},',
-            '{"trait_type":"Size","value":"64x64px"},',
-            '{"trait_type":"Colors","value":"256"}',
+            '{"trait_type":"Original","value":"',
+            originalId.toString(),
+            '"},',
             "]"
         );
 
@@ -158,6 +164,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
                 description,
                 image,
                 externalUrl,
+                originalUrl,
                 attributes,
                 "}"
             )
@@ -198,22 +205,6 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         return string(jsonBase64);
     }
 
-    /// @notice Get the tokenURI using a custom render type. This allows for retrevial of on-chain, off-chain, or a custom render.. I.E maybe there are multiple sizes
-    /// @dev allow the caller to specific the type of render, e.g. on-chain, off-chain, 64px, etc..
-    /// @param _editionId Id of token
-    /// @param _renderType specific context for what to render
-    // function tokenURI(
-    //     uint256 _editionId,
-    //     string calldata _renderType
-    // ) external view returns (string memory)
-    // {
-    //     return string(abi.encodePacked(
-    //         dataStore.getOffChainBaseURI(),
-    //         _renderType,
-    //         _editionId.toString()
-    //     ));
-    // }
-
     // --------------------------------------------------------
     // ~~ Exquisite Graphics SVG Renderers  ~~
     // --------------------------------------------------------
@@ -231,9 +222,9 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
 
         svg.appendSafe(
             abi.encodePacked(
-                '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" width="100%" height="100%" version="1.1" viewBox="0 0 128 128" fill="#fff">',
+                '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" viewBox="0 0 96 96"><rect fill="#1f2937" height="96" width="96"/><rect fill="#0f172a" x="14" y="14" height="68" width="68"/><g transform="translate(16,16)">',
                 rects,
-                "</svg>"
+                "</g></svg>"
             )
         );
         return svg;
