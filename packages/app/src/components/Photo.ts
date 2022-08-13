@@ -27,13 +27,13 @@ export class Photo {
 
     this.slug = slugify(this.name.toLowerCase());
 
-    let imageId = id + 1 + "";
-    if (id < 9) {
+    let imageId = id + "";
+    if (id < 10) {
       imageId = `0${imageId}`;
     }
 
-    this.previewImage = `ALTERED-EARTH-${imageId}.jpg`;
-    this.svgPreview = `ALTERED-EARTH-${imageId}.svg`;
+    this.previewImage = `${imageId}.jpg`;
+    this.svgPreview = `${imageId}.svg`;
   }
 
   getEditionIdStart = () => {

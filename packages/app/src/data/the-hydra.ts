@@ -331,5 +331,53 @@ collection.addPhoto(
     "This is a description that will be written later"
   )
 );
+collection.addPhoto(
+  new Photo(
+    "The Hydra",
+    44,
+    "The Hydra 44",
+    "This is a description that will be written later"
+  )
+);
+collection.addPhoto(
+  new Photo(
+    "The Hydra",
+    45,
+    "The Hydra 45",
+    "This is a description that will be written later"
+  )
+);
+collection.addPhoto(
+  new Photo(
+    "The Hydra",
+    46,
+    "The Hydra 46",
+    "This is a description that will be written later"
+  )
+);
+collection.addPhoto(
+  new Photo(
+    "The Hydra",
+    47,
+    "The Hydra 47",
+    "This is a description that will be written later"
+  )
+);
+collection.addPhoto(
+  new Photo(
+    "The Hydra",
+    48,
+    "The Hydra 48",
+    "This is a description that will be written later"
+  )
+);
+collection.addPhoto(
+  new Photo(
+    "The Hydra",
+    49,
+    "The Hydra 49",
+    "This is a description that will be written later"
+  )
+);
 
 export const theHydraCollection = collection;
