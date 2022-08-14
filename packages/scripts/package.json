@@ -10,7 +10,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pixelize": "npx @digitak/esrun src/scripts/pixalize.ts",
+    "pixalize": "npx @digitak/esrun src/scripts/pixalize.ts",
     "svgs": "npx @digitak/esrun src/scripts/pixel-png-to-svg.ts",
     "metadata-testnets": "npx @digitak/esrun src/scripts/metadata-testnets.ts",
     "pipeline": "npx @digitak/esrun src/scripts/pipeline.ts"

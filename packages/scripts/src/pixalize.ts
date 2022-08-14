@@ -19,7 +19,7 @@ export const pixalize = async () => {
       const _promise = new Promise<string>((resolve, reject) => {
         const file = fs.readFileSync(path.join(inputDir, fileName));
         sharp(file)
-          .resize(64, 64, { fits: "inside", kernel: sharp.kernel.nearest })
+          .resize(64, 64, { fits: "inside", kernel: sharp.kernel.cubic })
           .png({ colors: 256, palette: true, quality: 90 })
           .toFile(path.join(outputDir, fileName.replace("jpg", "png")))
           .then(() => {
