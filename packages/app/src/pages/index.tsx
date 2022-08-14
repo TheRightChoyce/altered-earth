@@ -57,12 +57,13 @@ const HomePage: NextPageWithLayout = () => {
                   layout="intrinsic"
                   width={1443}
                   height={658}
+                  sizes={"100vw"}
                 />
               </a>
             </Link>
           </div>
 
-          <div className="mb-16">
+          {/* <div className="mb-16">
             <h2 className="text-2xl lg:text-4xl custom-major-mono mb-4">
               crystAliZed <small>(coming soon)</small>
             </h2>
@@ -72,7 +73,7 @@ const HomePage: NextPageWithLayout = () => {
               width={1443}
               height={658}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

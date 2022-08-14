@@ -64,7 +64,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
           {/* breadcrumbs + arrow navigation */}
           <GalleryBreadcrumbs photoId={undefined} breadcrumb={`${type}s`} />
         </div>
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row mb-16">
           <div className="basis-1/2 lg:px-8">
             <h1 className="text-6xl leading-relaxed xl:text-7xl mb-[5vh] lg:mb-8 custom-major-mono text-center lg:text-left -ml-4">
               {collection.name}
@@ -84,13 +84,14 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
               then has 50 editions of an on-chain version available.
             </div>
           </div>
-          <div className="basis-1/2">
+          <div className={`${imageClass} basis-1/2`}>
             <Image
-              src="/the-hydra/hydra-hero.png"
+              src="/the-hydra/hydra-gallery-hero.png"
               alt="The Hydra Collection"
               layout="intrinsic"
-              width={1443}
-              height={658}
+              width={800}
+              height={500}
+              sizes={"100vw"}
             />
           </div>
         </div>
@@ -109,9 +110,9 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
           </div>
         )}
 
-        <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8">
+        <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8 text-center">
           To switch between originals and editions, use the “O” and “E” buttons
-          on the nav , or press the “O” or “E” key on your keyboard.
+          on the nav.
         </div>
 
         <div className="mt-16">

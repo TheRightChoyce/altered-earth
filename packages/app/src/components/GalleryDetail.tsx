@@ -36,7 +36,7 @@ export const GalleryDetail = ({
 }) => {
   const isMounted = useIsMounted();
   const router = useRouter();
-  const { isCorrectNetwork, networkName } = useNetworkCheck();
+  const { isConnected, isCorrectNetwork, networkName } = useNetworkCheck();
 
   // define some page states
   enum TokenType {
@@ -47,6 +47,9 @@ export const GalleryDetail = ({
   enum MintState {
     // loading / unknown
     Unknown,
+
+    // Not connected to any network
+    NotConnected,
 
     // Connected to the wrong chain/network
     WrongNetwork,
@@ -104,12 +107,17 @@ export const GalleryDetail = ({
   );
 
   // Use and watch the owner of this token
-  useOwnerOf(photoId, isCorrectNetwork, setTokenLoaded, setOwner);
+  useOwnerOf(
+    photoId,
+    isCorrectNetwork && isConnected,
+    setTokenLoaded,
+    setOwner
+  );
 
   // Use and watch the edition info
   useEditionInfo(
     originalId,
-    isCorrectNetwork,
+    isCorrectNetwork && isConnected,
     setNextAvailableEditionId,
     setEditionSoldOut
   );
@@ -132,6 +140,8 @@ export const GalleryDetail = ({
   useEffect(() => {
     if (!isCorrectNetwork) {
       setMintState(MintState.WrongNetwork);
+    } else if (!isConnected) {
+      setMintState(MintState.NotConnected);
     } else if (!tokenLoaded) {
       setMintState(MintState.Unknown);
     } else {
@@ -159,6 +169,7 @@ export const GalleryDetail = ({
     tokenLoaded,
     type,
     owner,
+    isConnected,
     isCorrectNetwork,
   ]);
 
@@ -261,6 +272,24 @@ export const GalleryDetail = ({
                   </div>
                 )}
                 {/* Wallet connected to the wrong network */}
+                {mintState == MintState.NotConnected && (
+                  <div className="flex flex-col items-center">
+                    <div className="w-full">
+                      <GalleryMintButton
+                        photo={photo}
+                        address={address}
+                        isOriginal={true}
+                        onSuccess={onMintSuccess}
+                        isCorrectNetwork={isCorrectNetwork}
+                      />
+                    </div>
+                    <div className="pt-3 text-sm italic">
+                      Click above to connect your web3 wallet
+                    </div>
+                  </div>
+                )}
+
+                {/* Wallet connected to the wrong network */}
                 {mintState == MintState.WrongNetwork && (
                   <div className="flex flex-col items-center">
                     <div className="w-full">
@@ -273,7 +302,7 @@ export const GalleryDetail = ({
                       />
                     </div>
                     <div className="pt-3 text-sm italic">
-                      Please connect your wallet to the
+                      Please connect your wallet to the{` `}
                       {process.env.NEXT_PUBLIC_CHAIN_NAME} network
                     </div>
                   </div>
