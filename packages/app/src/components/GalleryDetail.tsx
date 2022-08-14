@@ -476,14 +476,16 @@ export const GalleryDetail = ({
                 <h6 className="uppercase">Attributes</h6>
                 <div className="text-lg font-bold">
                   <div className="grid grid-cols-2 text-xs lg:text-sm w-1/2">
+                    <div>Type</div>
+                    <div>
+                      {type === TokenType.Original ? "Original" : "Edition"}
+                    </div>
+
                     <div>Direction</div>
                     <div>Value1</div>
 
                     <div>Season</div>
                     <div>Value1</div>
-
-                    <div>Type</div>
-                    <div>{type}</div>
 
                     <div>Trunk</div>
                     <div>Value1</div>
