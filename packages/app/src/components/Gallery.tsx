@@ -124,15 +124,15 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
             {collection.photos.map((photo: Photo) => (
               <div
                 key={photo.id}
-                className="h-64 w-48 md:h-96 md:w-64 lg:hover:scale-110 lg:transition-transform lg:duration-500"
+                className="h-64 w-48 md:h-96 md:w-64 lg:hover:scale-110 lg:transition-transform lg:duration-500 block"
               >
                 <Link href={`/the-hydra/${photo.id}?type=${type}`}>
                   <a>
                     <div className="relative">
                       <Image
                         layout={"responsive"}
-                        width={768}
-                        height={1024}
+                        width={256}
+                        height={341}
                         src={photo.previewImageUri}
                         alt={photo.name}
                         priority={true}
@@ -147,8 +147,8 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
                       >
                         <Image
                           layout={"responsive"}
-                          width={768}
-                          height={768}
+                          width={256}
+                          height={256}
                           src={photo.svgPreviewUri}
                           alt={photo.name}
                           priority={true}
