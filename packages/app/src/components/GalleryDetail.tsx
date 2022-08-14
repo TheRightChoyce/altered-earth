@@ -485,13 +485,13 @@ export const GalleryDetail = ({
                 className={`${
                   type == "original" && tokenLoaded
                     ? "opacity-100"
-                    : "opacity-20"
+                    : "opacity-10"
                 } ease-linear transition-all duration-500`}
               />
               <div
                 className={`${
                   type == "original" ? "opacity-0" : "opacity-100"
-                } absolute w-[75%] h-[75%] top-[12.5%] left-[12.5%] ease-linear transition-all duration-300`}
+                } absolute w-[75%] h-[56%] top-[12.5%] left-[12.5%] ease-linear transition-all duration-300 border-8 border-slate-100`}
               >
                 <Image
                   layout={"responsive"}
