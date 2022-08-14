@@ -126,7 +126,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         bytes memory description = abi.encodePacked(
             '"description":"An altered reality forever wandering on the Ethereum blockchain. This edition is an on-chain SVG version The Hydra #',
             originalId.toString(),
-            '. Its has 256 colors and is a 64x64 pixel representation of the original 1-of-1 artwork. The metadata and SVG are immutable, conform to the ERC-721 standard, and exist entirely on the Ethereum blockchain."'
+            '. Its has 256 colors and is a 64x64 pixel representation of the original 1-of-1 artwork. The metadata and SVG are immutable, conform to the ERC-721 standard, and exist entirely on the Ethereum blockchain.",'
         );
         bytes memory image = abi.encodePacked(
             '"image":"',
@@ -145,7 +145,8 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
         );
         bytes memory attributes = abi.encodePacked(
             '"attributes":[',
-            '{"trait_type":"Type","value":Edition',
+            '{"trait_type":"Type","value":"Edition"',
+            "},"
             '{"trait_type":"Edition","value":"',
             editionIndex.toString(),
             " of ",
@@ -153,7 +154,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
             '"},',
             '{"trait_type":"Original","value":"',
             originalId.toString(),
-            '"},',
+            '"}',
             "]"
         );
 
@@ -222,7 +223,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
 
         svg.appendSafe(
             abi.encodePacked(
-                '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" viewBox="0 0 96 96"><rect fill="#1f2937" height="96" width="96"/><rect fill="#0f172a" x="14" y="14" height="68" width="68"/><g transform="translate(16,16)">',
+                '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" version="1.1" viewBox="0 0 96 96"><rect fill="#1e293b" height="96" width="96"/><rect fill="#f1f5f9" x="14" y="14" height="68" width="68"/><g transform="translate(16,16)">',
                 rects,
                 "</g></svg>"
             )
