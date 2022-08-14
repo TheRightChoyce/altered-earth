@@ -29,9 +29,7 @@ const renamePhoto = async (fileName): Promise<void> => {
     fileName.replace("ALTERED-EARTH-", "").replace(".jpg", "")
   );
   const newFileIndex = fileIndex - 1;
-  const newFileName = `${
-    newFileIndex < 10 ? `0${newFileIndex}` : newFileIndex
-  }.jpg`;
+  const newFileName = `${newFileIndex}.jpg`;
 
   console.log(newFileName);
 
