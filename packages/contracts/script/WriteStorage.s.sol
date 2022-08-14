@@ -27,7 +27,7 @@ contract WriteStorage is Script, ConfiguredDeployment {
 
         dataStore = TheHydraDataStore(dataStore_);
 
-        for (uint256 i; i < 5; ) {
+        for (uint256 i; i < 50; ) {
             string[] memory inputs = new string[](3);
             inputs[0] = "sh";
             inputs[1] = "-c";
