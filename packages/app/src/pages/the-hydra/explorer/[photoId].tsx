@@ -2,13 +2,8 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 
 import { GalleryBreadcrumbs } from "../../../components/GalleryBreadcrumbs";
-import { GalleryNav } from "../../../components/GalleryNav";
 import { OnChainExplorer } from "../../../components/OnChainExplorer";
-import {
-  SideBar,
-  TheHydraButton,
-  TypeNavigationButton,
-} from "../../../components/SideBar";
+import { SideBar, TheHydraButton } from "../../../components/SideBar";
 import Layout from "../../../layout/GalleryLayout";
 import type { NextPageWithLayout } from "../../_app";
 
