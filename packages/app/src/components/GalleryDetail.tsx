@@ -482,10 +482,11 @@ export const GalleryDetail = ({
                 src={photo.previewImageUri}
                 alt={photo.name}
                 priority={true}
+                sizes={"100vw"}
                 className={`${
                   type == "original" && tokenLoaded
                     ? "opacity-100"
-                    : "opacity-10"
+                    : "opacity-20"
                 } ease-linear transition-all duration-500`}
               />
               <div
@@ -500,6 +501,7 @@ export const GalleryDetail = ({
                   src={photo.svgPreviewUri}
                   alt={photo.name}
                   priority={true}
+                  sizes={"100vw"}
                 />
               </div>
             </div>

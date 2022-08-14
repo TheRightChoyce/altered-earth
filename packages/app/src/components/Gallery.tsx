@@ -136,6 +136,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
                         src={photo.previewImageUri}
                         alt={photo.name}
                         priority={true}
+                        sizes={"100vw"}
                         className={`${
                           type == "original" ? "opacity-100" : "opacity-20"
                         } ease-linear transition-all duration-500`}
