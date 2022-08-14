@@ -27,13 +27,8 @@ export class Photo {
 
     this.slug = slugify(this.name.toLowerCase());
 
-    let imageId = id + "";
-    if (id < 10) {
-      imageId = `0${imageId}`;
-    }
-
-    this.previewImage = `${imageId}.jpg`;
-    this.svgPreview = `${imageId}.svg`;
+    this.previewImage = `${id}.jpg`;
+    this.svgPreview = `${id}.svg`;
   }
 
   getEditionIdStart = () => {
