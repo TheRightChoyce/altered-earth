@@ -45,7 +45,7 @@ contract TheHydraDataStore is ITheHydraDataStore, Owned {
     // --------------------------------------------------------
 
     /// @notice Admin function to set the baseURI for off-chain photos, i.e. an IPFS link
-    /// @param _baseURI The new baseURI to set
+    /// @param _baseURI The new baseURI to set. Expects a trailing slash IE "/"
     function setOffChainBaseURI(string memory _baseURI) external onlyOwner {
         offChainBaseURI = _baseURI;
     }

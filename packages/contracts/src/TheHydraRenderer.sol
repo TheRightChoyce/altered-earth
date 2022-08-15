@@ -124,7 +124,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
             '",'
         );
         bytes memory description = abi.encodePacked(
-            '"description":"An altered reality forever wandering on the Ethereum blockchain. This edition is an on-chain SVG version The Hydra #',
+            '"description":"An altered reality forever wandering on the Ethereum blockchain. This edition is an on-chain SVG version of The Hydra #',
             originalId.toString(),
             '. Its has 256 colors and is a 64x64 pixel representation of the original 1-of-1 artwork. The metadata and SVG are immutable, conform to the ERC-721 standard, and exist entirely on the Ethereum blockchain.",'
         );
