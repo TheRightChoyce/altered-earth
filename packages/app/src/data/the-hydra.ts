@@ -1,6 +1,3 @@
-import fs from "fs";
-import path from "path";
-
 import { Photo } from "../components/Photo";
 import { PhotoCollection } from "../components/PhotoCollection";
 
