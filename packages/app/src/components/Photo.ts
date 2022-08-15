@@ -1,5 +1,10 @@
 import slugify from "slugify";
 
+interface IAttribute {
+  trait_type: string;
+  value: string;
+}
+
 export class Photo {
   collection = "";
   id = 0;
@@ -11,13 +16,15 @@ export class Photo {
   svgPreview = "";
   svgPreviewUri = "";
   slug = "";
+  attributes: Record<string, string> = {};
 
   constructor(
     collection: string,
     id: number,
     name: string,
     description: string,
-    price?: number
+    price?: number,
+    attributes?: Array<IAttribute>
   ) {
     this.collection = collection;
     this.id = id;
@@ -29,6 +36,12 @@ export class Photo {
 
     this.previewImage = `${id}.jpg`;
     this.svgPreview = `${id}.svg`;
+
+    if (attributes) {
+      attributes.forEach((attribute) => {
+        this.attributes[attribute["trait_type"]] = attribute["value"];
+      });
+    }
   }
 
   getEditionIdStart = () => {
@@ -36,5 +49,8 @@ export class Photo {
   };
   getEditionIdEnd = () => {
     return this.id * 50 + 99;
+  };
+  getEditionIndex = (tokenId: number) => {
+    return (tokenId % 50) + 1;
   };
 }

@@ -239,22 +239,29 @@ export const GalleryDetail = ({
           <div className="w-10/12 m-auto lg:m-0">
             {/* Name & description */}
             <div className="my-[2vh]">
+              {type == TokenType.Edition && (
+                <h3 className="mb-2">Edition of:</h3>
+              )}
               <h2 className="text-2xl lg:text-5xl mb-8">{photo.name}</h2>
               <div className="text-md lg:text-lg">
-                <p className="mb-4">{photo.description}</p>
+                <p className="text-2xl italic mb-8">{photo.description}</p>
                 <p className="mb-4">
                   {type == "original" && (
                     <span>
-                      An original 1-of-1 artwork that comes with a high-res
-                      immutable image stored on IPFS and a fully on-chain SVG
-                      version. Each token conforms to the ERC-721 standard.
+                      An altered reality forever wandering the Ethereum
+                      blockchain. This is an original 1-of-1 artwork that comes
+                      with a high-res immutable image stored on IPFS. Each token
+                      conforms to the ERC-721 standard.
                     </span>
                   )}
                   {type == "edition" && (
                     <span>
-                      An edition is a fully on-chain SVG version of the
-                      original. 50 editions exist for each original photo. Each
-                      token conforms to the ERC-721 standard.
+                      An altered reality forever wandering on the Ethereum
+                      blockchain. This edition is an on-chain SVG version of{" "}
+                      {photo.name}. Its has 256 colors and is a 64x64 pixel
+                      representation of the original 1-of-1 artwork. The
+                      metadata and SVG are immutable, conform to the ERC-721
+                      standard, and exist entirely on the Ethereum blockchain.
                     </span>
                   )}
                 </p>
@@ -476,25 +483,34 @@ export const GalleryDetail = ({
                 <h6 className="uppercase">Attributes</h6>
                 <div className="text-lg font-bold">
                   <div className="grid grid-cols-2 text-xs lg:text-sm w-1/2">
-                    <div>Type</div>
-                    <div>
-                      {type === TokenType.Original ? "Original" : "Edition"}
-                    </div>
+                    {type === TokenType.Original && (
+                      <>
+                        <div>Type</div>
+                        <div>Original</div>
 
-                    <div>Direction</div>
-                    <div>Value1</div>
+                        <div>Chakra</div>
+                        <div>{photo.attributes["Chakra"]}</div>
 
-                    <div>Season</div>
-                    <div>Value1</div>
+                        <div>Season</div>
+                        <div>{photo.attributes["Season"]}</div>
+                      </>
+                    )}
 
-                    <div>Trunk</div>
-                    <div>Value1</div>
+                    {type === TokenType.Edition && (
+                      <>
+                        <div>Type</div>
+                        <div>Edition</div>
 
-                    <div>Location</div>
-                    <div>Value1</div>
+                        <div>Edition</div>
+                        <div>
+                          {photo.getEditionIndex(nextAvailableEditionId || 0)}{" "}
+                          of 50
+                        </div>
 
-                    <div>Dream</div>
-                    <div>Vivid</div>
+                        <div>Original</div>
+                        <div>{originalId}</div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
