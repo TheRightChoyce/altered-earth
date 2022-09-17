@@ -25,7 +25,8 @@ export class PhotoCollection {
   }
 
   addPhoto(photo: Photo) {
-    photo.previewImageUri = `/${this.slug}/previews/${photo.previewImage}`;
+    photo.previewImageUri = `/${this.slug}/previews/256/${photo.previewImage}`;
+    photo.previewImage1024Uri = `/${this.slug}/previews/1024/${photo.previewImage}`;
     photo.svgPreviewUri = `/${this.slug}/svgs/${photo.svgPreview}`;
     this.photos.push(photo);
   }

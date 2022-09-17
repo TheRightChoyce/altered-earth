@@ -278,7 +278,7 @@ export const GalleryDetail = ({
                     <Spinner />
                   </div>
                 )}
-                {/* Wallet connected to the wrong network */}
+                {/* Wallet not connected to a network */}
                 {mintState == MintState.NotConnected && (
                   <div className="flex flex-col items-center">
                     <div className="w-full">
@@ -526,7 +526,7 @@ export const GalleryDetail = ({
                 layout={"responsive"}
                 width={768}
                 height={1024}
-                src={photo.previewImageUri}
+                src={photo.previewImage1024Uri}
                 alt={photo.name}
                 priority={true}
                 sizes={"100vw"}

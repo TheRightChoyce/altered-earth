@@ -13,13 +13,14 @@
 import fs, { promises as fsp } from "fs";
 import path from "path";
 
-import { pixalize } from "../pixalize";
-import { makeSVGFromPixelPNG } from "../svg";
+import { pixalize } from "../lib/pixalize";
+import { resizeAll } from "../lib/resize-images";
+import { makeSVGFromPixelPNG } from "../lib/svg";
 import {
   writeJpgsToProject,
   writeSvgsToProject,
-} from "../write-images-to-project";
-import { writeXQSTGFXFilesToProject } from "../write-xsqtgfx-to-project";
+} from "../lib/write-images-to-project";
+import { writeXQSTGFXFilesToProject } from "../lib/write-xsqtgfx-to-project";
 
 const rawJpgDir = path.join("data", "raw");
 const renamedJpgDir = path.join("data", "renamed");
@@ -56,6 +57,12 @@ const renamePhotos = async () => {
 const main = async () => {
   console.log("Renaming raw photos...");
   await renamePhotos();
+
+  console.log("Generating 256px previews...");
+  await resizeAll(256, 341);
+
+  console.log("Generating 1024px previews...");
+  await resizeAll(1024, 1364);
 
   console.log("Pixalizing jpgs to pngs...");
   await pixalize();

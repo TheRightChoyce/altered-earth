@@ -13,6 +13,12 @@ export const writeJpgsToProject = async () => {
     "previews"
   );
 
+  const resized256Dir = path.join("data", "resized", "256");
+  const resized256OutputDir = path.join(jpgOutputDir, "256");
+
+  const resized1024Dir = path.join("data", "resized", "1024");
+  const resized1024OutputDir = path.join(jpgOutputDir, "1024");
+
   fs.mkdirSync(jpgOutputDir, { recursive: true });
 
   const files = fs
@@ -23,6 +29,14 @@ export const writeJpgsToProject = async () => {
     fs.copyFileSync(
       path.join(renamedDir, fileName),
       path.join(jpgOutputDir, fileName)
+    );
+    fs.copyFileSync(
+      path.join(resized256Dir, fileName),
+      path.join(resized256OutputDir, fileName)
+    );
+    fs.copyFileSync(
+      path.join(resized1024Dir, fileName),
+      path.join(resized1024OutputDir, fileName)
     );
   });
 };

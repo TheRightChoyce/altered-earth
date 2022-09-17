@@ -12,9 +12,11 @@ export class Photo {
   description = "";
   price = 0.25;
   previewImage = "";
-  previewImageUri = "";
   svgPreview = "";
+  // Uris are set from the collection since it knows the root path
   svgPreviewUri = "";
+  previewImageUri = "";
+  previewImage1024Uri = "";
   slug = "";
   attributes: Record<string, string> = {};
 
