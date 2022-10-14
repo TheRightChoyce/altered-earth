@@ -16,7 +16,6 @@ import "./interfaces/ITheHydraRenderer.sol";
 /// @author therightchoyce.eth
 /// @notice This implemeints the ERC721 standard
 /// @dev Modified ERC721 for minting and managing tokens
-
 contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Enable toString and other string functions on uint256
     using Strings for uint256;
@@ -77,6 +76,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // ~~ Events ~~
     // --------------------------------------------------------
 
+    // TODO -- optimize events since Solmate also emits some of its own by default
+
     /// @dev When this contract is created
     event TheHydraAwakens();
 
@@ -133,10 +134,12 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         _;
     }
 
+    // TODO -- add tests for CheckEditionIdBoundries
+
     /// @dev Fail if the editionId is actually an originalId, or if it is beyond the max number of editions
     /// @param _editionId The tokenId of this edition
     modifier CheckEditionIdBoundries(uint256 _editionId) {
-        /// @dev If this is actually an original
+        /// @dev If this is actually an original. OriginalsSupply is 50, editions start at 50, so editionId of 50 should pass
         if (_editionId < originalsSupply)
             revert BeyondTheScopeOfConsciousness();
         /// @dev if this is higher then the editions we have available
@@ -146,6 +149,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @dev Defer this to the Solmate contract's _mint function to save gas, since it already has an ownership check built in -- in theory this checks to ensure this token is not already owned
     modifier RealityNotAlreadyAltered(uint256 id) {
+        // TODO -- do not have duplicate modifiers
         _;
     }
 
@@ -204,8 +208,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     function alterReality(uint256 id)
         external
         payable
-        ElevatingConsciousnessHasACost(originalsMintPrice)
         CheckConsciousness(id)
+        ElevatingConsciousnessHasACost(originalsMintPrice)
         RealityNotAlreadyAltered(id)
     {
         _safeMint(msg.sender, id, "Welcome to TheHydra's Reality");
@@ -214,6 +218,15 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
     // ~~ Mint Functions => Editions ~~
     // --------------------------------------------------------
+
+    /// @notice helper for getting the starting offset of an edition block
+    function getEditionOffset(uint256 _originalId)
+        internal
+        pure
+        returns (uint256)
+    {
+        return (_originalId * editionsPerOriginal) + originalsSupply;
+    }
 
     /// @notice Mint an edition of an original
     /// @dev This will revert if trying to mint more than 50 of an edition
@@ -225,8 +238,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         CheckSubConsciousness(_originalId)
         ElevatingConsciousnessHasACost(editionsMintPrice)
     {
-        uint256 nextEditionId = (_originalId * editionsPerOriginal) +
-            originalsSupply +
+        /// @dev editionsOffset + totalSupply of originals gives us the starting index
+        uint256 nextEditionId = getEditionOffset(_originalId) +
             editionsMinted[_originalId];
 
         ++editionsMinted[_originalId];
@@ -246,7 +259,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         CheckConsciousness(_originalId)
         returns (EditionInfo memory)
     {
-        uint256 startId = (_originalId * editionsPerOriginal) + originalsSupply;
+        uint256 startId = getEditionOffset(_originalId);
         uint256 endId = startId + editionsCountPerOriginal;
         uint256 minted = editionsMinted[_originalId];
         bool soldOut = (minted == 50);

@@ -84,6 +84,18 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     // ~~ ERC721 TokenURI implementation  ~~
     // --------------------------------------------------------
 
+    /// @dev Internal helper function for returning the tokenUri for an original.. IE the off-chain metadata file
+    function originalsTokenURI(uint256 _id)
+        internal
+        view
+        returns (string memory)
+    {
+        return
+            string(
+                abi.encodePacked(dataStore.getOffChainBaseURI(), _id.toString())
+            );
+    }
+
     /// @notice Builds the raw, on-chain json metadata file for an edition. If an originalId is passed in we just render that string like normal.
     /// @dev This will grab the on-chain SVG and include it as a base64 version
     /// @param _editionId The editionId.
@@ -94,13 +106,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     {
         /// @dev Originals return their tokenUri string
         if (_editionId < originalsSupply) {
-            return
-                string(
-                    abi.encodePacked(
-                        dataStore.getOffChainBaseURI(),
-                        _editionId.toString()
-                    )
-                );
+            return originalsTokenURI(_editionId);
         }
 
         uint256 originalId = (_editionId - originalsSupply) /
@@ -185,13 +191,7 @@ contract TheHydraRenderer is ITheHydraRenderer, Owned {
     {
         /// @dev Originals return their tokenUri string
         if (_id < originalsSupply) {
-            return
-                string(
-                    abi.encodePacked(
-                        dataStore.getOffChainBaseURI(),
-                        _id.toString()
-                    )
-                );
+            return originalsTokenURI(_id);
         }
 
         /// @dev Editions build their tokenUri string on chain
