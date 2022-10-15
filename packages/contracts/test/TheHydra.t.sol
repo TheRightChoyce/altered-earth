@@ -45,6 +45,12 @@ contract TheHydraTest is DSTest {
     );
     event TheHydraAwakens();
     event ConsciousnessActivated(address indexed renderer);
+    event Gift(
+        address indexed from,
+        address indexed to,
+        uint256 originalId,
+        uint256 indexed editionId
+    );
 
     function getNewContract() public returns (TheHydra) {
         return new TheHydra(owner, originalsMintPrice, editionsMintPrice);
@@ -705,5 +711,89 @@ contract TheHydraTest is DSTest {
 
         assertEq(address(_c).balance, 0);
         assertEq(owner.balance, priorBalance + contractBalance);
+    }
+
+    // --------------------------------------------------------
+    // Test giftEdition
+    // --------------------------------------------------------
+
+    function testGiftEditionOnlyTokenOwner() public {
+        TheHydra _c = getNewContract();
+        // Have the minter mint
+        vm.prank(minter);
+        _c.alterReality{value: originalsMintPrice}(0);
+
+        // revert back to the default wallet, and trying to gift this should fail
+        vm.expectRevert(TheHydra.GifterNotInDreamState.selector);
+        _c.giftEdition(0, other);
+
+        // And one more time when the sender is the same as the recipient, but not owner
+        vm.startPrank(other);
+        vm.expectRevert(TheHydra.GifterNotInDreamState.selector);
+        _c.giftEdition(0, other);
+        vm.stopPrank();
+    }
+
+    function testGiftEditionEmitsEvent() public {
+        TheHydra _c = getNewContract();
+        vm.startPrank(minter);
+        _c.alterReality{value: originalsMintPrice}(0);
+
+        // Test emit the gift event
+        vm.expectEmit(true, true, true, true);
+        emit Gift(minter, owner, 0, 50);
+        _c.giftEdition(0, other);
+
+        vm.stopPrank();
+    }
+
+    function testGiftEditionTransfersEdition() public {
+        TheHydra _c = getNewContract();
+        vm.startPrank(minter);
+        _c.alterReality{value: originalsMintPrice}(0);
+
+        // Test emit the gift event
+        _c.giftEdition(0, other);
+        assertEq(address(_c.ownerOf(50)), other);
+        vm.stopPrank();
+    }
+
+    function testGiftEdition() public {
+        TheHydra _c = getNewContract();
+
+        vm.startPrank(minter);
+        _c.alterReality{value: originalsMintPrice}(0);
+
+        _c.giftEdition(0, other);
+        assertEq(address(_c.ownerOf(50)), other);
+        _c.giftEdition(0, other);
+        assertEq(address(_c.ownerOf(51)), other);
+        _c.giftEdition(0, other);
+        assertEq(address(_c.ownerOf(52)), other);
+        _c.giftEdition(0, other);
+        assertEq(address(_c.ownerOf(53)), other);
+        _c.giftEdition(0, other);
+        assertEq(address(_c.ownerOf(54)), other);
+
+        vm.expectRevert(TheHydra.GiftsAreEphemrialAndFleeting.selector);
+        _c.giftEdition(0, other);
+
+        // test end boundry
+        _c.alterReality{value: originalsMintPrice}(49);
+        _c.giftEdition(49, other);
+        assertEq(address(_c.ownerOf(29 * 50 + 50)), other);
+        _c.giftEdition(49, other);
+        assertEq(address(_c.ownerOf(29 * 50 + 51)), other);
+        _c.giftEdition(49, other);
+        assertEq(address(_c.ownerOf(29 * 50 + 52)), other);
+        _c.giftEdition(49, other);
+        assertEq(address(_c.ownerOf(29 * 50 + 53)), other);
+        _c.giftEdition(49, other);
+        assertEq(address(_c.ownerOf(29 * 50 + 54)), other);
+
+        vm.expectRevert(TheHydra.GiftsAreEphemrialAndFleeting.selector);
+        _c.giftEdition(49, other);
+
+        vm.stopPrank();
     }
 }

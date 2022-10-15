@@ -52,6 +52,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev Easily track the number of editions minted for each original contract. Using a counter instead of tracking the starting index because if we tracked the starting index for each edition, then there would be a need to initilize each starting index to a particular sequenced number vs. just allowing default value of 0 here.
     mapping(uint256 => uint256) editionsMinted;
 
+    /// @dev Each original will allow the gifting of 5 editions, giftable by the current owner
+    uint256 constant editionsGiftedPerOriginal = 5;
+
     // --------------------------------------------------------
     // ~~ Original configuration ~~
     // --------------------------------------------------------
@@ -84,6 +87,14 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @dev When the renderer contract is set and available
     event ConsciousnessActivated(address indexed renderer);
 
+    /// @dev When an edition is gifted
+    event Gift(
+        address indexed from,
+        address indexed to,
+        uint256 originalId,
+        uint256 indexed editionId
+    );
+
     // --------------------------------------------------------
     // ~~ Errors ~~
     // --------------------------------------------------------
@@ -105,6 +116,12 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @dev When the renderer isn't configured
     error ConsciousnessNotActivated();
+
+    /// @dev When a h4ck3r tries to gift editions they are not eligable to
+    error GifterNotInDreamState();
+
+    /// @dev When there is no more gift allocation available
+    error GiftsAreEphemrialAndFleeting();
 
     // --------------------------------------------------------
     // ~~ Modifiers ~~
@@ -225,7 +242,10 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         pure
         returns (uint256)
     {
-        return (_originalId * editionsPerOriginal) + originalsSupply;
+        return
+            (_originalId * editionsPerOriginal) +
+            originalsSupply +
+            editionsGiftedPerOriginal;
     }
 
     /// @notice Mint an edition of an original
@@ -245,6 +265,17 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         ++editionsMinted[_originalId];
 
         _safeMint(msg.sender, nextEditionId, "Welcome to TheHydra's Reality");
+    }
+
+    function giftEdition(uint256 _originalId, address _recipient)
+        public
+        payable
+    {
+        // ensure the sender is the owner
+        // check to see if there is a gift allocation available
+        // increase the gifted count
+        // attempt to transfer
+        // emit the gift event
     }
 
     // --------------------------------------------------------

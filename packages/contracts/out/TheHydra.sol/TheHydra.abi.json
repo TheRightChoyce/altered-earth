@@ -42,6 +42,16 @@
   },
   {
     "inputs": [],
+    "name": "GifterNotInDreamState",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "GiftsAreEphemrialAndFleeting",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "InvalidDreamState",
     "type": "error"
   },
@@ -111,6 +121,37 @@
       }
     ],
     "name": "ConsciousnessActivated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "originalId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "editionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "Gift",
     "type": "event"
   },
   {
@@ -378,6 +419,24 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_originalId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      }
+    ],
+    "name": "giftEdition",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
