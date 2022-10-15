@@ -32,6 +32,11 @@
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
+            "name": "gifted",
+            "type": "uint256"
+          },
+          {
             "internalType": "bool",
             "name": "soldOut",
             "type": "bool"
@@ -90,6 +95,11 @@
           {
             "internalType": "uint256",
             "name": "minted",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gifted",
             "type": "uint256"
           },
           {

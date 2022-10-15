@@ -13,6 +13,7 @@ interface ITheHydra {
         uint256 startId;
         uint256 endId;
         uint256 minted;
+        uint256 gifted;
         bool soldOut;
         uint256 nextId;
         uint256 localIndex;

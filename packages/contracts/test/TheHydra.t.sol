@@ -257,6 +257,7 @@ contract TheHydraTest is DSTest {
         info = _c.editionsGetInfoFromOriginal(0);
         assertEq(info.nextId, 51);
         assertEq(info.minted, 1);
+        assertEq(info.gifted, 0);
 
         // original 0 x 2
         vm.prank(minter);
@@ -264,39 +265,83 @@ contract TheHydraTest is DSTest {
         info = _c.editionsGetInfoFromOriginal(0);
         assertEq(info.nextId, 52);
         assertEq(info.minted, 2);
+        assertEq(info.gifted, 0);
+
+        // original 0 gift 1
+
+        // ensure the minter owns the original
+        vm.prank(minter);
+        _c.alterReality{value: originalsMintPrice}(0);
+
+        // now attempt to gift from that original
+        vm.prank(minter);
+        _c.giftEdition(0, other);
+        info = _c.editionsGetInfoFromOriginal(0);
+        assertEq(info.nextId, 53);
+        assertEq(info.minted, 2);
+        assertEq(info.gifted, 1);
 
         // original 1
         vm.prank(minter);
         _c.alterSubReality{value: editionsMintPrice}(1);
         info = _c.editionsGetInfoFromOriginal(0);
         info1 = _c.editionsGetInfoFromOriginal(1);
-        assertEq(info.nextId, 52);
+        assertEq(info.nextId, 53);
         assertEq(info.minted, 2);
+        assertEq(info.gifted, 1);
+
         assertEq(info1.nextId, 101);
         assertEq(info1.minted, 1);
 
         // original 1 x2
         vm.prank(minter);
         _c.alterSubReality{value: editionsMintPrice}(1);
+
+        // ensure the minter owns the original
+        vm.prank(minter);
+        _c.alterReality{value: originalsMintPrice}(1);
+
+        // now attempt to gift from that original
+        vm.prank(minter);
+        _c.giftEdition(1, other);
+
         info = _c.editionsGetInfoFromOriginal(0);
         info1 = _c.editionsGetInfoFromOriginal(1);
-        assertEq(info.nextId, 52);
+
+        assertEq(info.nextId, 53);
         assertEq(info.minted, 2);
-        assertEq(info1.nextId, 102);
+        assertEq(info.gifted, 1);
+
+        assertEq(info1.nextId, 103);
         assertEq(info1.minted, 2);
+        assertEq(info1.gifted, 1);
 
         // original 49
         vm.prank(minter);
         _c.alterSubReality{value: editionsMintPrice}(49);
+
+        // ensure the minter owns the original
+        vm.prank(minter);
+        _c.alterReality{value: originalsMintPrice}(49);
+
+        // now attempt to gift from that original
+        vm.prank(minter);
+        _c.giftEdition(49, other);
+
         info = _c.editionsGetInfoFromOriginal(0);
         info1 = _c.editionsGetInfoFromOriginal(1);
         info49 = _c.editionsGetInfoFromOriginal(49);
-        assertEq(info.nextId, 52);
+        assertEq(info.nextId, 53);
         assertEq(info.minted, 2);
-        assertEq(info1.nextId, 102);
+        assertEq(info.gifted, 1);
+
+        assertEq(info1.nextId, 103);
         assertEq(info1.minted, 2);
-        assertEq(info49.nextId, 2501);
+        assertEq(info1.gifted, 1);
+
+        assertEq(info49.nextId, 2502);
         assertEq(info49.minted, 1);
+        assertEq(info49.gifted, 1);
 
         // original 49 x 2
         vm.prank(minter);
@@ -304,12 +349,17 @@ contract TheHydraTest is DSTest {
         info = _c.editionsGetInfoFromOriginal(0);
         info1 = _c.editionsGetInfoFromOriginal(1);
         info49 = _c.editionsGetInfoFromOriginal(49);
-        assertEq(info.nextId, 52);
+        assertEq(info.nextId, 53);
         assertEq(info.minted, 2);
-        assertEq(info1.nextId, 102);
+        assertEq(info.gifted, 1);
+
+        assertEq(info1.nextId, 103);
         assertEq(info1.minted, 2);
-        assertEq(info49.nextId, 2502);
+        assertEq(info1.gifted, 1);
+
+        assertEq(info49.nextId, 2503);
         assertEq(info49.minted, 2);
+        assertEq(info49.gifted, 1);
     }
 
     function testEditionGetInfoFromOriginalAfterEditionsLimit() public {
@@ -317,38 +367,64 @@ contract TheHydraTest is DSTest {
         TheHydra.EditionInfo memory info;
 
         vm.startPrank(minter);
-        for (uint256 i = 0; i < 50; i++) {
+        for (uint256 i = 0; i < 45; i++) {
             info = _c.editionsGetInfoFromOriginal(0);
             _c.alterSubReality{value: editionsMintPrice}(0);
             assertEq(address(_c.ownerOf(info.nextId)), minter);
         }
 
-        vm.expectRevert(TheHydra.EditionSoldOut.selector);
+        vm.expectRevert(TheHydra.EditionsAreEphemrialAndFleeting.selector);
         _c.alterSubReality(0);
 
         info = _c.editionsGetInfoFromOriginal(0);
-        assertEq(info.nextId, type(uint256).max);
-        assertEq(info.minted, 50);
+        assertEq(info.nextId, 46);
+        assertEq(info.minted, 45);
+        assertEq(info.gifted, 0);
 
-        // Original 49
-        for (uint256 i = 0; i < 50; i++) {
+        // Now gift the rest
+        for (uint256 i = 0; i < 5; i++) {
+            info = _c.editionsGetInfoFromOriginal(0);
+            _c.giftEdition(0, other);
+            assertEq(address(_c.ownerOf(info.nextId)), other);
+        }
+
+        info = _c.editionsGetInfoFromOriginal(0);
+        assertEq(info.nextId, type(uint256).max);
+        assertEq(info.minted, 45);
+        assertEq(info.gifted, 5);
+
+        // Original # 49
+        for (uint256 i = 0; i < 45; i++) {
             info = _c.editionsGetInfoFromOriginal(49);
             _c.alterSubReality{value: editionsMintPrice}(49);
             assertEq(address(_c.ownerOf(info.nextId)), minter);
         }
 
-        vm.expectRevert(TheHydra.EditionSoldOut.selector);
+        vm.expectRevert(TheHydra.EditionsAreEphemrialAndFleeting.selector);
         _c.alterSubReality(49);
 
         info = _c.editionsGetInfoFromOriginal(49);
+        assertEq(info.nextId, 2546);
+        assertEq(info.minted, 45);
+        assertEq(info.gifted, 0);
+
+        // Now gift the rest
+        for (uint256 i = 0; i < 5; i++) {
+            info = _c.editionsGetInfoFromOriginal(49);
+            _c.giftEdition(49, other);
+            assertEq(address(_c.ownerOf(info.nextId)), other);
+        }
+
+        info = _c.editionsGetInfoFromOriginal(49);
         assertEq(info.nextId, type(uint256).max);
-        assertEq(info.minted, 50);
+        assertEq(info.minted, 45);
+        assertEq(info.gifted, 5);
 
         vm.stopPrank();
     }
 
     // --------------------------------------------------------
-    // ~~ Edition Info From Edition Id ~
+    // ~~ Edition Info From Edition Id ~ TODO DELETE
     // --------------------------------------------------------
 
     function testEditionGetInfoFromEdition50() public {
@@ -359,6 +435,7 @@ contract TheHydraTest is DSTest {
         assertEq(info.startId, 50);
         assertEq(info.endId, 99);
         assertEq(info.minted, 0);
+        assertEq(info.gifted, 0);
         assertEq(info.nextId, 50);
         assertEq(info.localIndex, 1);
         assertEq(info.maxPerOriginal, 50);
@@ -372,6 +449,7 @@ contract TheHydraTest is DSTest {
         assertEq(info.startId, 50);
         assertEq(info.endId, 99);
         assertEq(info.minted, 0);
+        assertEq(info.gifted, 0);
         assertEq(info.nextId, 50);
         assertEq(info.localIndex, 2);
         assertEq(info.maxPerOriginal, 50);
@@ -385,6 +463,7 @@ contract TheHydraTest is DSTest {
         assertEq(info.startId, 100);
         assertEq(info.endId, 149);
         assertEq(info.minted, 0);
+        assertEq(info.gifted, 0);
         assertEq(info.nextId, 100);
         assertEq(info.localIndex, 1);
         assertEq(info.maxPerOriginal, 50);
@@ -398,6 +477,7 @@ contract TheHydraTest is DSTest {
         assertEq(info.startId, 2500);
         assertEq(info.endId, 2549);
         assertEq(info.minted, 0);
+        assertEq(info.gifted, 0);
         assertEq(info.nextId, 2500);
         assertEq(info.localIndex, 1);
         assertEq(info.maxPerOriginal, 50);
@@ -425,6 +505,7 @@ contract TheHydraTest is DSTest {
         info50 = _c.editionsGetInfoFromEdition(50);
         assertEq(info50.nextId, 51);
         assertEq(info50.minted, 1);
+        assertEq(info50.gifted, 0);
 
         // edition50 x 2
         vm.prank(minter);
@@ -432,6 +513,15 @@ contract TheHydraTest is DSTest {
         info50 = _c.editionsGetInfoFromEdition(50);
         assertEq(info50.nextId, 52);
         assertEq(info50.minted, 2);
+        assertEq(info50.gifted, 0);
+
+        // edition50 gift
+        vm.prank(minter);
+        _c.giftEdition(0, other);
+        info50 = _c.editionsGetInfoFromEdition(50);
+        assertEq(info50.nextId, 52);
+        assertEq(info50.minted, 2);
+        assertEq(info50.gifted, 0);
 
         // edition100
         vm.prank(minter);
@@ -442,6 +532,7 @@ contract TheHydraTest is DSTest {
         assertEq(info50.minted, 2);
         assertEq(info100.nextId, 101);
         assertEq(info100.minted, 1);
+        assertEq(info100.gifted, 0);
 
         // edition100 x 2
         vm.prank(minter);
@@ -452,6 +543,7 @@ contract TheHydraTest is DSTest {
         assertEq(info50.minted, 2);
         assertEq(info100.nextId, 102);
         assertEq(info100.minted, 2);
+        assertEq(info100.gifted, 0);
 
         // edition2500
         vm.prank(minter);
@@ -459,6 +551,7 @@ contract TheHydraTest is DSTest {
         info2500 = _c.editionsGetInfoFromEdition(2500);
         assertEq(info2500.nextId, 2501);
         assertEq(info2500.minted, 1);
+        assertEq(info2500.gifted, 0);
     }
 
     function testEditionGetInfoFromEditionAfterEditionsLimit() public {
@@ -466,7 +559,7 @@ contract TheHydraTest is DSTest {
         TheHydra.EditionInfo memory info;
 
         vm.startPrank(minter);
-        for (uint256 i = 0; i < 50; i++) {
+        for (uint256 i = 0; i < 45; i++) {
             info = _c.editionsGetInfoFromEdition(50 + i);
             _c.alterSubReality{value: editionsMintPrice}(0);
             assertEq(address(_c.ownerOf(info.nextId)), minter);
@@ -475,7 +568,8 @@ contract TheHydraTest is DSTest {
 
         info = _c.editionsGetInfoFromEdition(50);
         assertEq(info.nextId, type(uint256).max);
-        assertEq(info.minted, 50);
+        assertEq(info.minted, 45);
+        assertEq(info.gifted, 45);
 
         // Original 49
         for (uint256 i = 0; i < 50; i++) {
@@ -553,27 +647,27 @@ contract TheHydraTest is DSTest {
     function testEditionMintRevertsAtEditionLimit() public {
         TheHydra _c = getNewContract();
         vm.startPrank(minter);
-        for (uint256 i = 0; i < 50; i++) {
+        for (uint256 i = 0; i < 45; i++) {
             _c.alterSubReality{value: editionsMintPrice}(0);
         }
 
-        vm.expectRevert(TheHydra.EditionSoldOut.selector);
+        vm.expectRevert(TheHydra.EditionsAreEphemrialAndFleeting.selector);
         _c.alterSubReality{value: editionsMintPrice}(0);
 
         // now check another token to be sure
-        for (uint256 i = 0; i < 50; i++) {
+        for (uint256 i = 0; i < 45; i++) {
             _c.alterSubReality{value: editionsMintPrice}(1);
         }
 
-        vm.expectRevert(TheHydra.EditionSoldOut.selector);
+        vm.expectRevert(TheHydra.EditionsAreEphemrialAndFleeting.selector);
         _c.alterSubReality{value: editionsMintPrice}(1);
 
         // now check the last token
-        for (uint256 i = 0; i < 50; i++) {
+        for (uint256 i = 0; i < 45; i++) {
             _c.alterSubReality{value: editionsMintPrice}(49);
         }
 
-        vm.expectRevert(TheHydra.EditionSoldOut.selector);
+        vm.expectRevert(TheHydra.EditionsAreEphemrialAndFleeting.selector);
         _c.alterSubReality{value: editionsMintPrice}(49);
 
         vm.stopPrank();
@@ -724,12 +818,12 @@ contract TheHydraTest is DSTest {
         _c.alterReality{value: originalsMintPrice}(0);
 
         // revert back to the default wallet, and trying to gift this should fail
-        vm.expectRevert(TheHydra.GifterNotInDreamState.selector);
+        vm.expectRevert(TheHydra.InvalidDreamState.selector);
         _c.giftEdition(0, other);
 
         // And one more time when the sender is the same as the recipient, but not owner
         vm.startPrank(other);
-        vm.expectRevert(TheHydra.GifterNotInDreamState.selector);
+        vm.expectRevert(TheHydra.InvalidDreamState.selector);
         _c.giftEdition(0, other);
         vm.stopPrank();
     }
@@ -764,16 +858,28 @@ contract TheHydraTest is DSTest {
         vm.startPrank(minter);
         _c.alterReality{value: originalsMintPrice}(0);
 
+        console.log(_c.ownerOf(0));
+
+        TheHydra.EditionInfo memory info = _c.editionsGetInfoFromOriginal(0);
+
+        console.log(info.nextId);
+
         _c.giftEdition(0, other);
         assertEq(address(_c.ownerOf(50)), other);
-        _c.giftEdition(0, other);
-        assertEq(address(_c.ownerOf(51)), other);
+
+        // now mint an edition to increment the ids
+        _c.alterSubReality{value: editionsMintPrice}(0);
+        assertEq(address(_c.ownerOf(51)), minter);
+
+        // Keep gifting the rest
         _c.giftEdition(0, other);
         assertEq(address(_c.ownerOf(52)), other);
         _c.giftEdition(0, other);
         assertEq(address(_c.ownerOf(53)), other);
         _c.giftEdition(0, other);
         assertEq(address(_c.ownerOf(54)), other);
+        _c.giftEdition(0, other);
+        assertEq(address(_c.ownerOf(55)), other);
 
         vm.expectRevert(TheHydra.GiftsAreEphemrialAndFleeting.selector);
         _c.giftEdition(0, other);
@@ -781,15 +887,20 @@ contract TheHydraTest is DSTest {
         // test end boundry
         _c.alterReality{value: originalsMintPrice}(49);
         _c.giftEdition(49, other);
-        assertEq(address(_c.ownerOf(29 * 50 + 50)), other);
+        assertEq(address(_c.ownerOf(49 * 50 + 50)), other);
+
+        // now mint an edition to increment the ids
+        _c.alterSubReality{value: editionsMintPrice}(49);
+        assertEq(address(_c.ownerOf(49 * 50 + 51)), minter);
+
         _c.giftEdition(49, other);
-        assertEq(address(_c.ownerOf(29 * 50 + 51)), other);
+        assertEq(address(_c.ownerOf(49 * 50 + 52)), other);
         _c.giftEdition(49, other);
-        assertEq(address(_c.ownerOf(29 * 50 + 52)), other);
+        assertEq(address(_c.ownerOf(49 * 50 + 53)), other);
         _c.giftEdition(49, other);
-        assertEq(address(_c.ownerOf(29 * 50 + 53)), other);
+        assertEq(address(_c.ownerOf(49 * 50 + 54)), other);
         _c.giftEdition(49, other);
-        assertEq(address(_c.ownerOf(29 * 50 + 54)), other);
+        assertEq(address(_c.ownerOf(49 * 50 + 55)), other);
 
         vm.expectRevert(TheHydra.GiftsAreEphemrialAndFleeting.selector);
         _c.giftEdition(49, other);

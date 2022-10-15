@@ -35,13 +35,22 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
 
     /// @dev The maximum available editions per original.
-    uint256 constant editionsPerOriginal = 50;
+    uint256 constant editionsTotalSupplyPerOriginal = 50;
 
-    /// @dev Max edition count per origial
+    /// @dev Each original will allow the gifting of 5 editions, giftable by the current owner
+    uint256 constant editionsGiftSupplyPerOriginal = 5;
+
+    /// @dev Max edition count per origial IE TotalSupply - 1
     uint256 constant editionsCountPerOriginal = 49;
 
+    /// @dev Max edition count available to mint, IE TotalSupply - 1 - 5
+    uint256 constant editionsCountToMint = 44;
+
+    /// @dev Max edition count available to gift, IE GiftSupply - 1
+    uint256 constant editionsCountToGift = 4;
+
     /// @dev The total number of 1-of-1 original NFTs available
-    uint256 constant editionsSupply = 2500;
+    uint256 constant editionsTotalSupply = 2500;
 
     /// @dev This is the maximium Id available for the editions.. I.E if there are 2500 editions and 50 originals, the max editionId is 2549. Used to save gas during when doing > or < logic.
     uint256 constant editionsMaxId = 2549;
@@ -50,10 +59,10 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     uint256 public immutable editionsMintPrice;
 
     /// @dev Easily track the number of editions minted for each original contract. Using a counter instead of tracking the starting index because if we tracked the starting index for each edition, then there would be a need to initilize each starting index to a particular sequenced number vs. just allowing default value of 0 here.
-    mapping(uint256 => uint256) editionsMinted;
+    mapping(uint256 => uint256) editionsMintedPerOriginal;
 
-    /// @dev Each original will allow the gifting of 5 editions, giftable by the current owner
-    uint256 constant editionsGiftedPerOriginal = 5;
+    /// @dev Holds a mapping of originalId => total amount of editions that have been gifted
+    mapping(uint256 => uint256) editionsGiftedPerOriginal;
 
     // --------------------------------------------------------
     // ~~ Original configuration ~~
@@ -106,7 +115,10 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     error BeyondTheScopeOfConsciousness();
 
     /// @dev When all editions for an original are minted
-    error EditionSoldOut();
+    error EditionsAreEphemrialAndFleeting();
+
+    /// @dev When all editions for an original are gifted
+    error GiftsAreEphemrialAndFleeting();
 
     /// @dev When a h4ck3r tries to steal out tokens
     error PayeeNotInDreamState();
@@ -116,12 +128,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
 
     /// @dev When the renderer isn't configured
     error ConsciousnessNotActivated();
-
-    /// @dev When a h4ck3r tries to gift editions they are not eligable to
-    error GifterNotInDreamState();
-
-    /// @dev When there is no more gift allocation available
-    error GiftsAreEphemrialAndFleeting();
 
     // --------------------------------------------------------
     // ~~ Modifiers ~~
@@ -146,8 +152,18 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     /// @param _originalId The edition id to check
     modifier CheckSubConsciousness(uint256 _originalId) {
         // currently allowing zero-based ids
-        if (editionsMinted[_originalId] > editionsCountPerOriginal)
-            revert EditionSoldOut();
+        if (editionsMintedPerOriginal[_originalId] > editionsCountToMint) {
+            revert EditionsAreEphemrialAndFleeting();
+        }
+        _;
+    }
+    /// @dev Fail if an edition has reached its gift capacity
+    /// @param _originalId The edition id to check
+    modifier CheckEditionGiftAvailability(uint256 _originalId) {
+        // currently allowing zero-based ids
+        if (editionsGiftedPerOriginal[_originalId] > editionsCountToGift) {
+            revert GiftsAreEphemrialAndFleeting();
+        }
         _;
     }
 
@@ -236,20 +252,8 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // ~~ Mint Functions => Editions ~~
     // --------------------------------------------------------
 
-    /// @notice helper for getting the starting offset of an edition block
-    function getEditionOffset(uint256 _originalId)
-        internal
-        pure
-        returns (uint256)
-    {
-        return
-            (_originalId * editionsPerOriginal) +
-            originalsSupply +
-            editionsGiftedPerOriginal;
-    }
-
     /// @notice Mint an edition of an original
-    /// @dev This will revert if trying to mint more than 50 of an edition
+    /// @dev This will revert if trying to mint more than 45 of an edition, since we need 5 allocated for gifting
     /// @param _originalId TokenId of the original 1-of-1 NFT
     function alterSubReality(uint256 _originalId)
         external
@@ -258,24 +262,39 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         CheckSubConsciousness(_originalId)
         ElevatingConsciousnessHasACost(editionsMintPrice)
     {
-        /// @dev editionsOffset + totalSupply of originals gives us the starting index
-        uint256 nextEditionId = getEditionOffset(_originalId) +
-            editionsMinted[_originalId];
+        /// @dev originals offset + editionsOffset + total minted + total gifted
+        uint256 nextEditionId = originalsSupply +
+            (_originalId * editionsTotalSupplyPerOriginal) +
+            editionsMintedPerOriginal[_originalId] +
+            editionsGiftedPerOriginal[_originalId];
 
-        ++editionsMinted[_originalId];
+        ++editionsMintedPerOriginal[_originalId];
 
         _safeMint(msg.sender, nextEditionId, "Welcome to TheHydra's Reality");
     }
 
     function giftEdition(uint256 _originalId, address _recipient)
-        public
-        payable
+        external
+        CheckEditionGiftAvailability(_originalId)
     {
-        // ensure the sender is the owner
-        // check to see if there is a gift allocation available
+        /// @dev ensure the sender is the owner
+        if (ownerOf(_originalId) != msg.sender) {
+            revert InvalidDreamState();
+        }
+
+        /// @dev originals offset + editionsOffset + total minted + total gifted
+        uint256 nextEditionId = originalsSupply +
+            (_originalId * editionsTotalSupplyPerOriginal) +
+            editionsMintedPerOriginal[_originalId] +
+            editionsGiftedPerOriginal[_originalId];
+
         // increase the gifted count
-        // attempt to transfer
+        ++editionsGiftedPerOriginal[_originalId];
+
+        _safeMint(_recipient, nextEditionId, "Welcome to TheHydra's Reality");
+
         // emit the gift event
+        emit Gift(msg.sender, _recipient, _originalId, nextEditionId);
     }
 
     // --------------------------------------------------------
@@ -290,15 +309,17 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         CheckConsciousness(_originalId)
         returns (EditionInfo memory)
     {
-        uint256 startId = getEditionOffset(_originalId);
+        uint256 startId = originalsSupply +
+            (_originalId * editionsTotalSupplyPerOriginal);
         uint256 endId = startId + editionsCountPerOriginal;
-        uint256 minted = editionsMinted[_originalId];
-        bool soldOut = (minted == 50);
-        uint256 nextId = soldOut ? MAX_INT : startId + minted;
+        uint256 minted = editionsMintedPerOriginal[_originalId];
+        uint256 gifted = editionsGiftedPerOriginal[_originalId];
+        bool soldOut = (minted == 45);
+        uint256 nextId = soldOut ? MAX_INT : startId + minted + gifted;
         /// @dev Take the reminder and then add 1 to convert from 0-based to 1-based counting
         uint256 localIndex = soldOut
             ? MAX_INT
-            : (nextId % editionsPerOriginal) + 1;
+            : (nextId % editionsTotalSupplyPerOriginal) + 1;
 
         return
             EditionInfo(
@@ -306,10 +327,11 @@ contract TheHydra is Owned, ERC721, ITheHydra {
                 startId,
                 endId,
                 minted,
+                gifted,
                 soldOut,
                 nextId,
                 localIndex,
-                editionsPerOriginal
+                editionsTotalSupplyPerOriginal
             );
     }
 
@@ -324,9 +346,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         returns (EditionInfo memory)
     {
         uint256 originalId = (_editionId - originalsSupply) /
-            editionsPerOriginal;
+            editionsTotalSupplyPerOriginal;
         EditionInfo memory edition = editionsGetInfoFromOriginal(originalId);
-        edition.localIndex = (_editionId % editionsPerOriginal) + 1;
+        edition.localIndex = (_editionId % editionsTotalSupplyPerOriginal) + 1;
 
         return edition;
     }
