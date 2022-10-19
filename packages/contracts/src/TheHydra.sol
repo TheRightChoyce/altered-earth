@@ -65,7 +65,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     mapping(uint256 => uint256) editionsGiftedPerOriginal;
 
     // --------------------------------------------------------
-    // ~~ Original configuration ~~
+    // ~~ Originals configuration ~~
     // --------------------------------------------------------
 
     /// @dev The total number of 1-of-1 original NFTs available
@@ -291,7 +291,11 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         // increase the gifted count
         ++editionsGiftedPerOriginal[_originalId];
 
-        _safeMint(_recipient, nextEditionId, "Welcome to TheHydra's Reality");
+        _safeMint(
+            _recipient,
+            nextEditionId,
+            abi.encodePacked("Gift from ", msg.sender)
+        );
 
         // emit the gift event
         emit Gift(msg.sender, _recipient, _originalId, nextEditionId);

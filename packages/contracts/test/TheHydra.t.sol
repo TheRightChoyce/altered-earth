@@ -834,8 +834,8 @@ contract TheHydraTest is DSTest {
         _c.alterReality{value: originalsMintPrice}(0);
 
         // Test emit the gift event
-        vm.expectEmit(true, true, true, true);
-        emit Gift(minter, owner, 0, 50);
+        vm.expectEmit(true, true, false, true);
+        emit Gift(minter, other, 0, 50);
         _c.giftEdition(0, other);
 
         vm.stopPrank();
@@ -858,11 +858,7 @@ contract TheHydraTest is DSTest {
         vm.startPrank(minter);
         _c.alterReality{value: originalsMintPrice}(0);
 
-        console.log(_c.ownerOf(0));
-
         TheHydra.EditionInfo memory info = _c.editionsGetInfoFromOriginal(0);
-
-        console.log(info.nextId);
 
         _c.giftEdition(0, other);
         assertEq(address(_c.ownerOf(50)), other);
