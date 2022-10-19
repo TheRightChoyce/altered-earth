@@ -3,17 +3,11 @@
 /* eslint-disable */
 export * as erc721Sol from "./ERC721.sol";
 export * as exquisiteGraphicsMockSol from "./ExquisiteGraphics.mock.sol";
-export * as theHydraRendererSol from "./TheHydraRenderer.sol";
-export { ERC20__factory } from "./ERC20__factory";
-export { IERC165__factory } from "./IERC165__factory";
-export { IERC20__factory } from "./IERC20__factory";
-export { IERC20Metadata__factory } from "./IERC20Metadata__factory";
-export { IERC2981__factory } from "./IERC2981__factory";
 export { IExquisiteGraphics__factory } from "./IExquisiteGraphics__factory";
 export { ITheHydra__factory } from "./ITheHydra__factory";
 export { ITheHydraDataStore__factory } from "./ITheHydraDataStore__factory";
 export { ITheHydraRenderer__factory } from "./ITheHydraRenderer__factory";
-export { Ownable__factory } from "./Ownable__factory";
 export { Owned__factory } from "./Owned__factory";
 export { TheHydra__factory } from "./TheHydra__factory";
 export { TheHydraDataStore__factory } from "./TheHydraDataStore__factory";
+export { TheHydraRenderer__factory } from "./TheHydraRenderer__factory";

@@ -31,11 +31,6 @@ interface ITheHydra {
         view
         returns (EditionInfo memory);
 
-    function editionsGetInfoFromEdition(uint256 _editionId)
-        external
-        view
-        returns (EditionInfo memory);
-
     // function editionsGetOriginalId(uint256 _id) external pure returns (uint256);
 
     // function editionsGetStartId(uint256 _originalId)

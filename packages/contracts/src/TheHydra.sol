@@ -339,24 +339,6 @@ contract TheHydra is Owned, ERC721, ITheHydra {
             );
     }
 
-    // TODO -- I think I can also remove this!
-    /// @notice Gets all the information a particular edition
-    /// @dev Returns a struct containing edition startId, endId, minted count, soldOut status, next EditionId to be minted, and the localindx of this edition (ie. 3 of 50)
-    /// @param _editionId The tokenId of the the edition
-    function editionsGetInfoFromEdition(uint256 _editionId)
-        public
-        view
-        CheckEditionIdBoundries(_editionId)
-        returns (EditionInfo memory)
-    {
-        uint256 originalId = (_editionId - originalsSupply) /
-            editionsTotalSupplyPerOriginal;
-        EditionInfo memory edition = editionsGetInfoFromOriginal(originalId);
-        edition.localIndex = (_editionId % editionsTotalSupplyPerOriginal) + 1;
-
-        return edition;
-    }
-
     // --------------------------------------------------------
     // ~~ BURN ~~
     // --------------------------------------------------------

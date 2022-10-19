@@ -27,6 +27,7 @@ export declare namespace ITheHydra {
     startId: PromiseOrValue<BigNumberish>;
     endId: PromiseOrValue<BigNumberish>;
     minted: PromiseOrValue<BigNumberish>;
+    gifted: PromiseOrValue<BigNumberish>;
     soldOut: PromiseOrValue<boolean>;
     nextId: PromiseOrValue<BigNumberish>;
     localIndex: PromiseOrValue<BigNumberish>;
@@ -34,6 +35,7 @@ export declare namespace ITheHydra {
   };
 
   export type EditionInfoStructOutput = [
+    BigNumber,
     BigNumber,
     BigNumber,
     BigNumber,
@@ -47,6 +49,7 @@ export declare namespace ITheHydra {
     startId: BigNumber;
     endId: BigNumber;
     minted: BigNumber;
+    gifted: BigNumber;
     soldOut: boolean;
     nextId: BigNumber;
     localIndex: BigNumber;
@@ -56,29 +59,18 @@ export declare namespace ITheHydra {
 
 export interface ITheHydraInterface extends utils.Interface {
   functions: {
-    "editionsGetInfoFromEdition(uint256)": FunctionFragment;
     "editionsGetInfoFromOriginal(uint256)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic:
-      | "editionsGetInfoFromEdition"
-      | "editionsGetInfoFromOriginal"
+    nameOrSignatureOrTopic: "editionsGetInfoFromOriginal"
   ): FunctionFragment;
 
-  encodeFunctionData(
-    functionFragment: "editionsGetInfoFromEdition",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
   encodeFunctionData(
     functionFragment: "editionsGetInfoFromOriginal",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "editionsGetInfoFromEdition",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "editionsGetInfoFromOriginal",
     data: BytesLike
@@ -114,21 +106,11 @@ export interface ITheHydra extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    editionsGetInfoFromEdition(
-      _editionId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[ITheHydra.EditionInfoStructOutput]>;
-
     editionsGetInfoFromOriginal(
       _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[ITheHydra.EditionInfoStructOutput]>;
   };
-
-  editionsGetInfoFromEdition(
-    _editionId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<ITheHydra.EditionInfoStructOutput>;
 
   editionsGetInfoFromOriginal(
     _originalId: PromiseOrValue<BigNumberish>,
@@ -136,11 +118,6 @@ export interface ITheHydra extends BaseContract {
   ): Promise<ITheHydra.EditionInfoStructOutput>;
 
   callStatic: {
-    editionsGetInfoFromEdition(
-      _editionId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<ITheHydra.EditionInfoStructOutput>;
-
     editionsGetInfoFromOriginal(
       _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -150,11 +127,6 @@ export interface ITheHydra extends BaseContract {
   filters: {};
 
   estimateGas: {
-    editionsGetInfoFromEdition(
-      _editionId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     editionsGetInfoFromOriginal(
       _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -162,11 +134,6 @@ export interface ITheHydra extends BaseContract {
   };
 
   populateTransaction: {
-    editionsGetInfoFromEdition(
-      _editionId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     editionsGetInfoFromOriginal(
       _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides

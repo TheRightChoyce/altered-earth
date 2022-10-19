@@ -34,6 +34,7 @@ export declare namespace ITheHydra {
     startId: PromiseOrValue<BigNumberish>;
     endId: PromiseOrValue<BigNumberish>;
     minted: PromiseOrValue<BigNumberish>;
+    gifted: PromiseOrValue<BigNumberish>;
     soldOut: PromiseOrValue<boolean>;
     nextId: PromiseOrValue<BigNumberish>;
     localIndex: PromiseOrValue<BigNumberish>;
@@ -41,6 +42,7 @@ export declare namespace ITheHydra {
   };
 
   export type EditionInfoStructOutput = [
+    BigNumber,
     BigNumber,
     BigNumber,
     BigNumber,
@@ -54,6 +56,7 @@ export declare namespace ITheHydra {
     startId: BigNumber;
     endId: BigNumber;
     minted: BigNumber;
+    gifted: BigNumber;
     soldOut: boolean;
     nextId: BigNumber;
     localIndex: BigNumber;
@@ -67,10 +70,10 @@ export interface TheHydraInterface extends utils.Interface {
     "alterSubReality(uint256)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "editionsGetInfoFromEdition(uint256)": FunctionFragment;
     "editionsGetInfoFromOriginal(uint256)": FunctionFragment;
     "editionsMintPrice()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "giftEdition(uint256,address)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "name()": FunctionFragment;
     "originalsMintPrice()": FunctionFragment;
@@ -100,10 +103,10 @@ export interface TheHydraInterface extends utils.Interface {
       | "alterSubReality"
       | "approve"
       | "balanceOf"
-      | "editionsGetInfoFromEdition"
       | "editionsGetInfoFromOriginal"
       | "editionsMintPrice"
       | "getApproved"
+      | "giftEdition"
       | "isApprovedForAll"
       | "name"
       | "originalsMintPrice"
@@ -144,10 +147,6 @@ export interface TheHydraInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "editionsGetInfoFromEdition",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "editionsGetInfoFromOriginal",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -158,6 +157,10 @@ export interface TheHydraInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "giftEdition",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
@@ -256,10 +259,6 @@ export interface TheHydraInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "editionsGetInfoFromEdition",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "editionsGetInfoFromOriginal",
     data: BytesLike
   ): Result;
@@ -269,6 +268,10 @@ export interface TheHydraInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "giftEdition",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -339,6 +342,7 @@ export interface TheHydraInterface extends utils.Interface {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "ConsciousnessActivated(address)": EventFragment;
+    "Gift(address,address,uint256,uint256)": EventFragment;
     "OwnerUpdated(address,address)": EventFragment;
     "TheHydraAwakens()": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
@@ -347,6 +351,7 @@ export interface TheHydraInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ConsciousnessActivated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Gift"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnerUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TheHydraAwakens"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
@@ -386,6 +391,19 @@ export type ConsciousnessActivatedEvent = TypedEvent<
 
 export type ConsciousnessActivatedEventFilter =
   TypedEventFilter<ConsciousnessActivatedEvent>;
+
+export interface GiftEventObject {
+  from: string;
+  to: string;
+  originalId: BigNumber;
+  editionId: BigNumber;
+}
+export type GiftEvent = TypedEvent<
+  [string, string, BigNumber, BigNumber],
+  GiftEventObject
+>;
+
+export type GiftEventFilter = TypedEventFilter<GiftEvent>;
 
 export interface OwnerUpdatedEventObject {
   user: string;
@@ -463,11 +481,6 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    editionsGetInfoFromEdition(
-      _editionId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[ITheHydra.EditionInfoStructOutput]>;
-
     editionsGetInfoFromOriginal(
       _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -479,6 +492,12 @@ export interface TheHydra extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    giftEdition(
+      _originalId: PromiseOrValue<BigNumberish>,
+      _recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     isApprovedForAll(
       arg0: PromiseOrValue<string>,
@@ -602,11 +621,6 @@ export interface TheHydra extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  editionsGetInfoFromEdition(
-    _editionId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<ITheHydra.EditionInfoStructOutput>;
-
   editionsGetInfoFromOriginal(
     _originalId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -618,6 +632,12 @@ export interface TheHydra extends BaseContract {
     arg0: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  giftEdition(
+    _originalId: PromiseOrValue<BigNumberish>,
+    _recipient: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   isApprovedForAll(
     arg0: PromiseOrValue<string>,
@@ -741,11 +761,6 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    editionsGetInfoFromEdition(
-      _editionId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<ITheHydra.EditionInfoStructOutput>;
-
     editionsGetInfoFromOriginal(
       _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -757,6 +772,12 @@ export interface TheHydra extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    giftEdition(
+      _originalId: PromiseOrValue<BigNumberish>,
+      _recipient: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     isApprovedForAll(
       arg0: PromiseOrValue<string>,
@@ -889,6 +910,19 @@ export interface TheHydra extends BaseContract {
       renderer?: PromiseOrValue<string> | null
     ): ConsciousnessActivatedEventFilter;
 
+    "Gift(address,address,uint256,uint256)"(
+      from?: PromiseOrValue<string> | null,
+      to?: PromiseOrValue<string> | null,
+      originalId?: null,
+      editionId?: PromiseOrValue<BigNumberish> | null
+    ): GiftEventFilter;
+    Gift(
+      from?: PromiseOrValue<string> | null,
+      to?: PromiseOrValue<string> | null,
+      originalId?: null,
+      editionId?: PromiseOrValue<BigNumberish> | null
+    ): GiftEventFilter;
+
     "OwnerUpdated(address,address)"(
       user?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
@@ -935,11 +969,6 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    editionsGetInfoFromEdition(
-      _editionId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     editionsGetInfoFromOriginal(
       _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -950,6 +979,12 @@ export interface TheHydra extends BaseContract {
     getApproved(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    giftEdition(
+      _originalId: PromiseOrValue<BigNumberish>,
+      _recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     isApprovedForAll(
@@ -1073,11 +1108,6 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    editionsGetInfoFromEdition(
-      _editionId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     editionsGetInfoFromOriginal(
       _originalId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1088,6 +1118,12 @@ export interface TheHydra extends BaseContract {
     getApproved(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    giftEdition(
+      _originalId: PromiseOrValue<BigNumberish>,
+      _recipient: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(

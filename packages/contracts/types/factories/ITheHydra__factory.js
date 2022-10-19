@@ -10,67 +10,6 @@ const _abi = [
         inputs: [
             {
                 internalType: "uint256",
-                name: "_editionId",
-                type: "uint256",
-            },
-        ],
-        name: "editionsGetInfoFromEdition",
-        outputs: [
-            {
-                components: [
-                    {
-                        internalType: "uint256",
-                        name: "originalId",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "startId",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "endId",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "minted",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "bool",
-                        name: "soldOut",
-                        type: "bool",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "nextId",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "localIndex",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "maxPerOriginal",
-                        type: "uint256",
-                    },
-                ],
-                internalType: "struct ITheHydra.EditionInfo",
-                name: "",
-                type: "tuple",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "uint256",
                 name: "_originalId",
                 type: "uint256",
             },
@@ -97,6 +36,11 @@ const _abi = [
                     {
                         internalType: "uint256",
                         name: "minted",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "gifted",
                         type: "uint256",
                     },
                     {
