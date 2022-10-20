@@ -318,8 +318,15 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         uint256 endId = startId + editionsCountPerOriginal;
         uint256 minted = editionsMintedPerOriginal[_originalId];
         uint256 gifted = editionsGiftedPerOriginal[_originalId];
+
+        /// @dev sold out means no more for sale, so this is 50 - the 5 we reserved for gifting
         bool soldOut = (minted == 45);
-        uint256 nextId = soldOut ? MAX_INT : startId + minted + gifted;
+
+        /// @dev the nextId should always return the nextId, unless that id would be out of bounds for this range of editiosn.. IE for original 0, the nextId should never return 51
+        uint256 nextId = minted + gifted == 50
+            ? MAX_INT
+            : startId + minted + gifted;
+
         /// @dev Take the reminder and then add 1 to convert from 0-based to 1-based counting
         uint256 localIndex = soldOut
             ? MAX_INT

@@ -367,6 +367,8 @@ contract TheHydraTest is DSTest {
         TheHydra.EditionInfo memory info;
 
         vm.startPrank(minter);
+        _c.alterReality{value: originalsMintPrice}(0);
+
         for (uint256 i = 0; i < 45; i++) {
             info = _c.editionsGetInfoFromOriginal(0);
             _c.alterSubReality{value: editionsMintPrice}(0);
@@ -377,7 +379,7 @@ contract TheHydraTest is DSTest {
         _c.alterSubReality(0);
 
         info = _c.editionsGetInfoFromOriginal(0);
-        assertEq(info.nextId, 46);
+        assertEq(info.nextId, 95);
         assertEq(info.minted, 45);
         assertEq(info.gifted, 0);
 
@@ -388,12 +390,14 @@ contract TheHydraTest is DSTest {
             assertEq(address(_c.ownerOf(info.nextId)), other);
         }
 
+        // Get the final info, and ensure its populdated correctly
         info = _c.editionsGetInfoFromOriginal(0);
         assertEq(info.nextId, type(uint256).max);
         assertEq(info.minted, 45);
         assertEq(info.gifted, 5);
 
         // Original # 49
+        _c.alterReality{value: originalsMintPrice}(49);
         for (uint256 i = 0; i < 45; i++) {
             info = _c.editionsGetInfoFromOriginal(49);
             _c.alterSubReality{value: editionsMintPrice}(49);
@@ -404,7 +408,7 @@ contract TheHydraTest is DSTest {
         _c.alterSubReality(49);
 
         info = _c.editionsGetInfoFromOriginal(49);
-        assertEq(info.nextId, 2546);
+        assertEq(info.nextId, 2545);
         assertEq(info.minted, 45);
         assertEq(info.gifted, 0);
 
@@ -693,8 +697,6 @@ contract TheHydraTest is DSTest {
 
         vm.startPrank(minter);
         _c.alterReality{value: originalsMintPrice}(0);
-
-        TheHydra.EditionInfo memory info = _c.editionsGetInfoFromOriginal(0);
 
         _c.giftEdition(0, other);
         assertEq(address(_c.ownerOf(50)), other);
