@@ -738,11 +738,11 @@
     "inputs": [
       {
         "internalType": "address payable",
-        "name": "payee",
+        "name": "_payee",
         "type": "address"
       }
     ],
-    "name": "withdrawPayments",
+    "name": "withdrawFunds",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

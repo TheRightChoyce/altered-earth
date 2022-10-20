@@ -4,6 +4,7 @@ pragma solidity ^0.8.13;
 // third party includes
 import "solmate/tokens/ERC721.sol";
 import "solmate/auth/Owned.sol";
+import "solmate/utils/SafeTransferLib.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 // local includes
@@ -157,6 +158,7 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         }
         _;
     }
+
     /// @dev Fail if an edition has reached its gift capacity
     /// @param _originalId The edition id to check
     modifier CheckEditionGiftAvailability(uint256 _originalId) {
@@ -198,9 +200,9 @@ contract TheHydra is Owned, ERC721, ITheHydra {
         uint256 _originalsMintPrice,
         uint256 _editionsMintPrice
     ) ERC721("Altered Earth: The Hydra Collection", "ALTERED") Owned(_owner) {
-        // therightchoyce.eth and 10% -- can be changed later
+        /// @dev By default -> altered-earth.eth and 10% -- can be changed using the setRoyaltyInfo function
         royalties = Royalties(
-            address(0x18836acedeF35D4A6C00Aae46a36fAdE12ee5FF7),
+            0xC0f9Bd81E13F8b6f7c54878dB4850986127f9018,
             1000 // 1000 / 10_000 => 10%
         );
 
@@ -409,12 +411,12 @@ contract TheHydra is Owned, ERC721, ITheHydra {
     // --------------------------------------------------------
     // Withdraw ETH in contract
     // --------------------------------------------------------
-    function withdrawPayments(address payable payee) external onlyOwner {
-        uint256 balance = address(this).balance;
-        (bool transferTx, ) = payee.call{value: balance}("");
-        if (!transferTx) {
-            revert PayeeNotInDreamState();
-        }
+
+    /// @notice Allows the owner to withdraw eth in this contract
+    /// @param _payee Wallet to send the funds to
+    function withdrawFunds(address payable _payee) external onlyOwner {
+        if (address(this).balance == 0) revert PayeeNotInDreamState();
+        SafeTransferLib.safeTransferETH(_payee, address(this).balance);
     }
 
     // --------------------------------------------------------

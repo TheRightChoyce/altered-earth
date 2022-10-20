@@ -31,7 +31,7 @@ contract TheHydraTest is DSTest {
     uint256 originalsMintPrice = 0.001 ether;
     uint256 editionsMintPrice = 0.0005 ether;
     uint256 royaltyAmount = 1000; // 1000 / 10_000 => 10%
-    address royaltyReceiver = 0x18836acedeF35D4A6C00Aae46a36fAdE12ee5FF7;
+    address royaltyReceiver = 0xC0f9Bd81E13F8b6f7c54878dB4850986127f9018;
 
     // external addresses
     address xqstgfxMainNet = 0xDf01A4040493B514605392620B3a0a05Eb8Cd295;
@@ -623,16 +623,16 @@ contract TheHydraTest is DSTest {
     // --------------------------------------------------------
     // ~~ Withdraw any ETH in Contract ~~
     // --------------------------------------------------------
-    function testWithdrawPaymentsOnlyOwner() public {
+    function testwithdrawFundsOnlyOwner() public {
         TheHydra _c = getNewContract();
         vm.startPrank(minter);
         _c.alterReality{value: originalsMintPrice}(0);
         vm.expectRevert("UNAUTHORIZED");
-        _c.withdrawPayments(payable(minter));
+        _c.withdrawFunds(payable(minter));
         vm.stopPrank();
     }
 
-    function testWithdrawPaymentsFromOwner() public {
+    function testwithdrawFundsFromOwner() public {
         TheHydra _c = getNewContract();
         vm.prank(minter);
         _c.alterReality{value: originalsMintPrice}(0);
@@ -641,7 +641,7 @@ contract TheHydraTest is DSTest {
         uint256 contractBalance = address(_c).balance;
 
         vm.prank(owner);
-        _c.withdrawPayments(payable(owner));
+        _c.withdrawFunds(payable(owner));
 
         assertEq(address(_c).balance, 0);
         assertEq(owner.balance, priorBalance + contractBalance);
