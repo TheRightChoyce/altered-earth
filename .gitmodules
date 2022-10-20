@@ -6,7 +6,7 @@
 	url = https://github.com/foundry-rs/forge-std
 [submodule "packages/contracts/lib/solmate"]
 	path = packages/contracts/lib/solmate
-	url = https://github.com/rari-capital/solmate
+	url = https://github.com/transmissions11/solmate
 [submodule "packages/contracts/lib/solidity-dynamic-buffer"]
 	path = packages/contracts/lib/solidity-dynamic-buffer
 	url = https://github.com/dievardump/solidity-dynamic-buffer
