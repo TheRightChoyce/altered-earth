@@ -3,7 +3,7 @@
 # Run this from the root of the contract dir!!!
 # If the verification fails, run this script again and remove the "broadcast" flag
 
-source .env.local
+source .env.goerli
 
 if [ -z "$CHAIN_ID" ]; then
   echo "CHAIN_ID is not set"

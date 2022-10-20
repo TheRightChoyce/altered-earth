@@ -1,10 +1,7 @@
 # Run this from the root of the contract dir!!!
+# If the verification fails, run this script again and remove the "broadcast" flag
 
-source .env.rinkeby
-
-# Manually set the chain IDs here
-CHAIN_ID=4
-CHAIN_NAME=rinkeby
+source .env.goerli
 
 forge script script/DeployAll.s.sol:DeployAll -vvvv --ffi --chain-id $CHAIN_ID \
   --rpc-url $RPC_URL \
