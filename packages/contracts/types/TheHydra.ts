@@ -94,7 +94,7 @@ export interface TheHydraInterface extends utils.Interface {
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
-    "withdrawPayments(address)": FunctionFragment;
+    "withdrawFunds(address)": FunctionFragment;
   };
 
   getFunction(
@@ -127,7 +127,7 @@ export interface TheHydraInterface extends utils.Interface {
       | "tokenURI"
       | "totalSupply"
       | "transferFrom"
-      | "withdrawPayments"
+      | "withdrawFunds"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -244,7 +244,7 @@ export interface TheHydraInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "withdrawPayments",
+    functionFragment: "withdrawFunds",
     values: [PromiseOrValue<string>]
   ): string;
 
@@ -334,7 +334,7 @@ export interface TheHydraInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "withdrawPayments",
+    functionFragment: "withdrawFunds",
     data: BytesLike
   ): Result;
 
@@ -594,8 +594,8 @@ export interface TheHydra extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    withdrawPayments(
-      payee: PromiseOrValue<string>,
+    withdrawFunds(
+      _payee: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
@@ -734,8 +734,8 @@ export interface TheHydra extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  withdrawPayments(
-    payee: PromiseOrValue<string>,
+  withdrawFunds(
+    _payee: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -874,8 +874,8 @@ export interface TheHydra extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    withdrawPayments(
-      payee: PromiseOrValue<string>,
+    withdrawFunds(
+      _payee: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -1080,8 +1080,8 @@ export interface TheHydra extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    withdrawPayments(
-      payee: PromiseOrValue<string>,
+    withdrawFunds(
+      _payee: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
@@ -1221,8 +1221,8 @@ export interface TheHydra extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    withdrawPayments(
-      payee: PromiseOrValue<string>,
+    withdrawFunds(
+      _payee: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

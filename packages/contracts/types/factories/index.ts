@@ -3,6 +3,7 @@
 /* eslint-disable */
 export * as erc721Sol from "./ERC721.sol";
 export * as exquisiteGraphicsMockSol from "./ExquisiteGraphics.mock.sol";
+export { ERC20__factory } from "./ERC20__factory";
 export { IExquisiteGraphics__factory } from "./IExquisiteGraphics__factory";
 export { ITheHydra__factory } from "./ITheHydra__factory";
 export { ITheHydraDataStore__factory } from "./ITheHydraDataStore__factory";

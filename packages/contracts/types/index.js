@@ -23,8 +23,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TheHydraRenderer__factory = exports.TheHydraDataStore__factory = exports.TheHydra__factory = exports.Owned__factory = exports.ITheHydraRenderer__factory = exports.ITheHydraDataStore__factory = exports.ITheHydra__factory = exports.IExquisiteGraphics__factory = exports.ExquisiteGraphics__factory = exports.ERC721TokenReceiver__factory = exports.ERC721__factory = exports.factories = void 0;
+exports.TheHydraRenderer__factory = exports.TheHydraDataStore__factory = exports.TheHydra__factory = exports.Owned__factory = exports.ITheHydraRenderer__factory = exports.ITheHydraDataStore__factory = exports.ITheHydra__factory = exports.IExquisiteGraphics__factory = exports.ExquisiteGraphics__factory = exports.ERC721TokenReceiver__factory = exports.ERC721__factory = exports.ERC20__factory = exports.factories = void 0;
 exports.factories = __importStar(require("./factories"));
+var ERC20__factory_1 = require("./factories/ERC20__factory");
+Object.defineProperty(exports, "ERC20__factory", { enumerable: true, get: function () { return ERC20__factory_1.ERC20__factory; } });
 var ERC721__factory_1 = require("./factories/ERC721.sol/ERC721__factory");
 Object.defineProperty(exports, "ERC721__factory", { enumerable: true, get: function () { return ERC721__factory_1.ERC721__factory; } });
 var ERC721TokenReceiver__factory_1 = require("./factories/ERC721.sol/ERC721TokenReceiver__factory");
