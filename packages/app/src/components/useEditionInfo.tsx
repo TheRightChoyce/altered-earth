@@ -5,16 +5,17 @@ import { useTheHydraContractRead } from "../contracts";
 export function useEditionInfo(
   originalId: number,
   enabled: boolean,
-  setNextAvailableEditionId: (nextId: number | undefined) => void,
+  setNextAvailableEditionId: (nextId: number) => void,
   setEditionSoldOut: (nextId: boolean) => void
 ) {
   const { data } = useTheHydraContractRead({
     functionName: "editionsGetInfoFromOriginal",
-    args: originalId.toString(),
-    watch: true,
+    args: [originalId],
+    watch: false,
     enabled: enabled,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError(error: any) {
+      console.log(error);
       if (error.reason !== "BeyondTheScopeOfConsciousness") {
         throw error;
       }

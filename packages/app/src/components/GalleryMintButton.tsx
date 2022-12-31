@@ -140,25 +140,21 @@ export const GalleryMintButton = ({
   onSuccess: (owner: string, tx: string) => void;
   disabled?: boolean | undefined;
 }) => {
+  if (!isCorrectNetwork) {
+    return <NetworkSwitchButton />;
+  }
+
+  if (!address) {
+    return <CustomConnectButton />;
+  }
+
   return (
-    <>
-      {!isCorrectNetwork && <NetworkSwitchButton />}
-      {isCorrectNetwork && address && (
-        <>
-          <MintButton
-            tokenId={photo.id}
-            disabled={disabled ? disabled : address ? false : true}
-            label="Alter your Reality"
-            isOriginal={isOriginal}
-            onSuccess={onSuccess}
-          />
-        </>
-      )}
-      {!address && (
-        <>
-          <CustomConnectButton />
-        </>
-      )}
-    </>
+    <MintButton
+      tokenId={photo.id}
+      disabled={disabled}
+      label="Alter your Reality"
+      isOriginal={isOriginal}
+      onSuccess={onSuccess}
+    />
   );
 };

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ReactElement, useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
-import { SideBar } from "../components/SideBar";
+import { NavBar } from "../components/NavBar";
 import Layout from "../layout/GalleryLayout";
 import type { NextPageWithLayout } from "./_app";
 
@@ -24,7 +24,7 @@ const HomePage: NextPageWithLayout = () => {
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left nav bar -- none */}
-      <SideBar />
+      <NavBar />
 
       {/* content */}
       <div className="w-[100vw] lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">

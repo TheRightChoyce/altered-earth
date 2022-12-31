@@ -19,6 +19,7 @@
     "@ethersproject/providers": "^5.5.0",
     "@rainbow-me/rainbowkit": "0.4.6",
     "@web3-scaffold/contracts": "workspace:*",
+    "alchemy-sdk": "^2.1.1",
     "classnames": "^2.3.1",
     "ethers": "5.5.2",
     "graphql": "^16.2.0",

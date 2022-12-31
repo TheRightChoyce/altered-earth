@@ -3,26 +3,28 @@ import Link from "next/link";
 
 import { PhotoCollection } from "./PhotoCollection";
 
+interface GalleryNavParams {
+  collection: PhotoCollection;
+  photoId: number;
+  photoType: string;
+  photoLimit: number;
+}
+
 export const GalleryNav = ({
   collection,
   photoId,
   photoType,
-}: {
-  collection: PhotoCollection;
-  photoId: number;
-  photoType: string;
-}) => {
+  photoLimit,
+}: GalleryNavParams) => {
   const navigatePreviousPhotoId =
     photoId == 0 ? collection.photos.length - 1 : photoId - 1;
   const navigateNextPhotoId =
     photoId == collection.photos.length - 1 ? 0 : photoId + 1;
 
   return (
-    <div className="w-24">
-      <div>
-        <Link
-          href={`/the-hydra/${navigatePreviousPhotoId}?type=${photoType}#artwork`}
-        >
+    <div className="flex flex-row w-[100vw] my-4" id="nav">
+      <div className="basis-1/4 text-center">
+        <Link href={`/the-hydra/${navigatePreviousPhotoId}?type=${photoType}`}>
           <a>
             <Image
               src="/arrow-left.svg"
@@ -32,7 +34,11 @@ export const GalleryNav = ({
             />
           </a>
         </Link>
-        <div className="w-8 inline-block">&nbsp;</div>
+      </div>
+      <div className="basis-1/2 text-center">
+        {photoId + 1} of {photoLimit}
+      </div>
+      <div className="basis-1/4 text-center">
         <Link
           href={`/the-hydra/${navigateNextPhotoId}?type=${photoType}#artwork`}
         >

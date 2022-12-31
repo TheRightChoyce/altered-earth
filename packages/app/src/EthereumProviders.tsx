@@ -34,6 +34,8 @@ if (targetChainId === chainId["foundry"]) {
   }
 }
 
+console.log(process.env.NEXT_PUBLIC_ALCHEMY_API_KEY);
+
 export const { chains, provider, webSocketProvider } = configureChains(
   targetChains,
   [

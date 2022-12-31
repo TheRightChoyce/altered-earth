@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import { useTheHydraContractRead } from "../contracts";
 
 export function useOwnerOf(
@@ -8,13 +6,14 @@ export function useOwnerOf(
   setTokenLoaded: (isLoaded: boolean) => void,
   setOwner: (owner: string | undefined) => void
 ) {
-  const { data } = useTheHydraContractRead({
-    functionName: "ownerOf",
+  useTheHydraContractRead({
+    functionName: "ownerOfOrNull",
     args: photoId?.toString(),
-    watch: true,
+    watch: false, //(photoId || 0) < 50, // only watch for originals
     enabled: enabled,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError(error: any) {
+      console.log("onError", error);
       setTokenLoaded(true);
 
       if (error.reason === "NOT_MINTED") {
@@ -25,28 +24,32 @@ export function useOwnerOf(
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSettled(data, error: any) {
+      console.log("onSettled", data, error);
       setTokenLoaded(true);
 
-      if (!error) {
-        setOwner(data?.toString());
-        return;
-      }
-
-      if (error?.reason === "NOT_MINTED") {
-        setOwner(undefined);
-      } else {
+      if (error) {
         throw error;
+      } else {
+        setOwner(
+          data?.toString() === "0x0000000000000000000000000000000000000000"
+            ? undefined
+            : data?.toString()
+        );
+        return;
       }
     },
     onSuccess(data) {
+      console.log("onSuccess", data);
       setTokenLoaded(true);
-      setOwner(data?.toString());
+      setOwner(
+        data?.toString() === "0x0000000000000000000000000000000000000000"
+          ? undefined
+          : data?.toString()
+      );
     },
   });
 
-  useEffect(() => {
-    setOwner(data ? data.toString() : undefined);
-  }, [data, setOwner]);
-
-  return data;
+  // useEffect(() => {
+  //   setOwner(ownerAddress ? ownerAddress : undefined);
+  // }, [ownerAddress, setOwner]);
 }

@@ -3,9 +3,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
-export const SideBar = ({ children }: { children?: React.ReactNode }) => {
+export const NavBar = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <div className="w-[100vw] h-24 custom-side-bar-bg flex flex-row items-center justify-around lg:justify-start lg:flex-col lg:w-[10vw] lg:h-[100vh] lg:fixed">
+    <div className="w-[100vw] h-24 custom-side-bar-bg flex-row items-center justify-around lg:justify-start lg:flex-col lg:w-[10vw] lg:h-[100vh] lg:fixed hidden lg:visible">
       <div className="lg:w-full">
         <AlteredEarthButton />
       </div>

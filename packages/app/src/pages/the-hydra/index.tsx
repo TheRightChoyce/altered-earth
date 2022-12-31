@@ -6,11 +6,7 @@ import Layout from "../../layout/GalleryLayout";
 import type { NextPageWithLayout } from "../_app";
 
 const TheHydraPage: NextPageWithLayout = () => {
-  return (
-    <>
-      <Gallery collection={theHydraCollection} />
-    </>
-  );
+  return <Gallery collection={theHydraCollection} />;
 };
 
 TheHydraPage.getLayout = function getLayout(page: ReactElement) {

@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 
 import { GalleryBreadcrumbs } from "../../../components/GalleryBreadcrumbs";
+import { NavBar, TheHydraButton } from "../../../components/NavBar";
 import { OnChainExplorer } from "../../../components/OnChainExplorer";
-import { SideBar, TheHydraButton } from "../../../components/SideBar";
 import Layout from "../../../layout/GalleryLayout";
 import type { NextPageWithLayout } from "../../_app";
 
@@ -19,11 +19,11 @@ const TheHydraDetailPage: NextPageWithLayout = () => {
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left nav bar */}
-      <SideBar>
+      <NavBar>
         <div className="lg:w-full">
           <TheHydraButton />
         </div>
-      </SideBar>
+      </NavBar>
 
       <div className="flex flex-col-reverse lg:flex-row w-[100vw] lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">
         {/* left / bottom -- info */}

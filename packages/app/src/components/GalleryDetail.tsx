@@ -1,7 +1,8 @@
+import { Alchemy, Network } from "alchemy-sdk";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { theHydraContract } from "../contracts";
@@ -10,16 +11,20 @@ import { OpenSeaButton } from "../OpenSeaButton";
 import { useIsMounted } from "../useIsMounted";
 import { Address } from "./Address";
 import { ExplorerButton } from "./ExplorerButton";
-import { GalleryBreadcrumbs } from "./GalleryBreadcrumbs";
+import { GalleryDetailEditionInfo } from "./gallery/GalleryDetailEditionInfo";
+import { GalleryDetailOriginalInfo } from "./gallery/GalleryDetailOriginalInfo";
+import { GalleryDetailTypeToggle } from "./gallery/GalleryDetailTypeToggle";
+import { MintState } from "./gallery/mintState";
+import { TokenType } from "./gallery/tokenType";
 import { GalleryMintButton } from "./GalleryMintButton";
 import { GalleryNav } from "./GalleryNav";
+import { NavBar, TheHydraButton, TypeNavigationButton } from "./NavBar";
 import { OwnerName } from "./OwnerName";
 import { PhotoCollection } from "./PhotoCollection";
-import { SideBar, TheHydraButton, TypeNavigationButton } from "./SideBar";
 import { Spinner } from "./Spinner";
 import { useEditionInfo } from "./useEditionInfo";
 import { useNetworkCheck } from "./useNetworkCheck";
-import { useOwnerOf } from "./useOwnerOf";
+// import { useOwnerOf } from "./useOwnerOf";
 
 const notFound = (
   <div className="flex flex-col w-full text-center">
@@ -38,62 +43,49 @@ export const GalleryDetail = ({
   const router = useRouter();
   const { isConnected, isCorrectNetwork, networkName } = useNetworkCheck();
 
-  // define some page states
-  enum TokenType {
-    Original = "original",
-    Edition = "edition",
-  }
-
-  enum MintState {
-    // loading / unknown
-    Unknown,
-
-    // Not connected to any network
-    NotConnected,
-
-    // Connected to the wrong chain/network
-    WrongNetwork,
-
-    // For when type == original
-    OriginalAvailable,
-    OriginalOwned,
-
-    // for when type == edition AND a specific Id is passed, i.e. 51, 1025, etc..
-    EditionAvailable,
-    EditionOwned,
-
-    // for when type == edition and the original id is passsed i.e. anything below the orginal supply
-    GenericEditionAvailable,
-    GenericEditionSoldOut,
-  }
-
-  // Default the token type since we might need to manually adjust
-  let _type = router.query.type || TokenType.Original;
-
-  // Get the correct Ids
-  const originalId = collection.getOriginalId(photoId);
-  let galleryPhotoId = _type == TokenType.Original ? originalId : photoId;
-
-  // Default to the edition if an edition id was specifically provided
-  if (photoId > originalId) {
-    _type = TokenType.Edition;
-    galleryPhotoId = photoId;
-  }
-
-  // load the photo we want to disply on this page using the original id
-  const photo = collection.getPhoto(originalId);
-
-  // The type we are viewing -- either edition or original
-  const [type, setType] = useState(_type);
-
   // Token specific info
   const [tokenLoaded, setTokenLoaded] = useState(false);
   const [owner, setOwner] = useState<string | undefined>(undefined);
-  const [editionSoldOut, setEditionSoldOut] = useState(false);
   const [mintState, setMintState] = useState(MintState.Unknown);
-  const [nextAvailableEditionId, setNextAvailableEditionId] = useState<
-    number | undefined
-  >(undefined);
+  const [editionSoldOut, setEditionSoldOut] = useState(false);
+  // const [nextAvailableEditionId, setNextAvailableEditionId] = useState<
+  //   number | undefined
+  // >(undefined);
+
+  const alchemy = useMemo(() => {
+    return new Alchemy({
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
+      network: Network.ETH_GOERLI,
+    });
+  }, []);
+
+  // Photo ids
+  const originalId = collection.getOriginalId(photoId);
+  const photo = useMemo(() => {
+    return collection.getPhoto(originalId);
+  }, [collection, originalId]);
+
+  photo?.getOwnerFromContract(setOwner);
+
+  // Default the token type since we might need to manually adjust
+  const initTokenType = (photoId: number, originalId: number) => {
+    let _type: string = TokenType.Original;
+    if (photoId !== originalId) {
+      _type = TokenType.Edition;
+    }
+    // if (router.query.type) {
+    //   if (router.query.type instanceof Array) {
+    //     _type = router.query.type[0];
+    //   } else {
+    //     _type = router.query.type;
+    //   }
+    // }
+    return _type;
+  };
+  // load the photo we want to disply on this page using the original id
+
+  // The type we are viewing -- either edition or original
+  const [type, setType] = useState(initTokenType(photoId, originalId));
 
   // Navigation helpers
   const [previousPhoto, setPreviousPhoto] = useState(-1);
@@ -105,22 +97,29 @@ export const GalleryDetail = ({
   const [imageClass, setImageClass] = useState(
     "grayscale-0 transition-all ease-in-out duration-5000"
   );
+  const [originalImageClass, setOriginalImageClass] = useState(
+    type === "original" ? "opacity-100" : "opacity-20"
+  );
+  const [editionImageClass, setEditionImageClass] = useState(
+    type === "original" ? "opacity-20" : "opacity-100"
+  );
 
   // Use and watch the owner of this token
-  useOwnerOf(
-    photoId,
-    isCorrectNetwork && isConnected,
-    setTokenLoaded,
-    setOwner
-  );
+  // useOwnerOf(
+  //   // alchemy,
+  //   photoId,
+  //   isCorrectNetwork && isConnected,
+  //   setTokenLoaded,
+  //   setOwner
+  // );
 
   // Use and watch the edition info
-  useEditionInfo(
-    originalId,
-    isCorrectNetwork && isConnected,
-    setNextAvailableEditionId,
-    setEditionSoldOut
-  );
+  // useEditionInfo(
+  //   originalId,
+  //   isCorrectNetwork && isConnected,
+  //   setNextAvailableEditionId,
+  //   setEditionSoldOut
+  // );
 
   // Adjust the grayscale of the images if user is not connected
   useEffect(() => {
@@ -131,10 +130,28 @@ export const GalleryDetail = ({
     );
   }, [address, isReconnecting, isDisconnected]);
 
-  // Set the type since this is a url param and might need a page rerender to be applied
+  // Adjust the opacity of the original when viewing an edition
   useEffect(() => {
-    setType(_type);
-  }, [_type]);
+    setOriginalImageClass(
+      `${
+        type === "original" ? "opacity-100" : "opacity-20"
+      } ease-linear transition-all duration-500`
+    );
+  }, [type, tokenLoaded]);
+
+  // Adjust the opacity of the edition when viewing an edition
+  useEffect(() => {
+    setEditionImageClass(
+      `${
+        type === "original" ? "opacity-0" : "opacity-100"
+      } ease-linear transition-all duration-500`
+    );
+  }, [type, tokenLoaded]);
+
+  // Set the type since this is a url param and might need a page rerender to be applied
+  // useEffect(() => {
+  //   setType(_type);
+  // }, [_type]);
 
   // set the mint state as it can change from various factors
   useEffect(() => {
@@ -149,7 +166,7 @@ export const GalleryDetail = ({
         if (owner !== undefined) setMintState(MintState.OriginalOwned);
         else if (owner === undefined) setMintState(MintState.OriginalAvailable);
       } else if (type == TokenType.Edition) {
-        if (galleryPhotoId > originalId) {
+        if (photoId > originalId) {
           // a specific edition was requested
           if (owner !== undefined) setMintState(MintState.EditionOwned);
           if (owner === undefined) setMintState(MintState.EditionAvailable);
@@ -161,9 +178,7 @@ export const GalleryDetail = ({
       }
     }
   }, [
-    MintState,
-    TokenType,
-    galleryPhotoId,
+    photoId,
     originalId,
     editionSoldOut,
     tokenLoaded,
@@ -194,7 +209,7 @@ export const GalleryDetail = ({
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left nav bar */}
-      <SideBar>
+      <NavBar>
         <div className="lg:w-full">
           <TheHydraButton />
         </div>
@@ -212,61 +227,100 @@ export const GalleryDetail = ({
             originalId={originalId}
           />
         </div>
-      </SideBar>
+      </NavBar>
 
-      {/* contact */}
-      <div className="flex flex-col-reverse lg:flex-row w-[100vw] lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">
-        {/* left / bottom -- info */}
-        <div className="col-span-1 flex-auto basis-1/2 pr-8">
-          {/* nav */}
-          <div className="flex flex-rows mb-8 ml-4 lg:ml-0" id="nav">
-            {/* breadcrumbs + arrow navigation */}
-            <GalleryBreadcrumbs
-              breadcrumb={`${type.toString()}s`}
-              photoId={photoId}
-            />
-
-            <div className="h-16 flex items-center">
-              <GalleryNav
-                collection={collection}
-                photoId={originalId}
-                photoType={type.toString()}
+      {/* Image + token info */}
+      <div className="px-8">
+        <div className="relative mb-4" id="artwork">
+          {/* Image */}
+          <div className={`${imageClass} m-auto`}>
+            <div className="relative min-h-[290]">
+              <Image
+                layout={"responsive"}
+                width={768}
+                height={1024}
+                src={photo.previewImage1024Uri}
+                alt={photo.name}
+                priority={true}
+                sizes={"100vw"}
+                className={originalImageClass}
               />
+              <div
+                className={`${editionImageClass} absolute w-[75%] h-[56%] top-[12.5%] left-[12.5%] border-8 border-slate-100`}
+              >
+                <Image
+                  layout={"responsive"}
+                  width={768}
+                  height={768}
+                  src={photo.svgPreviewUri}
+                  alt={photo.name}
+                  priority={true}
+                  sizes={"100vw"}
+                />
+              </div>
             </div>
           </div>
 
           {/* Token Information */}
+          <div className="absolute top-2 left-4">
+            {/* {type == TokenType.Edition && <h3 className="mb-2">Edition of:</h3>} */}
+            <h2 className="text-2xl lg:text-5xl mb-8 bg-black px-2 opacity-75">
+              {photo.name}
+            </h2>
+          </div>
+
+          <div className="absolute bottom-8 left-4 mr-4 bg-black px-2 opacity-75">
+            <p className="text-lg italic leading-tight">{photo.description}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* gallary photo nav */}
+      <GalleryNav
+        collection={collection}
+        photoId={originalId}
+        photoType={type.toString()}
+        photoLimit={50}
+      />
+
+      <div className="bg-slate-800">
+        {/* Original / Edition toggle */}
+        <GalleryDetailTypeToggle setType={setType} currentType={type} />
+
+        {/* Original / Edition info */}
+        <div className="container">
+          {type == "original" && (
+            <GalleryDetailOriginalInfo
+              alchemy={alchemy}
+              isConnected={isConnected}
+              photo={photo}
+              mintState={mintState}
+              userWalletAddress={address}
+              onMintSuccess={onMintSuccess}
+            />
+          )}
+          {type == "edition" && (
+            <GalleryDetailEditionInfo
+              isConnected={isConnected}
+              photo={photo}
+              originalId={originalId}
+              mintState={mintState}
+              userWalletAddress={address}
+              onMintSuccess={onMintSuccess}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* old */}
+
+      {/* content */}
+      <div className="flex lg:flex-row lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">
+        {/* left / bottom -- info */}
+        <div className="col-span-1 flex-auto basis-1/2 pr-8">
+          {/* Token Information */}
           <div className="w-10/12 m-auto lg:m-0">
             {/* Name & description */}
-            <div className="my-[2vh]">
-              {type == TokenType.Edition && (
-                <h3 className="mb-2">Edition of:</h3>
-              )}
-              <h2 className="text-2xl lg:text-5xl mb-8">{photo.name}</h2>
-              <div className="text-md lg:text-lg">
-                <p className="text-2xl italic mb-8">{photo.description}</p>
-                <p className="mb-4">
-                  {type == "original" && (
-                    <span>
-                      An altered reality forever wandering the Ethereum
-                      blockchain. This is an original 1-of-1 artwork that comes
-                      with a high-res immutable image stored on IPFS. Each token
-                      conforms to the ERC-721 standard.
-                    </span>
-                  )}
-                  {type == "edition" && (
-                    <span>
-                      An altered reality forever wandering on the Ethereum
-                      blockchain. This edition is an on-chain SVG version of{" "}
-                      {photo.name}. Its has 256 colors and is a 64x64 pixel
-                      representation of the original 1-of-1 artwork. The
-                      metadata and SVG are immutable, conform to the ERC-721
-                      standard, and exist entirely on the Ethereum blockchain.
-                    </span>
-                  )}
-                </p>
-              </div>
-            </div>
 
             {/* Mint / Ownership */}
             <div className="my-[2vh]">
@@ -432,89 +486,6 @@ export const GalleryDetail = ({
                 and you will be able to mint the next available edition.
               </div>
             )}
-
-            {/* Let the user which editionId is next available */}
-            {mintState == MintState.GenericEditionAvailable && (
-              <div>
-                If you minted now, you would receive token #
-                {nextAvailableEditionId}
-              </div>
-            )}
-
-            {/* info */}
-            <div className="my-[2vh]">
-              <div className="mb-4">
-                <h6 className="uppercase">Price</h6>
-                <div className="text-lg font-bold">
-                  {type == "original" ? "0.25" : "0.05"} eth
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <h6 className="uppercase">Token Id</h6>
-                <div className="text-lg font-bold">
-                  {type == "original"
-                    ? photo.id
-                    : `${photo.getEditionIdStart()} - ${photo.getEditionIdEnd()}`}
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <h6 className="uppercase">Royalties</h6>
-                <div className="text-lg font-bold">7.5%</div>
-              </div>
-
-              <div className="mb-4">
-                <h6 className="uppercase">Contract</h6>
-                <div className="text-lg font-bold">
-                  <a
-                    href={`https://${process.env.NEXT_PUBLIC_CHAIN_NAME?.toLowerCase()}.etherscan.io/address/${
-                      theHydraContract.address
-                    }`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {Address(theHydraContract.address)}
-                  </a>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <h6 className="uppercase">Attributes</h6>
-                <div className="text-lg font-bold">
-                  <div className="grid grid-cols-2 text-xs lg:text-sm w-1/2">
-                    {type === TokenType.Original && (
-                      <>
-                        <div>Type</div>
-                        <div>Original</div>
-
-                        <div>Chakra</div>
-                        <div>{photo.attributes["Chakra"]}</div>
-
-                        <div>Season</div>
-                        <div>{photo.attributes["Season"]}</div>
-                      </>
-                    )}
-
-                    {type === TokenType.Edition && (
-                      <>
-                        <div>Type</div>
-                        <div>Edition</div>
-
-                        <div>Edition</div>
-                        <div>
-                          {photo.getEditionIndex(nextAvailableEditionId || 0)}{" "}
-                          of 50
-                        </div>
-
-                        <div>Original</div>
-                        <div>{originalId}</div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 

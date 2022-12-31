@@ -7,9 +7,9 @@ import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../useIsMounted";
 import { GalleryBreadcrumbs } from "./GalleryBreadcrumbs";
+import { NavBar, TheHydraButton, TypeNavigationButton } from "./NavBar";
 import { Photo } from "./Photo";
 import { PhotoCollection } from "./PhotoCollection";
-import { SideBar, TheHydraButton, TypeNavigationButton } from "./SideBar";
 import { TypeToggle } from "./TypeToggle";
 
 export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
@@ -46,7 +46,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left nav bar */}
-      <SideBar>
+      <NavBar>
         <div className="lg:w-full">
           <TheHydraButton />
         </div>
@@ -56,19 +56,29 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
         <div className="lg:w-full">
           <TypeNavigationButton type="edition" currentType={type.toString()} />
         </div>
-      </SideBar>
+      </NavBar>
 
       {/* content */}
       <div className="w-[100vw] px-4 lg:px-8 lg:w-[90vw] lg:ml-[10vw]">
-        <div className="flex flex-rows lg:mb-8 ml-4 lg:ml-0" id="nav">
+        <div className="flex flex-rows mb-4 lg:mb-8" id="nav">
           {/* breadcrumbs + arrow navigation */}
           <GalleryBreadcrumbs photoId={undefined} breadcrumb={`${type}s`} />
         </div>
-        <div className="flex flex-col lg:flex-row mb-16">
+        <div className="flex flex-col lg:flex-row">
           <div className="basis-1/2 lg:px-8">
-            <h1 className="text-6xl leading-relaxed xl:text-7xl mb-[5vh] lg:mb-8 custom-major-mono text-center lg:text-left -ml-4">
+            <h1 className="text-6xl -ml-2 mb-4 leading-relaxed xl:text-7xl lg:mb-8 custom-major-mono lg:text-left">
               {collection.name}
             </h1>
+            <div className={`${imageClass} basis-1/2 mb-4`}>
+              <Image
+                src="/the-hydra/hydra-gallery-hero.png"
+                alt="The Hydra Collection"
+                layout="intrinsic"
+                width={800}
+                height={500}
+                sizes={"100vw"}
+              />
+            </div>
             {collection.headline && (
               <div className="container mb-4 tracking-wide text-md lg:text-xl lg:mb-8">
                 <p>{collection.headline}</p>
@@ -79,27 +89,18 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
                 <p>{collection.description}</p>
               </div>
             )}
-            <div className="container mb-4 pr-8 tracking-wide text-md lg:text-xl lg:mb-8">
-              The collection consists of 50 1-of-1 original photos. Each photo
-              then has 50 editions of an on-chain version available.
+            <div className="container mb-4 tracking-wide text-md lg:text-xl lg:mb-8">
+              The collection consists of 50 1-of-1 original photos (tokens 0-49)
+              and 50 on-chain editions of 50. Each edition represents an
+              on-chain version of the original 1-of-1 photo.
             </div>
-          </div>
-          <div className={`${imageClass} basis-1/2`}>
-            <Image
-              src="/the-hydra/hydra-gallery-hero.png"
-              alt="The Hydra Collection"
-              layout="intrinsic"
-              width={800}
-              height={500}
-              sizes={"100vw"}
-            />
           </div>
         </div>
 
         {!address && (
-          <div className="my-8 p-8 lg:mb-16 flex flex-col justify-center items-center w-3/4 bg-pink-900 m-auto">
+          <div className="my-8 p-8 lg:mb-16 flex flex-col justify-center items-center w-100 bg-gray-700 m-auto">
             <div className="basis-1">
-              <h4 className="text-2xl lg:max-w-xl mb-8 text-center text-gray-200 uppercase">
+              <h4 className="text-xl lg:max-w-xl mb-8 text-center text-gray-200 uppercase">
                 altered earth is best experienced in a dream state. please
                 connect your wallet to dream
               </h4>
@@ -110,10 +111,10 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
           </div>
         )}
 
-        <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8 text-center">
+        {/* <div className="container mb-4 px-8 tracking-wide text-md lg:text-xl lg:mb-8 text-center">
           To switch between originals and editions, use the “O” and “E” buttons
           on the nav.
-        </div>
+        </div> */}
 
         <div className="mt-16">
           {/* Original / Edition toggle */}

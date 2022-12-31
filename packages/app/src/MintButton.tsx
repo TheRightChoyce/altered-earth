@@ -16,7 +16,7 @@ export const MintButton = ({
   onSuccess,
 }: {
   tokenId: number;
-  disabled: boolean;
+  disabled: boolean | undefined;
   label: string | undefined;
   isOriginal: boolean;
   onSuccess: (owner: string, tx: string) => void;
