@@ -1,10 +1,13 @@
 import { useState } from "react";
 
 import { theHydraContract } from "../../contracts";
+import { LooksRareButton } from "../../LooksRareButton";
+import { OpenSeaButton } from "../../OpenSeaButton";
 import { Address } from "../Address";
-import { GalleryMintButton } from "../GalleryMintButton";
+import { ExplorerButton } from "../ExplorerButton";
 import { Photo } from "../Photo";
 import { Spinner } from "../Spinner";
+import { GalleryMintButton } from "./GalleryMintButton";
 // import { useEditionInfo } from "../useEditionInfo";
 import { MintState } from "./mintState";
 
@@ -47,12 +50,26 @@ const renderMintButton = (
   );
 };
 
-const renderOwned = () => {
-  return <p>Not available</p>;
+const renderOwned = (photo: Photo) => {
+  return (
+    <>
+      <p>Not available</p>
+      <div className="mb-[2vh] flex flex-row">
+        <div className="basis-1/3 mr-4">
+          <OpenSeaButton tokenId={photo.id} />
+        </div>
+        <div className="basis-1/3 mr-4">
+          <LooksRareButton tokenId={photo.id} />
+        </div>
+        <div className="basis-1/3">
+          <ExplorerButton tokenId={photo.id} />
+        </div>
+      </div>
+    </>
+  );
 };
 
 export const GalleryDetailEditionInfo = ({
-  isConnected,
   photo,
   originalId,
   mintState,
@@ -71,9 +88,10 @@ export const GalleryDetailEditionInfo = ({
           </div>
         )}
 
-        {/* Edition is available */}
-        {mintState === MintState.GenericEditionSoldOut && renderOwned()}
+        {/* Editions are sold out */}
+        {mintState === MintState.GenericEditionSoldOut && renderOwned(photo)}
 
+        {/* Editions are NOT sold out */}
         {mintState !== MintState.GenericEditionSoldOut &&
           renderMintButton(
             photo,

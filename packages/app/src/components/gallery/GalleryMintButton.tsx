@@ -1,8 +1,8 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-import { Button } from "../Button";
-import { MintButton } from "../MintButton";
-import { Photo } from "./Photo";
+import { Button } from "../../Button";
+import { MintButton } from "../../MintButton";
+import { Photo } from "../Photo";
 
 const CustomConnectButton = () => {
   return (

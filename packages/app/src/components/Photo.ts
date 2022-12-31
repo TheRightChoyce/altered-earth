@@ -92,8 +92,11 @@ export class Photo {
       });
   };
 
-  getOwnerFromContract = (setOwner: (owner: string | undefined) => void) => {
-    const { data } = useTheHydraContractRead({
+  getOwnerFromContract = (
+    setOwner: (owner: string | undefined) => void,
+    setTokenLoaded: (loaded: boolean) => void
+  ) => {
+    const { data, isFetched } = useTheHydraContractRead({
       functionName: "ownerOf",
       args: this.id,
       watch: false,
@@ -126,6 +129,7 @@ export class Photo {
 
     useEffect(() => {
       setOwner(data?.toString());
-    }, [data, setOwner]);
+      setTokenLoaded(isFetched);
+    }, [data, setOwner, setTokenLoaded, isFetched]);
   };
 }

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { PhotoCollection } from "./PhotoCollection";
+import { PhotoCollection } from "../PhotoCollection";
 
 interface GalleryNavParams {
   collection: PhotoCollection;

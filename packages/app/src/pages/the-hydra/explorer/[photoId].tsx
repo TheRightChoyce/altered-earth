@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 
-import { GalleryBreadcrumbs } from "../../../components/GalleryBreadcrumbs";
+import { GalleryBreadcrumbs } from "../../../components/gallery/GalleryBreadcrumbs";
 import { NavBar, TheHydraButton } from "../../../components/NavBar";
 import { OnChainExplorer } from "../../../components/OnChainExplorer";
 import Layout from "../../../layout/GalleryLayout";
