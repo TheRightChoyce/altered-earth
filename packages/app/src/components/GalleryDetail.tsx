@@ -216,10 +216,8 @@ export const GalleryDetail = ({
           )}
           {type == "edition" && (
             <GalleryDetailEditionInfo
-              isConnected={isConnected}
               photo={photo}
               originalId={originalId}
-              mintState={mintState}
               userWalletAddress={address}
               onMintSuccess={onMintSuccess}
             />

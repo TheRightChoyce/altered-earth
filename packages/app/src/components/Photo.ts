@@ -1,4 +1,5 @@
 import { Alchemy } from "alchemy-sdk";
+import { Result } from "ethers/lib/utils";
 import { useEffect } from "react";
 import slugify from "slugify";
 
@@ -7,6 +8,30 @@ import { useTheHydraContractRead } from "../contracts";
 interface IAttribute {
   trait_type: string;
   value: string;
+}
+
+export class EditionInfoFromContract {
+  endId = 0;
+  gifted = 0;
+  localIndex = 0;
+  maxPerOriginal = 50;
+  minted = 0;
+  nextId = 0;
+  originalId = 0;
+  soldOut = false;
+  startId = 0;
+
+  constructor(data: Result | undefined) {
+    this.endId = data?.endId.toNumber();
+    this.gifted = data?.gifted.toNumber();
+    this.localIndex = data?.localIndex.toNumber();
+    this.maxPerOriginal = data?.maxPerOriginal.toNumber();
+    this.minted = data?.minted.toNumber();
+    this.nextId = data?.nextId.toNumber();
+    this.originalId = data?.originalId.toNumber();
+    this.soldOut = data?.soldOut;
+    this.startId = data?.startId.toNumber();
+  }
 }
 
 export class Photo {
@@ -103,27 +128,9 @@ export class Photo {
       enabled: true,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onError(error: any) {
-        console.log(error);
         if (error.reason !== "NOT_MINTED") {
           throw error;
         }
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onSettled(data, error: any) {
-        console.log("Settled", data, error);
-        // if (!error) {
-        //   setOwner(data?.toString());
-        //   return;
-        // }
-        // if (error?.reason === "NOT_MINTED") {
-        //   setOwner(undefined);
-        // } else {
-        //   throw error;
-        // }
-      },
-      onSuccess(data) {
-        console.log("onSuccess", data);
-        // setOwner(data?.toString());
       },
     });
 
@@ -131,5 +138,30 @@ export class Photo {
       setOwner(data?.toString());
       setTokenLoaded(isFetched);
     }, [data, setOwner, setTokenLoaded, isFetched]);
+  };
+
+  getEditionInfo = (
+    originalId: number,
+    setTokenLoaded: (loaded: boolean) => void,
+    setEditionInfo: (val: EditionInfoFromContract | undefined) => void
+  ) => {
+    const { data, isFetched } = useTheHydraContractRead({
+      functionName: "editionsGetInfoFromOriginal",
+      args: originalId,
+      watch: false,
+      enabled: true,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onError(error: any) {
+        console.log(error);
+        if (error.reason !== "BeyondTheScopeOfConsciousness") {
+          throw error;
+        }
+      },
+    });
+
+    useEffect(() => {
+      setEditionInfo(new EditionInfoFromContract(data));
+      setTokenLoaded(isFetched);
+    }, [data, isFetched, setEditionInfo, setTokenLoaded]);
   };
 }

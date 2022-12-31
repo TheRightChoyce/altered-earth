@@ -1,21 +1,19 @@
-import { useState } from "react";
+import { Result } from "ethers/lib/utils";
+import { useEffect, useState } from "react";
 
 import { theHydraContract } from "../../contracts";
 import { LooksRareButton } from "../../LooksRareButton";
 import { OpenSeaButton } from "../../OpenSeaButton";
 import { Address } from "../Address";
 import { ExplorerButton } from "../ExplorerButton";
-import { Photo } from "../Photo";
+import { EditionInfoFromContract, Photo } from "../Photo";
 import { Spinner } from "../Spinner";
 import { GalleryMintButton } from "./GalleryMintButton";
-// import { useEditionInfo } from "../useEditionInfo";
 import { MintState } from "./mintState";
 
 interface EditionInfo {
-  isConnected: boolean;
   photo: Photo;
   originalId: number;
-  mintState: MintState;
   userWalletAddress: string | undefined;
   onMintSuccess: (owner: string, tx: string) => void;
 }
@@ -23,7 +21,6 @@ interface EditionInfo {
 const renderMintButton = (
   photo: Photo,
   userWalletAddress: string | undefined,
-  // nextAvailableEditionId: number,
   onMintSuccess: (owner: string, tx: string) => void
 ) => {
   return (
@@ -41,11 +38,6 @@ const renderMintButton = (
           isCorrectNetwork={true}
         />
       </div>
-      {/* {nextAvailableEditionId > 0 && (
-        <div>
-          If you minted now, you would receive token #{nextAvailableEditionId}
-        </div>
-      )} */}
     </div>
   );
 };
@@ -72,18 +64,33 @@ const renderOwned = (photo: Photo) => {
 export const GalleryDetailEditionInfo = ({
   photo,
   originalId,
-  mintState,
   userWalletAddress,
   onMintSuccess,
 }: EditionInfo) => {
-  // const [nextAvailableEditionId, setNextAvailableEditionId] = useState(0);
-  // const [editionSoldOut, setEditionSoldOut] = useState(false);
+  // Token specific info
+  const [mintState, setMintState] = useState(MintState.Unknown);
+  const [tokenLoaded, setTokenLoaded] = useState(false);
+  const [editionInfo, setEditionInfo] = useState<
+    EditionInfoFromContract | undefined
+  >(undefined);
+
+  useEffect(() => {
+    if (!tokenLoaded) setMintState(MintState.Unknown);
+    else if (editionInfo?.soldOut === true) {
+      setMintState(MintState.GenericEditionSoldOut);
+    } else if (editionInfo?.soldOut === false) {
+      setMintState(MintState.GenericEditionAvailable);
+    }
+  }, [tokenLoaded, editionInfo]);
+
+  // Get the info about this ediion
+  photo?.getEditionInfo(originalId, setTokenLoaded, setEditionInfo);
 
   return (
     <div className="p-4">
       <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-4">
         {mintState == MintState.Unknown && (
-          <div className="pt-8">
+          <div className="py-8">
             <Spinner />
           </div>
         )}
@@ -92,16 +99,26 @@ export const GalleryDetailEditionInfo = ({
         {mintState === MintState.GenericEditionSoldOut && renderOwned(photo)}
 
         {/* Editions are NOT sold out */}
-        {mintState !== MintState.GenericEditionSoldOut &&
-          renderMintButton(
-            photo,
-            userWalletAddress,
-            // nextAvailableEditionId,
-            onMintSuccess
-          )}
+        {mintState === MintState.GenericEditionAvailable &&
+          renderMintButton(photo, userWalletAddress, onMintSuccess)}
       </div>
 
-      <h4 className="text-xl mb-4 font-bold">Description</h4>
+      {editionInfo && editionInfo?.nextId > 0 && (
+        <div className="mb-8">
+          <h4 className="text-2xl mb-4 font-bold">Edition Status</h4>
+          <div>
+            <b>{editionInfo?.minted}</b> of <b>45</b> minted
+          </div>
+          <div>
+            <b>{editionInfo?.gifted}</b> of <b>5</b> gifted
+          </div>
+          <div>
+            Next edition id: <b>{editionInfo?.nextId}</b>
+          </div>
+        </div>
+      )}
+
+      <h4 className="text-2xl mb-4 font-bold">Description</h4>
       <p className="mb-4">
         An altered reality forever wandering on the Ethereum blockchain. This
         edition is an on-chain SVG version of {photo.name}. Its has 256 colors
@@ -110,7 +127,7 @@ export const GalleryDetailEditionInfo = ({
         exist entirely on the Ethereum blockchain.
       </p>
 
-      <h4 className="text-xl mb-4 font-bold">Details</h4>
+      <h4 className="text-2xl mb-4 font-bold">Details</h4>
       <div className="my-[2vh] grid grid-cols-2">
         <div className="mb-4">
           <h6 className="uppercase">Token Ids</h6>
@@ -148,7 +165,7 @@ export const GalleryDetailEditionInfo = ({
         </div>
 
         <div className="mb-4">
-          <h6 className="uppercase">Original</h6>
+          <h6 className="uppercase">Original Id</h6>
           <div className="text-lg font-bold">{originalId}</div>
         </div>
       </div>
