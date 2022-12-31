@@ -1,6 +1,4 @@
-import { Alchemy, Network } from "alchemy-sdk";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
@@ -10,11 +8,9 @@ import { GalleryDetailEditionInfo } from "./gallery/GalleryDetailEditionInfo";
 import { GalleryDetailOriginalInfo } from "./gallery/GalleryDetailOriginalInfo";
 import { GalleryDetailTypeToggle } from "./gallery/GalleryDetailTypeToggle";
 import { GalleryNav } from "./gallery/GalleryNav";
-import { MintState } from "./gallery/mintState";
 import { TokenType } from "./gallery/tokenType";
 import { NavBar, TheHydraButton, TypeNavigationButton } from "./NavBar";
 import { PhotoCollection } from "./PhotoCollection";
-import { useNetworkCheck } from "./useNetworkCheck";
 
 const notFound = (
   <div className="flex flex-col w-full text-center">
@@ -31,7 +27,6 @@ export const GalleryDetail = ({
 }) => {
   const isMounted = useIsMounted();
   const router = useRouter();
-  const { isConnected } = useNetworkCheck();
 
   // User wallet
   const { address, isReconnecting, isDisconnected } = useAccount();
@@ -52,13 +47,13 @@ export const GalleryDetail = ({
     if (photoId !== originalId) {
       _type = TokenType.Edition;
     }
-    // if (router.query.type) {
-    //   if (router.query.type instanceof Array) {
-    //     _type = router.query.type[0];
-    //   } else {
-    //     _type = router.query.type;
-    //   }
-    // }
+    if (router.query.type) {
+      if (router.query.type instanceof Array) {
+        _type = router.query.type[0];
+      } else {
+        _type = router.query.type;
+      }
+    }
     return _type;
   };
 
