@@ -45,16 +45,18 @@ const renderMintButton = (
 const renderOwned = (photo: Photo) => {
   return (
     <>
-      <p>Not available</p>
+      <div className="flex flex-col">
+        <div className="mb-2">
+          <h5 className="text-xl">Edition Sold Out</h5>
+          <h4 className="text-3xl line-through">0.05 ETH</h4>
+        </div>
+      </div>
       <div className="mb-[2vh] flex flex-row">
-        <div className="basis-1/3 mr-4">
+        <div className="basis-1/2 mr-4">
           <OpenSeaButton tokenId={photo.id} />
         </div>
-        <div className="basis-1/3 mr-4">
+        <div className="basis-1/2">
           <LooksRareButton tokenId={photo.id} />
-        </div>
-        <div className="basis-1/3">
-          <ExplorerButton tokenId={photo.id} />
         </div>
       </div>
     </>
@@ -112,9 +114,11 @@ export const GalleryDetailEditionInfo = ({
           <div>
             <b>{editionInfo?.gifted}</b> of <b>5</b> gifted
           </div>
-          <div>
-            Next edition id: <b>{editionInfo?.nextId}</b>
-          </div>
+          {!editionInfo?.soldOut && (
+            <div>
+              Next edition id: <b>{editionInfo?.nextId}</b>
+            </div>
+          )}
         </div>
       )}
 
