@@ -1,11 +1,9 @@
-import { Result } from "ethers/lib/utils";
 import { useEffect, useState } from "react";
 
 import { theHydraContract } from "../../contracts";
 import { LooksRareButton } from "../../LooksRareButton";
 import { OpenSeaButton } from "../../OpenSeaButton";
 import { Address } from "../Address";
-import { ExplorerButton } from "../ExplorerButton";
 import { EditionInfoFromContract, Photo } from "../Photo";
 import { Spinner } from "../Spinner";
 import { GalleryMintButton } from "./GalleryMintButton";
@@ -63,6 +61,21 @@ const renderOwned = (photo: Photo) => {
   );
 };
 
+const mintStateReducer = (
+  tokenLoaded: boolean,
+  editionSoldOut: boolean | undefined
+) => {
+  if (!tokenLoaded) {
+    return MintState.Unknown;
+  } else if (editionSoldOut === true) {
+    return MintState.GenericEditionSoldOut;
+  } else if (editionSoldOut === false) {
+    return MintState.GenericEditionAvailable;
+  }
+
+  return MintState.Unknown;
+};
+
 export const GalleryDetailEditionInfo = ({
   photo,
   originalId,
@@ -76,13 +89,9 @@ export const GalleryDetailEditionInfo = ({
     EditionInfoFromContract | undefined
   >(undefined);
 
+  // State machine for our mint state of this edition
   useEffect(() => {
-    if (!tokenLoaded) setMintState(MintState.Unknown);
-    else if (editionInfo?.soldOut === true) {
-      setMintState(MintState.GenericEditionSoldOut);
-    } else if (editionInfo?.soldOut === false) {
-      setMintState(MintState.GenericEditionAvailable);
-    }
+    setMintState(mintStateReducer(tokenLoaded, editionInfo?.soldOut));
   }, [tokenLoaded, editionInfo]);
 
   // Get the info about this ediion

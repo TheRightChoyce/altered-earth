@@ -5,7 +5,7 @@ import React from "react";
 
 export const NavBar = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <div className="w-[100vw] h-24 custom-side-bar-bg flex-row items-center justify-around lg:justify-start lg:flex-col lg:w-[10vw] lg:h-[100vh] lg:fixed hidden lg:visible">
+    <div className="hidden lg:justify-start lg:flex-row lg:w-[10vw] lg:h-[100vh] lg:fixed lg:block">
       <div className="lg:w-full">
         <AlteredEarthButton />
       </div>

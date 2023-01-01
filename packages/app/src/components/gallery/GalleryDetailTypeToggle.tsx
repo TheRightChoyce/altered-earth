@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import React, { Dispatch, SetStateAction } from "react";
 
 const TypeNavigationLink = ({
@@ -10,7 +9,6 @@ const TypeNavigationLink = ({
   currentType: string;
   setType: Dispatch<SetStateAction<string>>;
 }) => {
-  // const router = useRouter();
   const href = `?type=${type}`;
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();

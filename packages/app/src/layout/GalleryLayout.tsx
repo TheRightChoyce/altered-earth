@@ -8,7 +8,6 @@ import {
   Provider as GraphProvider,
 } from "urql";
 
-import { AlteredEarthButton } from "../components/NavBar";
 import { EthereumProviders } from "../EthereumProviders";
 import Footer from "./footer";
 
@@ -41,7 +40,7 @@ const Layout: React.FC = ({ children }) => {
       <GraphProvider value={graphClient}>
         <EthereumProviders>
           <div className="min-h-screen bg-slate-700 text-slate-100">
-            <div className="pt-8 pb-8 lg:h-0 flex flex-row items-center bg-slate-900 w-[100vw] lg:hidden">
+            <div className="pt-8 pb-8 flex flex-row items-center bg-slate-900 w-[100vw] absolute">
               <div className="basis-1/4">
                 <Link href="/">
                   <a>
@@ -52,9 +51,9 @@ const Layout: React.FC = ({ children }) => {
                 </Link>
               </div>
               <div className="basis-1/4"></div>
-              <div className="basis-1/2">
+              <div className="basis-1/2 flex flex-row-reverse">
                 {/* spacer since rainbowkit has its own layout */}
-                <div className="ml-2">
+                <div className="mr-8">
                   <ConnectButton
                     label="Enter Dream State"
                     accountStatus="address"

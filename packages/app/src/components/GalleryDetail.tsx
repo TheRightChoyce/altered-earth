@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -9,7 +10,6 @@ import { GalleryDetailOriginalInfo } from "./gallery/GalleryDetailOriginalInfo";
 import { GalleryDetailTypeToggle } from "./gallery/GalleryDetailTypeToggle";
 import { GalleryNav } from "./gallery/GalleryNav";
 import { TokenType } from "./gallery/tokenType";
-import { NavBar, TheHydraButton, TypeNavigationButton } from "./NavBar";
 import { PhotoCollection } from "./PhotoCollection";
 
 const notFound = (
@@ -30,10 +30,6 @@ export const GalleryDetail = ({
 
   // User wallet
   const { address, isReconnecting, isDisconnected } = useAccount();
-
-  // Token specific info
-  // const [tokenLoaded, setTokenLoaded] = useState(false);
-  // const [mintState, setMintState] = useState(MintState.Unknown);
 
   // Photo ids
   const originalId = collection.getOriginalId(photoId);
@@ -64,34 +60,26 @@ export const GalleryDetail = ({
   const [previousPhoto, setPreviousPhoto] = useState(-1);
 
   // UI helpers
-  const [imageClass, setImageClass] = useState(
-    "grayscale-0 transition-all ease-in-out duration-5000"
-  );
-  const [originalImageClass, setOriginalImageClass] = useState(
-    type === "original" ? "opacity-100" : "opacity-20"
-  );
-  const [editionImageClass, setEditionImageClass] = useState(
-    type === "original" ? "opacity-20" : "opacity-100"
-  );
-
+  const [imageClass, setImageClass] = useState("");
   // Adjust the grayscale of the images if user is not connected
   useEffect(() => {
     setImageClass(
       (isReconnecting || address) && !isDisconnected
-        ? "grayscale-0 transition-all ease-in-out duration-5000"
+        ? // ? "grayscale-0 transition-all ease-in-out duration-5000"
+          "grayscale-0"
         : "grayscale"
     );
   }, [address, isReconnecting, isDisconnected]);
 
+  const [originalImageClass, setOriginalImageClass] = useState("");
   // Adjust the opacity of the original when viewing an edition
   useEffect(() => {
     setOriginalImageClass(
-      `${
-        type === "original" ? "opacity-100" : "opacity-20"
-      } ease-linear transition-all duration-500`
+      `${type === "original" ? "opacity-100" : "opacity-20"}` // ease-linear transition-all duration-500`
     );
   }, [type]);
 
+  const [editionImageClass, setEditionImageClass] = useState("");
   // Adjust the opacity of the edition when viewing an edition
   useEffect(() => {
     setEditionImageClass(
@@ -120,71 +108,19 @@ export const GalleryDetail = ({
   }
 
   return (
-    <div className="flex flex-col lg:flex-row">
-      {/* Left nav bar */}
-      <NavBar>
-        <div className="lg:w-full">
-          <TheHydraButton />
-        </div>
-        <div className="lg:w-full">
-          <TypeNavigationButton
-            type="original"
-            currentType={type.toString()}
-            originalId={originalId}
-          />
-        </div>
-        <div className="lg:w-full">
-          <TypeNavigationButton
-            type="edition"
-            currentType={type.toString()}
-            originalId={originalId}
-          />
-        </div>
-      </NavBar>
-
+    <div className="flex flex-col items-center relative">
       {/* Image + token info */}
-      <div className="px-8">
-        <div className="relative mb-4" id="artwork">
-          {/* Image */}
-          <div className={`${imageClass} m-auto`}>
-            <div className="relative min-h-[290]">
-              <Image
-                layout={"responsive"}
-                width={768}
-                height={1024}
-                src={photo.previewImage1024Uri}
-                alt={photo.name}
-                priority={true}
-                sizes={"100vw"}
-                className={originalImageClass}
-              />
-              <div
-                className={`${editionImageClass} absolute w-[75%] h-[56%] top-[12.5%] left-[12.5%] border-8 border-slate-100`}
-              >
-                <Image
-                  layout={"responsive"}
-                  width={768}
-                  height={768}
-                  src={photo.svgPreviewUri}
-                  alt={photo.name}
-                  priority={true}
-                  sizes={"100vw"}
-                />
-              </div>
-            </div>
-          </div>
 
-          {/* Token Information */}
-          <div className="absolute top-2 left-4">
-            {/* {type == TokenType.Edition && <h3 className="mb-2">Edition of:</h3>} */}
-            <h2 className="text-2xl lg:text-5xl mb-8 bg-black px-2 opacity-75">
-              {photo.name}
-            </h2>
-          </div>
-
-          <div className="absolute bottom-8 left-4 mr-4 bg-black px-2 opacity-75">
-            <p className="text-lg italic leading-tight">{photo.description}</p>
-          </div>
+      <div className="relative m-auto pt-32 px-8 h-[70vh] sm:h-[80vh]">
+        <img
+          src={photo.previewImage1024Uri}
+          alt={photo.name}
+          className={`${originalImageClass} max-h-[60vh]`}
+        />
+        <div
+          className={`${editionImageClass} absolute w-[75%] h-[50%] top-[25%] left-[12.5%] border-8 border-slate-100`}
+        >
+          <img src={photo.svgPreviewUri} alt={photo.name} />
         </div>
       </div>
 
@@ -196,7 +132,7 @@ export const GalleryDetail = ({
         photoLimit={50}
       />
 
-      <div className="bg-slate-800">
+      <div className="bg-slate-800 lg:ml-8">
         {/* Original / Edition toggle */}
         <GalleryDetailTypeToggle setType={setType} currentType={type} />
 

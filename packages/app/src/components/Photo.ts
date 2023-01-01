@@ -145,6 +145,7 @@ export class Photo {
     setTokenLoaded: (loaded: boolean) => void,
     setEditionInfo: (val: EditionInfoFromContract | undefined) => void
   ) => {
+    console.log("getEditionIfo", originalId);
     const { data, isFetched } = useTheHydraContractRead({
       functionName: "editionsGetInfoFromOriginal",
       args: originalId,
