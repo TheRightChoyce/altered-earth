@@ -40,7 +40,7 @@ const renderMintButton = (
   );
 };
 
-const renderOwned = (photo: Photo) => {
+const renderSoldOut = (photo: Photo) => {
   return (
     <>
       <div className="flex flex-col">
@@ -61,6 +61,14 @@ const renderOwned = (photo: Photo) => {
   );
 };
 
+const renderSpinner = () => {
+  return (
+    <div className="pt-8">
+      <Spinner />
+    </div>
+  )
+}
+
 const mintStateReducer = (
   tokenLoaded: boolean,
   connectedWalletAddress: string | undefined,
@@ -78,6 +86,25 @@ const mintStateReducer = (
 
   return MintState.Unknown;
 };
+
+const mintComponentReducer = (
+  mintState: MintState,
+  photo: Photo,
+  connectedWalletAddress: string | undefined,
+  onMintSuccess: (owner: string, tx: string) => void
+) => {
+  switch (mintState) {
+    case MintState.Unknown:
+      return renderSpinner();
+    case MintState.GenericEditionSoldOut:
+      return renderSoldOut(photo);
+    case MintState.GenericEditionAvailable:
+    case MintState.NotConnected:
+      return renderMintButton(photo, connectedWalletAddress, onMintSuccess);
+    default:
+      return renderSpinner();
+  }
+}
 
 export const GalleryDetailEditionInfo = ({
   photo,
@@ -113,47 +140,35 @@ export const GalleryDetailEditionInfo = ({
 
   return (
     <div className="">
-      <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-4">
-        {mintState == MintState.Unknown && (
-          <div className="py-8">
-            <Spinner />
-          </div>
-        )}
-
-        {/* Editions are sold out */}
-        {mintState === MintState.GenericEditionSoldOut && renderOwned(photo)}
-
-        {/* Editions are NOT sold out */}
-        {mintState !== MintState.GenericEditionSoldOut &&
-          renderMintButton(photo, connectedWalletAddress, onMintSuccess)}
-
-        {/* Connect */}
-        {mintState === MintState.NotConnected && (
-          <div className="pt-3 text-sm italic">
-            Click above to connect your web3 wallet
-          </div>
-        )}
+      <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-8">
+      {mintComponentReducer(mintState, photo, connectedWalletAddress, onMintSuccess)}
       </div>
 
       {editionInfo && editionInfo?.nextId > 0 && (
-        <div className="mb-8">
+        <>
           <h4 className="text-2xl mb-4 font-bold">Edition Status</h4>
-          <div>
-            <b>{editionInfo?.minted}</b> of <b>45</b> minted
+          <div className="grid grid-cols-2 gap-y-0 mb-8">
+            <h6 className="uppercase">Minted</h6>
+            <div className="text-lg"><b>{editionInfo?.minted}</b> of <b>45</b></div>
+
+            <h6 className="uppercase">Gifted</h6>
+            <div className="text-lg"><b>{editionInfo?.gifted}</b> of <b>5</b></div>
+
+            <h6 className="uppercase">Status</h6>
+            <div className="text-lg font-bold">{editionInfo?.soldOut ? "Sold out" : "Available"}</div>
+
+            {!editionInfo?.soldOut && (
+              <>
+                <h6 className="uppercase">Next edition id</h6>
+                <div className="text-lg font-bold">{editionInfo?.nextId}</div>
+              </>
+            )}
           </div>
-          <div>
-            <b>{editionInfo?.gifted}</b> of <b>5</b> gifted
-          </div>
-          {!editionInfo?.soldOut && (
-            <div>
-              Next edition id: <b>{editionInfo?.nextId}</b>
-            </div>
-          )}
-        </div>
+        </>
       )}
 
       <h4 className="text-2xl mb-4 font-bold">Description</h4>
-      <p className="mb-4">
+      <p className="mb-8">
         An altered reality forever wandering on the Ethereum blockchain. This
         edition is an on-chain SVG version of {photo.name}. Its has 256 colors
         and is a 64x64 pixel representation of the original 1-of-1 artwork. The
@@ -161,47 +176,59 @@ export const GalleryDetailEditionInfo = ({
         exist entirely on the Ethereum blockchain.
       </p>
 
+      <h4 className="text-2xl mb-4 font-bold">Attributes</h4>
+      <div className="grid grid-cols-2 gap-y-0 mb-8">
+        <h6 className="uppercase">Type</h6>
+        <div className="text-lg font-bold">Edition</div>
+      </div>
+
       <h4 className="text-2xl mb-4 font-bold">Details</h4>
-      <div className="my-[2vh] grid grid-cols-2">
-        <div className="mb-4">
-          <h6 className="uppercase">Token Ids</h6>
-          <div className="text-lg font-bold">
-            {`${photo.getEditionIdStart()} - ${photo.getEditionIdEnd()}`}
-          </div>
+      <div className="grid grid-cols-2 gap-y-0 mb-8">
+        <h6 className="uppercase">Token Ids</h6>
+        <div className="text-lg font-bold">
+          {`${photo.getEditionIdStart()} - ${photo.getEditionIdEnd()}`}
         </div>
 
-        <div className="mb-4">
-          <h6 className="uppercase">Royalties</h6>
-          <div className="text-lg font-bold">7.5%</div>
+        <h6 className="uppercase">Edition</h6>
+        <div className="text-lg font-bold">
+          {photo.getEditionIndex(editionInfo?.nextId || 1)}{" "}
+          of 50
         </div>
 
-        <div className="mb-4">
-          <h6 className="uppercase">Contract</h6>
-          <div className="text-lg font-bold">
-            <a
-              href={`https://${process.env.NEXT_PUBLIC_CHAIN_NAME?.toLowerCase()}.etherscan.io/address/${
-                theHydraContract.address
-              }`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {Address(theHydraContract.address)}
-            </a>
-          </div>
+        <h6 className="uppercase">Original Id</h6>
+        <div className="text-lg font-bold">{originalId}</div>
+
+        <h6 className="uppercase">Contract</h6>
+        <div className="text-lg font-bold">
+          <a
+            href={`https://${process.env.NEXT_PUBLIC_CHAIN_NAME?.toLowerCase()}.etherscan.io/address/${
+              theHydraContract.address
+            }`}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
+            {Address(theHydraContract.address)}
+          </a>
         </div>
 
-        <div className="mb-4">
-          <h6 className="uppercase">Edition</h6>
-          <div className="text-lg font-bold">
-            {/* {photo.getEditionIndex(nextAvailableEditionId || 0)}{" "} */}
-            of 50
-          </div>
-        </div>
+        <h6 className="uppercase">Medium</h6>
+        <div className="text-lg font-bold">on-chain (XQSTGFX)</div>
 
-        <div className="mb-4">
-          <h6 className="uppercase">Original Id</h6>
-          <div className="text-lg font-bold">{originalId}</div>
-        </div>
+        <h6 className="uppercase">Dimensions</h6>
+        <div className="text-lg font-bold">256 x 256</div>
+
+        <h6 className="uppercase">Token Standard</h6>
+        <div className="text-lg font-bold">ERC-721</div>
+        
+        <h6 className="uppercase">Blockchain</h6>
+        <div className="text-lg font-bold">Ethereum</div>
+
+        <h6 className="uppercase">Metadata</h6>
+        <div className="text-lg font-bold">On-Chain</div>
+
+        <h6 className="uppercase">Royalties</h6>
+        <div className="text-lg font-bold">7.5%</div>
       </div>
     </div>
   );
