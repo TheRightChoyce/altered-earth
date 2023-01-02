@@ -29,7 +29,7 @@ export const GalleryDetail = ({
   const router = useRouter();
 
   // User wallet
-  const { address, isReconnecting, isDisconnected } = useAccount();
+  const { address } = useAccount();
 
   // Photo ids
   const originalId = collection.getOriginalId(photoId);
@@ -58,18 +58,6 @@ export const GalleryDetail = ({
 
   // Navigation helpers
   const [previousPhoto, setPreviousPhoto] = useState(-1);
-
-  // UI helpers
-  const [imageClass, setImageClass] = useState("");
-  // Adjust the grayscale of the images if user is not connected
-  useEffect(() => {
-    setImageClass(
-      (isReconnecting || address) && !isDisconnected
-        ? // ? "grayscale-0 transition-all ease-in-out duration-5000"
-          "grayscale-0"
-        : "grayscale"
-    );
-  }, [address, isReconnecting, isDisconnected]);
 
   const [originalImageClass, setOriginalImageClass] = useState("");
   // Adjust the opacity of the original when viewing an edition
@@ -110,7 +98,6 @@ export const GalleryDetail = ({
   return (
     <div className="flex flex-col items-center relative">
       {/* Image + token info */}
-
       <div className="relative m-auto pt-32 px-8 h-[70vh] sm:h-[80vh]">
         <img
           src={photo.previewImage1024Uri}
@@ -125,14 +112,12 @@ export const GalleryDetail = ({
       </div>
 
       {/* gallary photo nav */}
-      <div className="mb-8 w-full">
-        <GalleryNav
-          collection={collection}
-          photoId={originalId}
-          photoType={type.toString()}
-          photoLimit={50}
-        />
-      </div>
+      <GalleryNav
+        collection={collection}
+        photoId={originalId}
+        photoType={type.toString()}
+        photoLimit={50}
+      />
 
       <div className="bg-slate-800 w-full px-4 sm:px-8 lg:px-32">
         {/* Token Information */}
@@ -162,7 +147,7 @@ export const GalleryDetail = ({
             <GalleryDetailEditionInfo
               photo={photo}
               originalId={originalId}
-              userWalletAddress={address}
+              connectedWalletAddress={address}
               onMintSuccess={onMintSuccess}
             />
           )}

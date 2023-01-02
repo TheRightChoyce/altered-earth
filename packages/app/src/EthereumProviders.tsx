@@ -6,13 +6,15 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import {
-  allChains,
-  chainId,
   configureChains,
   createClient,
-  defaultChains,
   WagmiConfig,
 } from "wagmi";
+import {
+  mainnet,
+  goerli,
+  foundry
+} from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
@@ -22,24 +24,18 @@ export const targetChainId =
 
 // filter down to just mainnet + optional target testnet chain so that rainbowkit can tell
 // the user to switch network if they're on an alternative one
-const targetChains = defaultChains.filter(
+const targetChains = [mainnet, goerli].filter(
   (chain) => chain.id === 1 || chain.id === targetChainId
 );
 
 // For development purposes / we're using a local network
-if (targetChainId === chainId["foundry"]) {
-  const foundry = allChains.find((chain) => chain.name === "Foundry");
-  if (foundry) {
-    targetChains.push(foundry);
-  }
+if (targetChainId === foundry.id) {
+  targetChains.push(foundry);
 }
-
-console.log(process.env.NEXT_PUBLIC_ALCHEMY_API_KEY);
-
 export const { chains, provider, webSocketProvider } = configureChains(
   targetChains,
   [
-    alchemyProvider({ alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
+    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "" }),
     publicProvider(),
   ]
 );

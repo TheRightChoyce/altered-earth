@@ -31,7 +31,7 @@ const TypeNavigationLink = ({
                   type == currentType
                     ? "text-slate-100"
                     : "text-slate-400 hover:text-slate-300 underline underline-offset-1"
-                } text-lg transition-all duration-500 inline-block py-2
+                } text-lg transition-all duration-500 inline-block py-2 w-full
               `}
       >
         {type === "original" && "Original 1-of-1"}
@@ -49,7 +49,7 @@ export const GalleryDetailTypeToggle = ({
   setType: Dispatch<SetStateAction<string>>;
 }) => {
   return (
-    <div className="flex flex-row justify-items-stretch px-4 my-8">
+    <div className="flex flex-row justify-items-stretch my-8">
       <TypeNavigationLink
         type={"original"}
         currentType={currentType}

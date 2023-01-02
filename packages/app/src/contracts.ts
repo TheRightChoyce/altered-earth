@@ -17,6 +17,6 @@ export const useTheHydraContractRead = (
 ) =>
   useContractRead({
     ...readConfig,
-    addressOrName: NFTContract.deployedTo,
-    contractInterface: TheHydra__factory.abi,
+    address: NFTContract.deployedTo as `0x{string}`,
+    abi: TheHydra__factory.abi
   });

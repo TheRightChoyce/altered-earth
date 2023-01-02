@@ -22,7 +22,7 @@ export const GalleryNav = ({
     photoId == collection.photos.length - 1 ? 0 : photoId + 1;
 
   return (
-    <div className="flex flex-row my-4 w-full sm:w-[256px]" id="nav">
+    <div className="flex flex-row mt-4 mb-8 w-full sm:w-[256px]" id="nav">
       <div className="basis-1/4 text-center">
         <Link href={`/the-hydra/${navigatePreviousPhotoId}?type=${photoType}`}>
           <a>

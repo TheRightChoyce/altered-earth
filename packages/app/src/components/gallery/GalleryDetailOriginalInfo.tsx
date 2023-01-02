@@ -62,6 +62,51 @@ const renderOwned = (photo: Photo) => {
   );
 };
 
+const renderSpinner = () => {
+  return (
+    <div className="pt-8">
+      <Spinner />
+    </div>
+  )
+}
+
+const mintStateReducer = (
+  tokenLoaded: boolean,
+  owner: string | undefined,
+  connectedWalletAddress: string | undefined
+) => {
+  if (!tokenLoaded) {
+    return MintState.Unknown;
+  } else if (!connectedWalletAddress) {
+    return MintState.NotConnected;
+  } else if (owner !== undefined) {
+    return MintState.OriginalOwned;
+  } else if (owner === undefined) {
+    return MintState.OriginalAvailable;
+  }
+
+  return MintState.Unknown;
+};
+
+const mintComponentReducer = (
+  mintState: MintState,
+  photo: Photo,
+  connectedWalletAddress: string | undefined,
+  onMintSuccess: (owner: string, tx: string) => void
+) => {
+  switch (mintState) {
+    case MintState.Unknown:
+      return renderSpinner();
+    case MintState.OriginalOwned:
+      return renderOwned(photo);
+    case MintState.OriginalAvailable:
+    case MintState.NotConnected:
+      return renderMintButton(photo, connectedWalletAddress, onMintSuccess);
+    default:
+      return renderSpinner();
+  }
+}
+
 export const GalleryDetailOriginalInfo = ({
   photo,
   connectedWalletAddress,
@@ -69,70 +114,24 @@ export const GalleryDetailOriginalInfo = ({
 }: OriginalInfo) => {
   // Token specific info
   const [mintState, setMintState] = useState(MintState.Unknown);
-  const [tokenLoaded, setTokenLoaded] = useState(false);
+  const [tokenLoaded, setTokenLoaded] = useState(true);
   const [owner, setOwner] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (!tokenLoaded) setMintState(MintState.Unknown);
-    else if (owner !== undefined) setMintState(MintState.OriginalOwned);
-    else if (owner === undefined) setMintState(MintState.OriginalAvailable);
-  }, [owner, tokenLoaded]);
+    setMintState(mintStateReducer(tokenLoaded, owner, connectedWalletAddress));
+  }, [owner, connectedWalletAddress, tokenLoaded]);
 
   // Use and watch the owner of this token
-  photo?.getOwnerFromContract(setOwner, setTokenLoaded);
+  photo?.getOwnerFromContract(
+    setOwner,
+    setTokenLoaded,
+    mintState !== MintState.NotConnected
+  );
 
   return (
     <>
       <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-4">
-        {mintState == MintState.Unknown && (
-          <div className="pt-8">
-            <Spinner />
-          </div>
-        )}
-
-        {/* Wallet not connected to a network */}
-        {mintState == MintState.NotConnected && (
-          <div className="flex flex-col items-center">
-            <div className="w-full">
-              <GalleryMintButton
-                photo={photo}
-                address={connectedWalletAddress}
-                isOriginal={true}
-                onSuccess={onMintSuccess}
-                isCorrectNetwork={false}
-              />
-            </div>
-            <div className="pt-3 text-sm italic">
-              Click above to connect your web3 wallet
-            </div>
-          </div>
-        )}
-
-        {/* Wallet connected to the wrong network */}
-        {mintState == MintState.WrongNetwork && (
-          <div className="flex flex-col items-center">
-            <div className="w-full">
-              <GalleryMintButton
-                photo={photo}
-                address={connectedWalletAddress}
-                isOriginal={true}
-                onSuccess={onMintSuccess}
-                isCorrectNetwork={false}
-              />
-            </div>
-            <div className="pt-3 text-sm italic">
-              Please connect your wallet to the{` `}
-              {process.env.NEXT_PUBLIC_CHAIN_NAME} network
-            </div>
-          </div>
-        )}
-
-        {/* Original is owned */}
-        {mintState === MintState.OriginalOwned && renderOwned(photo)}
-
-        {/* Original is available */}
-        {mintState == MintState.OriginalAvailable &&
-          renderMintButton(photo, connectedWalletAddress, onMintSuccess)}
+        {mintComponentReducer(mintState, photo, connectedWalletAddress, onMintSuccess)}
       </div>
 
       {/* Show owner when owned */}

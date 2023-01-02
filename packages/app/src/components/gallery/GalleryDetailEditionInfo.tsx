@@ -12,13 +12,13 @@ import { MintState } from "./mintState";
 interface EditionInfo {
   photo: Photo;
   originalId: number;
-  userWalletAddress: string | undefined;
+  connectedWalletAddress: string | undefined;
   onMintSuccess: (owner: string, tx: string) => void;
 }
 
 const renderMintButton = (
   photo: Photo,
-  userWalletAddress: string | undefined,
+  connectedWalletAddress: string | undefined,
   onMintSuccess: (owner: string, tx: string) => void
 ) => {
   return (
@@ -30,7 +30,7 @@ const renderMintButton = (
       <div className="w-full">
         <GalleryMintButton
           photo={photo}
-          address={userWalletAddress}
+          address={connectedWalletAddress}
           isOriginal={false}
           onSuccess={onMintSuccess}
           isCorrectNetwork={true}
@@ -63,10 +63,13 @@ const renderOwned = (photo: Photo) => {
 
 const mintStateReducer = (
   tokenLoaded: boolean,
+  connectedWalletAddress: string | undefined,
   editionSoldOut: boolean | undefined
 ) => {
   if (!tokenLoaded) {
     return MintState.Unknown;
+  } else if (!connectedWalletAddress) {
+    return MintState.NotConnected;
   } else if (editionSoldOut === true) {
     return MintState.GenericEditionSoldOut;
   } else if (editionSoldOut === false) {
@@ -79,7 +82,7 @@ const mintStateReducer = (
 export const GalleryDetailEditionInfo = ({
   photo,
   originalId,
-  userWalletAddress,
+  connectedWalletAddress,
   onMintSuccess,
 }: EditionInfo) => {
   // Token specific info
@@ -91,11 +94,22 @@ export const GalleryDetailEditionInfo = ({
 
   // State machine for our mint state of this edition
   useEffect(() => {
-    setMintState(mintStateReducer(tokenLoaded, editionInfo?.soldOut));
-  }, [tokenLoaded, editionInfo]);
+    setMintState(
+      mintStateReducer(
+        tokenLoaded,
+        connectedWalletAddress,
+        editionInfo?.soldOut
+      )
+    );
+  }, [tokenLoaded, connectedWalletAddress, editionInfo]);
 
   // Get the info about this ediion
-  photo?.getEditionInfo(originalId, setTokenLoaded, setEditionInfo);
+  photo?.getEditionInfo(
+    originalId,
+    setTokenLoaded,
+    setEditionInfo,
+    mintState !== MintState.NotConnected
+  );
 
   return (
     <div className="">
@@ -110,8 +124,15 @@ export const GalleryDetailEditionInfo = ({
         {mintState === MintState.GenericEditionSoldOut && renderOwned(photo)}
 
         {/* Editions are NOT sold out */}
-        {mintState === MintState.GenericEditionAvailable &&
-          renderMintButton(photo, userWalletAddress, onMintSuccess)}
+        {mintState !== MintState.GenericEditionSoldOut &&
+          renderMintButton(photo, connectedWalletAddress, onMintSuccess)}
+
+        {/* Connect */}
+        {mintState === MintState.NotConnected && (
+          <div className="pt-3 text-sm italic">
+            Click above to connect your web3 wallet
+          </div>
+        )}
       </div>
 
       {editionInfo && editionInfo?.nextId > 0 && (

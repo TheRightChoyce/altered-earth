@@ -11,11 +11,13 @@ export function useOwnerOf(
   setTokenLoaded: (isLoaded: boolean) => void,
   setOwner: (owner: string | undefined) => void
 ) {
-  // if (!tokenId) {
-  //   setTokenLoaded(false);
-  //   setOwner(undefined);
-  // }
-  // let ownerAddress: string | undefined;
+  let ownerAddress: string | undefined;
+  
+  if (!tokenId) {
+    setTokenLoaded(false);
+    setOwner(undefined);
+  }
+  
   // const [lastFetch, setLastFetch] = useState(new Date());
   // if (new Date().getTime() - lastFetch.getTime() > 10000) {
   //   console.log("enough time as passed, checking for token owner");
@@ -67,8 +69,8 @@ export function useOwnerOf(
   //     setOwner(data?.toString());
   //   },
   // });
-  // useEffect(() => {
-  //   setOwner(ownerAddress ? ownerAddress : undefined);
-  // }, [ownerAddress, setOwner]);
-  // return ownerAddress;
+  useEffect(() => {
+    setOwner(ownerAddress ? ownerAddress : undefined);
+    setTokenLoaded(true);
+  }, [ownerAddress, setOwner]);
 }

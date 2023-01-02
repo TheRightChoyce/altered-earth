@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import slugify from "slugify";
 
 import { useTheHydraContractRead } from "../contracts";
+import { targetChainId } from "../EthereumProviders";
 
 interface IAttribute {
   trait_type: string;
@@ -119,19 +120,22 @@ export class Photo {
 
   getOwnerFromContract = (
     setOwner: (owner: string | undefined) => void,
-    setTokenLoaded: (loaded: boolean) => void
+    setTokenLoaded: (loaded: boolean) => void,
+    isEnabled: boolean
   ) => {
-    const { data, isFetched } = useTheHydraContractRead({
+    const { data, isFetched }: {data: any, isFetched: boolean} = useTheHydraContractRead({
       functionName: "ownerOf",
-      args: this.id,
+      args: [this.id],
       watch: false,
-      enabled: true,
+      enabled: isEnabled,
+      chainId: targetChainId, // needed for when we're on a testnet and a wallet isn't conected
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onError(error: any) {
         if (error.reason !== "NOT_MINTED") {
           throw error;
         }
-      },
+      }
     });
 
     useEffect(() => {
@@ -143,17 +147,18 @@ export class Photo {
   getEditionInfo = (
     originalId: number,
     setTokenLoaded: (loaded: boolean) => void,
-    setEditionInfo: (val: EditionInfoFromContract | undefined) => void
+    setEditionInfo: (val: EditionInfoFromContract | undefined) => void,
+    isEnabled: boolean
   ) => {
-    console.log("getEditionIfo", originalId);
-    const { data, isFetched } = useTheHydraContractRead({
+    const { data, isFetched }: { data: any, isFetched: boolean} = useTheHydraContractRead({
       functionName: "editionsGetInfoFromOriginal",
-      args: originalId,
+      args: [originalId],
       watch: false,
-      enabled: true,
+      enabled: isEnabled,
+      chainId: targetChainId, // needed for when we're on a testnet and a wallet isn't conected
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onError(error: any) {
-        console.log(error);
         if (error.reason !== "BeyondTheScopeOfConsciousness") {
           throw error;
         }
@@ -161,7 +166,7 @@ export class Photo {
     });
 
     useEffect(() => {
-      setEditionInfo(new EditionInfoFromContract(data));
+      setEditionInfo(new EditionInfoFromContract(data as Result));
       setTokenLoaded(isFetched);
     }, [data, isFetched, setEditionInfo, setTokenLoaded]);
   };
