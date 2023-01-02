@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 
 import { GalleryBreadcrumbs } from "../../../components/gallery/GalleryBreadcrumbs";
 import { NavBar, TheHydraButton } from "../../../components/NavBar";
-import { OnChainExplorer } from "../../../components/OnChainExplorer";
+import { OnChainExplorer } from "../../../components/gallery/OnChainExplorer";
 import Layout from "../../../layout/GalleryLayout";
 import type { NextPageWithLayout } from "../../_app";
 

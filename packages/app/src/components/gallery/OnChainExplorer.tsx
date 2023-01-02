@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import { useTheHydraContractRead } from "../contracts";
-import { useIsMounted } from "../useIsMounted";
+import { useTheHydraContractRead } from "../../contracts";
+import { useIsMounted } from "../../useIsMounted";
 
 type OnChainMetaDataAttribute = {
   trait_type: string;

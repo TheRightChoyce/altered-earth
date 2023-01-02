@@ -5,12 +5,12 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
-import { useIsMounted } from "../useIsMounted";
-import { GalleryBreadcrumbs } from "./gallery/GalleryBreadcrumbs";
-import { NavBar, TheHydraButton, TypeNavigationButton } from "./NavBar";
-import { Photo } from "./Photo";
-import { PhotoCollection } from "./PhotoCollection";
-import { TypeToggle } from "./TypeToggle";
+import { useIsMounted } from "../../useIsMounted";
+import { GalleryBreadcrumbs } from "./GalleryBreadcrumbs";
+import { NavBar, TheHydraButton, TypeNavigationButton } from "../NavBar";
+import { Photo } from "../Photo";
+import { PhotoCollection } from "../PhotoCollection";
+import { TypeToggle } from "../TypeToggle";
 
 export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   const isMounted = useIsMounted();

@@ -157,7 +157,7 @@ export const GalleryDetailOriginalInfo = ({
       <h4 className="text-2xl mb-4 font-bold">Attributes</h4>
       <div className="grid grid-cols-2 gap-y-0 mb-8">
         <h6 className="uppercase">Type</h6>
-        <div className="text-lg font-bold">Original 1-of-1</div>
+        <div className="text-lg font-bold">Original</div>
 
         <h6 className="uppercase">Chakra</h6>
         <div className="text-lg font-bold">{photo.attributes["Chakra"]}</div>
@@ -202,7 +202,6 @@ export const GalleryDetailOriginalInfo = ({
 
         <h6 className="uppercase">Royalties</h6>
         <div className="text-lg font-bold">7.5%</div>
-
       </div>
     </>
   );

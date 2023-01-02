@@ -4,13 +4,13 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
-import { useIsMounted } from "../useIsMounted";
-import { GalleryDetailEditionInfo } from "./gallery/GalleryDetailEditionInfo";
-import { GalleryDetailOriginalInfo } from "./gallery/GalleryDetailOriginalInfo";
-import { GalleryDetailTypeToggle } from "./gallery/GalleryDetailTypeToggle";
-import { GalleryNav } from "./gallery/GalleryNav";
-import { TokenType } from "./gallery/tokenType";
-import { PhotoCollection } from "./PhotoCollection";
+import { useIsMounted } from "../../useIsMounted";
+import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
+import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
+import { GalleryDetailTypeToggle } from "./GalleryDetailTypeToggle";
+import { GalleryNav } from "./GalleryNav";
+import { TokenType } from "./tokenType";
+import { PhotoCollection } from "../PhotoCollection";
 
 const notFound = (
   <div className="flex flex-col w-full text-center">
