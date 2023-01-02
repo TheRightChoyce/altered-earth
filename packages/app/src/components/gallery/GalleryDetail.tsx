@@ -99,16 +99,18 @@ export const GalleryDetail = ({
     <div className="flex flex-col items-center relative">
       {/* Image + token info */}
       <div className="relative m-auto pt-32 px-8 h-[70vh] sm:h-[80vh]">
-        <img
-          src={photo.previewImage1024Uri}
-          alt={photo.name}
-          className={`${originalImageClass} max-h-[60vh]`}
-        />
-        <div
-          className={`${editionImageClass} absolute w-[75%] h-[50%] top-[25%] left-[12.5%] border-8 border-slate-100`}
-        >
-          <img src={photo.svgPreviewUri} alt={photo.name} />
-        </div>
+        <a href={type === "original" ? photo.previewImage1024Uri : photo.svgPreviewUri} target="_blank" className="cursor-zoom-in">
+          <img
+            src={photo.previewImage1024Uri}
+            alt={photo.name}
+            className={`${originalImageClass} max-h-[60vh]`}
+          />
+          <div
+            className={`${editionImageClass} absolute w-[75%] h-[50%] top-[25%] left-[12.5%] border-8 border-slate-100`}
+          >
+            <img src={photo.svgPreviewUri} alt={photo.name} />
+          </div>
+        </a>
       </div>
 
       <div className="bg-slate-800 w-full px-4 sm:px-8 lg:px-32">
