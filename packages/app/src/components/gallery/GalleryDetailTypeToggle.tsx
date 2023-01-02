@@ -20,7 +20,7 @@ const TypeNavigationLink = ({
       className={`
     ${
       type == currentType ? "bg-slate-700" : "bg-slate-800"
-    } basis-1/2 text-center rounded-md`}
+    } basis-1/2 text-center`}
     >
       <a
         onClick={handleClick}
@@ -29,8 +29,8 @@ const TypeNavigationLink = ({
         className={`
                 ${
                   type == currentType
-                    ? "text-slate-100"
-                    : "text-slate-400 hover:text-slate-300 underline underline-offset-1"
+                    ? "text-slate-100 font-bold border-slate-700"
+                    : "text-slate-400 hover:text-slate-300"
                 } text-lg transition-all duration-500 inline-block py-2 w-full
               `}
       >
@@ -49,7 +49,7 @@ export const GalleryDetailTypeToggle = ({
   setType: Dispatch<SetStateAction<string>>;
 }) => {
   return (
-    <div className="flex flex-row justify-items-stretch my-8">
+    <div className="flex flex-row justify-items-stretch my-8 border-2 rounded-md border-slate-900">
       <TypeNavigationLink
         type={"original"}
         currentType={currentType}

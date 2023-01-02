@@ -111,27 +111,16 @@ export const GalleryDetail = ({
         </div>
       </div>
 
-      {/* gallary photo nav */}
-      <GalleryNav
-        collection={collection}
-        photoId={originalId}
-        photoType={type.toString()}
-        photoLimit={50}
-      />
-
       <div className="bg-slate-800 w-full px-4 sm:px-8 lg:px-32">
-        {/* Token Information */}
-        <div className="mt-16 mb-8">
-          <h2 className="text-3xl lg:text-6xl mb-2 font-bold">{photo.name}</h2>
-          <h3 className="text-md lg:text-lg mb-8">
-            {type === "original" ? "Original 1-of-1" : "On-chain Edition of 50"}
-          </h3>
-          <p className="text-lg italic leading-snug">{photo.description}</p>
-        </div>
-
         {/* Original / Edition toggle */}
         <div className="w-full">
           <GalleryDetailTypeToggle setType={setType} currentType={type} />
+        </div>
+
+        {/* Token Information */}
+        <div className="mt-8 mb-8">
+          <h2 className="text-3xl lg:text-6xl mb-2 font-bold">{photo.name}</h2>
+          <p className="text-lg italic leading-snug">{photo.description}</p>
         </div>
 
         {/* Original / Edition info */}
@@ -152,6 +141,14 @@ export const GalleryDetail = ({
             />
           )}
         </div>
+
+        {/* gallary photo nav */}
+        <GalleryNav
+          collection={collection}
+          photoId={originalId}
+          photoType={type.toString()}
+          photoLimit={50}
+        />
       </div>
     </div>
   );
