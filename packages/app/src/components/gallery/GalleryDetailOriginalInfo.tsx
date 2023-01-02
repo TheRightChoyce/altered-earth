@@ -130,7 +130,7 @@ export const GalleryDetailOriginalInfo = ({
 
   return (
     <>
-      <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-4">
+      <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-8">
         {mintComponentReducer(mintState, photo, connectedWalletAddress, onMintSuccess)}
       </div>
 
@@ -148,53 +148,61 @@ export const GalleryDetailOriginalInfo = ({
       )}
 
       <h4 className="text-2xl mb-4 font-bold">Description</h4>
-      <p className="mb-4">
+      <p className="mb-8">
         An altered reality forever wandering the Ethereum blockchain. This is an
         original 1-of-1 artwork that comes with a high-res immutable image
         stored on IPFS. Each token conforms to the ERC-721 standard.
       </p>
 
+      <h4 className="text-2xl mb-4 font-bold">Attributes</h4>
+      <div className="grid grid-cols-2 gap-y-0 mb-8">
+        <h6 className="uppercase">Type</h6>
+        <div className="text-lg font-bold">Original 1-of-1</div>
+
+        <h6 className="uppercase">Chakra</h6>
+        <div className="text-lg font-bold">{photo.attributes["Chakra"]}</div>
+
+        <h6 className="uppercase">Season</h6>
+        <div className="text-lg font-bold">{photo.attributes["Season"]}</div>
+      </div>
+
       <h4 className="text-2xl mb-4 font-bold">Details</h4>
-      <div className="my-[2vh] grid grid-cols-2">
-        <div className="mb-4">
-          <h6 className="uppercase">Token Id</h6>
-          <div className="text-lg font-bold">{photo.id}</div>
+      <div className="grid grid-cols-2 gap-y-0 mb-8">
+        <h6 className="uppercase">Token Id</h6>
+        <div className="text-lg font-bold">{photo.id}</div>
+
+        <h6 className="uppercase">Contract</h6>
+        <div className="text-lg font-bold">
+          <a
+            href={`https://${process.env.NEXT_PUBLIC_CHAIN_NAME?.toLowerCase()}.etherscan.io/address/${
+              theHydraContract.address
+            }`}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
+            {Address(theHydraContract.address)}
+          </a>
         </div>
 
-        <div className="mb-4">
-          <h6 className="uppercase">Royalties</h6>
-          <div className="text-lg font-bold">7.5%</div>
-        </div>
+        <h6 className="uppercase">Medium</h6>
+        <div className="text-lg font-bold">image (JPG)</div>
 
-        <div className="mb-4">
-          <h6 className="uppercase">Contract</h6>
-          <div className="text-lg font-bold">
-            <a
-              href={`https://${process.env.NEXT_PUBLIC_CHAIN_NAME?.toLowerCase()}.etherscan.io/address/${
-                theHydraContract.address
-              }`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {Address(theHydraContract.address)}
-            </a>
-          </div>
-        </div>
+        <h6 className="uppercase">Dimensions</h6>
+        <div className="text-lg font-bold">3024 x 4032</div>
 
-        <div className="mb-4">
-          <h6 className="uppercase">Type</h6>
-          <div className="text-lg font-bold">Original 1-of-1</div>
-        </div>
+        <h6 className="uppercase">Token Standard</h6>
+        <div className="text-lg font-bold">ERC-721</div>
 
-        <div className="mb-4">
-          <h6 className="uppercase">Chakra</h6>
-          <div className="text-lg font-bold">{photo.attributes["Chakra"]}</div>
-        </div>
+        <h6 className="uppercase">Blockchain</h6>
+        <div className="text-lg font-bold">Ethereum</div>
 
-        <div className="mb-4">
-          <h6 className="uppercase">Season</h6>
-          <div className="text-lg font-bold">{photo.attributes["Season"]}</div>
-        </div>
+        <h6 className="uppercase">Metadata</h6>
+        <div className="text-lg font-bold">IPFS</div>
+
+        <h6 className="uppercase">Royalties</h6>
+        <div className="text-lg font-bold">7.5%</div>
+
       </div>
     </>
   );
