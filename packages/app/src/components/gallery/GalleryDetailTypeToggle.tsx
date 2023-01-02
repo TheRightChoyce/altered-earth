@@ -30,7 +30,7 @@ const TypeNavigationLink = ({
                 ${
                   type == currentType
                     ? "text-slate-100"
-                    : "text-slate-400 hover:text-slate-300"
+                    : "text-slate-400 hover:text-slate-300 underline underline-offset-1"
                 } text-lg transition-all duration-500 inline-block py-2
               `}
       >

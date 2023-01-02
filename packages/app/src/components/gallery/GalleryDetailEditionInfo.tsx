@@ -98,7 +98,7 @@ export const GalleryDetailEditionInfo = ({
   photo?.getEditionInfo(originalId, setTokenLoaded, setEditionInfo);
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-4">
         {mintState == MintState.Unknown && (
           <div className="py-8">

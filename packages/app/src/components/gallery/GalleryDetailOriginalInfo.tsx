@@ -24,7 +24,7 @@ const renderMintButton = (
   return (
     <div className="flex flex-col">
       <div className="mb-2">
-        <h5 className="text-xl">Price</h5>
+        <h5 className="text-xl">Original Price</h5>
         <h4 className="text-3xl">0.25 ETH</h4>
       </div>
       <div className="w-full">
@@ -82,7 +82,7 @@ export const GalleryDetailOriginalInfo = ({
   photo?.getOwnerFromContract(setOwner, setTokenLoaded);
 
   return (
-    <div className="p-4">
+    <>
       <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-4">
         {mintState == MintState.Unknown && (
           <div className="pt-8">
@@ -197,6 +197,6 @@ export const GalleryDetailOriginalInfo = ({
           <div className="text-lg font-bold">{photo.attributes["Season"]}</div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
