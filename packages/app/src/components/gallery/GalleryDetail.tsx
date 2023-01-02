@@ -8,7 +8,7 @@ import { useIsMounted } from "../../useIsMounted";
 import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
 import { GalleryDetailTypeToggle } from "./GalleryDetailTypeToggle";
-import { GalleryNav } from "./GalleryNav";
+import { GalleryNav, GalleryNavNext, GalleryNavPrevious } from "./GalleryNav";
 import { TokenType } from "./tokenType";
 import { PhotoCollection } from "../PhotoCollection";
 
@@ -98,19 +98,37 @@ export const GalleryDetail = ({
   return (
     <div className="flex flex-col items-center relative">
       {/* Image + token info */}
-      <div className="relative m-auto pt-32 px-8 h-[70vh] sm:h-[80vh]">
-        <a href={type === "original" ? photo.previewImage1024Uri : photo.svgPreviewUri} target="_blank" className="cursor-zoom-in">
-          <img
-            src={photo.previewImage1024Uri}
-            alt={photo.name}
-            className={`${originalImageClass} max-h-[60vh]`}
-          />
-          <div
-            className={`${editionImageClass} absolute w-[75%] h-[50%] top-[25%] left-[12.5%] border-8 border-slate-100`}
-          >
-            <img src={photo.svgPreviewUri} alt={photo.name} />
-          </div>
-        </a>
+      <div className="flex flex-row">
+        <div className="w-16 relative hidden sm:block">
+          <div className="inline-block absolute top-[50%]">
+            <GalleryNavPrevious
+              collection={collection}
+              photoId={originalId}
+              photoType={type.toString()} />
+            </div>
+        </div>
+        <div className="relative m-auto pt-32 px-8 h-[70vh] sm:h-[80vh]">
+          <a href={type === "original" ? photo.previewImage1024Uri : photo.svgPreviewUri} target="_blank" className="cursor-zoom-in">
+            <img
+              src={photo.previewImage1024Uri}
+              alt={photo.name}
+              className={`${originalImageClass} max-h-[60vh]`}
+            />
+            <div
+              className={`${editionImageClass} absolute w-[75%] h-[50%] top-[25%] left-[12.5%] border-8 border-slate-100`}
+            >
+              <img src={photo.svgPreviewUri} alt={photo.name} />
+            </div>
+          </a>
+        </div>
+        <div className="w-16 relative hidden sm:block">
+          <div className="inline-block absolute top-[50%]">
+            <GalleryNavNext
+              collection={collection}
+              photoId={originalId}
+              photoType={type.toString()} />
+            </div>
+        </div>
       </div>
 
       <div className="bg-slate-800 px-4 sm:px-8 lg:px-32 w-full">
@@ -123,7 +141,21 @@ export const GalleryDetail = ({
 
           {/* Token Information */}
           <div className="mt-8 mb-8">
-            <h2 className="text-3xl lg:text-6xl mb-2 font-bold">{photo.name}</h2>
+            <div className="flex flex-row">
+              <div className="basis-5/6">
+                <h2 className="text-3xl lg:text-6xl mb-2 font-bold">{photo.name}</h2>
+              </div>
+
+              <div className="basis-1/6 sm:hidden">
+                {/* gallary photo nav */}
+                <GalleryNav
+                  collection={collection}
+                  photoId={originalId}
+                  photoType={type.toString()}
+                  photoLimit={50}
+                />
+              </div>
+            </div>
             <p className="text-lg italic leading-snug">{photo.description}</p>
           </div>
 
@@ -143,14 +175,6 @@ export const GalleryDetail = ({
               onMintSuccess={onMintSuccess}
             />
           )}
-
-          {/* gallary photo nav */}
-          <GalleryNav
-            collection={collection}
-            photoId={originalId}
-            photoType={type.toString()}
-            photoLimit={50}
-          />
         </div>
       </div>
     </div>
