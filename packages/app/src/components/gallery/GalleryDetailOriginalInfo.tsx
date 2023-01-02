@@ -155,7 +155,7 @@ export const GalleryDetailOriginalInfo = ({
       </p>
 
       <h4 className="text-2xl mb-4 font-bold">Attributes</h4>
-      <div className="grid grid-cols-2 gap-y-0 mb-8">
+      <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
         <h6 className="uppercase">Type</h6>
         <div className="text-lg font-bold">Original</div>
 
@@ -167,7 +167,7 @@ export const GalleryDetailOriginalInfo = ({
       </div>
 
       <h4 className="text-2xl mb-4 font-bold">Details</h4>
-      <div className="grid grid-cols-2 gap-y-0 mb-8">
+      <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
         <h6 className="uppercase">Token Id</h6>
         <div className="text-lg font-bold">{photo.id}</div>
 

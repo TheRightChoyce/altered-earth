@@ -113,20 +113,21 @@ export const GalleryDetail = ({
         </a>
       </div>
 
-      <div className="bg-slate-800 w-full px-4 sm:px-8 lg:px-32">
-        {/* Original / Edition toggle */}
-        <div className="w-full">
-          <GalleryDetailTypeToggle setType={setType} currentType={type} />
-        </div>
+      <div className="bg-slate-800 px-4 sm:px-8 lg:px-32 w-full">
+        <div className="container max-w-3xl m-auto">
 
-        {/* Token Information */}
-        <div className="mt-8 mb-8">
-          <h2 className="text-3xl lg:text-6xl mb-2 font-bold">{photo.name}</h2>
-          <p className="text-lg italic leading-snug">{photo.description}</p>
-        </div>
+          {/* Original / Edition toggle */}
+          <div className="w-full">
+            <GalleryDetailTypeToggle setType={setType} currentType={type} />
+          </div>
 
-        {/* Original / Edition info */}
-        <div className="container">
+          {/* Token Information */}
+          <div className="mt-8 mb-8">
+            <h2 className="text-3xl lg:text-6xl mb-2 font-bold">{photo.name}</h2>
+            <p className="text-lg italic leading-snug">{photo.description}</p>
+          </div>
+
+          {/* Original / Edition info */}
           {type == "original" && (
             <GalleryDetailOriginalInfo
               photo={photo}
@@ -142,15 +143,15 @@ export const GalleryDetail = ({
               onMintSuccess={onMintSuccess}
             />
           )}
-        </div>
 
-        {/* gallary photo nav */}
-        <GalleryNav
-          collection={collection}
-          photoId={originalId}
-          photoType={type.toString()}
-          photoLimit={50}
-        />
+          {/* gallary photo nav */}
+          <GalleryNav
+            collection={collection}
+            photoId={originalId}
+            photoType={type.toString()}
+            photoLimit={50}
+          />
+        </div>
       </div>
     </div>
   );

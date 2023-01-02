@@ -147,7 +147,7 @@ export const GalleryDetailEditionInfo = ({
       {editionInfo && editionInfo?.nextId > 0 && (
         <>
           <h4 className="text-2xl mb-4 font-bold">Edition Status</h4>
-          <div className="grid grid-cols-2 gap-y-0 mb-8">
+          <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
             <h6 className="uppercase">Minted</h6>
             <div className="text-lg"><b>{editionInfo?.minted}</b> of <b>45</b></div>
 
@@ -177,13 +177,13 @@ export const GalleryDetailEditionInfo = ({
       </p>
 
       <h4 className="text-2xl mb-4 font-bold">Attributes</h4>
-      <div className="grid grid-cols-2 gap-y-0 mb-8">
+      <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
         <h6 className="uppercase">Type</h6>
         <div className="text-lg font-bold">Edition</div>
       </div>
 
       <h4 className="text-2xl mb-4 font-bold">Details</h4>
-      <div className="grid grid-cols-2 gap-y-0 mb-8">
+      <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
         <h6 className="uppercase">Token Ids</h6>
         <div className="text-lg font-bold">
           {`${photo.getEditionIdStart()} - ${photo.getEditionIdEnd()}`}
