@@ -5,12 +5,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
+import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
 import { GalleryDetailTypeToggle } from "./GalleryDetailTypeToggle";
 import { GalleryNav, GalleryNavNext, GalleryNavPrevious } from "./GalleryNav";
 import { TokenType } from "./tokenType";
-import { PhotoCollection } from "../PhotoCollection";
 
 const notFound = (
   <div className="flex flex-col w-full text-center">
@@ -104,11 +104,21 @@ export const GalleryDetail = ({
             <GalleryNavPrevious
               collection={collection}
               photoId={originalId}
-              photoType={type.toString()} />
-            </div>
+              photoType={type.toString()}
+            />
+          </div>
         </div>
         <div className="relative m-auto pt-32 px-8 h-[70vh] sm:h-[80vh]">
-          <a href={type === "original" ? photo.previewImage1024Uri : photo.svgPreviewUri} target="_blank" className="cursor-zoom-in">
+          <a
+            href={
+              type === "original"
+                ? photo.previewImage1024Uri
+                : photo.svgPreviewUri
+            }
+            target="_blank"
+            className="cursor-zoom-in"
+            rel="noreferrer"
+          >
             <img
               src={photo.previewImage1024Uri}
               alt={photo.name}
@@ -126,14 +136,14 @@ export const GalleryDetail = ({
             <GalleryNavNext
               collection={collection}
               photoId={originalId}
-              photoType={type.toString()} />
-            </div>
+              photoType={type.toString()}
+            />
+          </div>
         </div>
       </div>
 
       <div className="bg-slate-800 px-4 sm:px-8 lg:px-32 w-full">
         <div className="container max-w-3xl m-auto">
-
           {/* Original / Edition toggle */}
           <div className="w-full">
             <GalleryDetailTypeToggle setType={setType} currentType={type} />
@@ -143,7 +153,9 @@ export const GalleryDetail = ({
           <div className="mt-8 mb-8">
             <div className="flex flex-row">
               <div className="basis-5/6">
-                <h2 className="text-3xl lg:text-6xl mb-2 font-bold">{photo.name}</h2>
+                <h2 className="text-3xl lg:text-6xl mb-2 font-bold">
+                  {photo.name}
+                </h2>
               </div>
 
               <div className="basis-1/6 sm:hidden">
