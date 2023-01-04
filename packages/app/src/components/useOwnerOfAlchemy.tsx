@@ -12,12 +12,12 @@ export function useOwnerOf(
   setOwner: (owner: string | undefined) => void
 ) {
   let ownerAddress: string | undefined;
-  
+
   if (!tokenId) {
     setTokenLoaded(false);
     setOwner(undefined);
   }
-  
+
   // const [lastFetch, setLastFetch] = useState(new Date());
   // if (new Date().getTime() - lastFetch.getTime() > 10000) {
   //   console.log("enough time as passed, checking for token owner");

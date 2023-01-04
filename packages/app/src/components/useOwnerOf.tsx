@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useTheHydraContractRead } from "../contracts";
 
 export function useOwnerOf(
@@ -23,7 +24,7 @@ export function useOwnerOf(
       }
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onSettled(data, error: any) {
+    onSettled(data: any, error: any) {
       console.log("onSettled", data, error);
       setTokenLoaded(true);
 
@@ -38,7 +39,7 @@ export function useOwnerOf(
         return;
       }
     },
-    onSuccess(data) {
+    onSuccess(data: any) {
       console.log("onSuccess", data);
       setTokenLoaded(true);
       setOwner(

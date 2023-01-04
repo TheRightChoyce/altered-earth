@@ -36,7 +36,7 @@ export const OnChainExplorer = ({ photoId }: { photoId: number }) => {
   );
   const [cloudflareIpfsLink, setCloudflareIpfsLink] = useState("");
 
-  const tokenURI = useTheHydraContractRead({
+  const { data }: { data: any } = useTheHydraContractRead({
     functionName: "tokenURI",
     args: photoId?.toString(),
     watch: false,
@@ -56,7 +56,8 @@ export const OnChainExplorer = ({ photoId }: { photoId: number }) => {
         throw error;
       }
     },
-    onSuccess(data) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onSuccess(data: any) {
       if (photoId < 50) {
         setCloudflareIpfsLink(
           `https://cloudflare-ipfs.com/ipfs/${data
@@ -120,7 +121,7 @@ export const OnChainExplorer = ({ photoId }: { photoId: number }) => {
           <div>
             Raw on-chain json:
             <iframe
-              src={tokenURI?.data?.toString()}
+              src={data?.data?.toString()}
               className="w-[80vw] h-128"
             ></iframe>
           </div>

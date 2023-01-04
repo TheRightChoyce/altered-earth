@@ -67,8 +67,8 @@ const renderSpinner = () => {
     <div className="pt-8">
       <Spinner />
     </div>
-  )
-}
+  );
+};
 
 const mintStateReducer = (
   tokenLoaded: boolean,
@@ -105,7 +105,7 @@ const mintComponentReducer = (
     default:
       return renderSpinner();
   }
-}
+};
 
 export const GalleryDetailOriginalInfo = ({
   photo,
@@ -131,7 +131,12 @@ export const GalleryDetailOriginalInfo = ({
   return (
     <>
       <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-8">
-        {mintComponentReducer(mintState, photo, connectedWalletAddress, onMintSuccess)}
+        {mintComponentReducer(
+          mintState,
+          photo,
+          connectedWalletAddress,
+          onMintSuccess
+        )}
       </div>
 
       {/* Show owner when owned */}

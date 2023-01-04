@@ -66,8 +66,8 @@ const renderSpinner = () => {
     <div className="pt-8">
       <Spinner />
     </div>
-  )
-}
+  );
+};
 
 const mintStateReducer = (
   tokenLoaded: boolean,
@@ -104,7 +104,7 @@ const mintComponentReducer = (
     default:
       return renderSpinner();
   }
-}
+};
 
 export const GalleryDetailEditionInfo = ({
   photo,
@@ -141,7 +141,12 @@ export const GalleryDetailEditionInfo = ({
   return (
     <div className="">
       <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-8">
-      {mintComponentReducer(mintState, photo, connectedWalletAddress, onMintSuccess)}
+        {mintComponentReducer(
+          mintState,
+          photo,
+          connectedWalletAddress,
+          onMintSuccess
+        )}
       </div>
 
       {editionInfo && editionInfo?.nextId > 0 && (
@@ -149,13 +154,19 @@ export const GalleryDetailEditionInfo = ({
           <h4 className="text-2xl mb-4 font-bold">Edition Status</h4>
           <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
             <h6 className="uppercase">Minted</h6>
-            <div className="text-lg"><b>{editionInfo?.minted}</b> of <b>45</b></div>
+            <div className="text-lg">
+              <b>{editionInfo?.minted}</b> of <b>45</b>
+            </div>
 
             <h6 className="uppercase">Gifted</h6>
-            <div className="text-lg"><b>{editionInfo?.gifted}</b> of <b>5</b></div>
+            <div className="text-lg">
+              <b>{editionInfo?.gifted}</b> of <b>5</b>
+            </div>
 
             <h6 className="uppercase">Status</h6>
-            <div className="text-lg font-bold">{editionInfo?.soldOut ? "Sold out" : "Available"}</div>
+            <div className="text-lg font-bold">
+              {editionInfo?.soldOut ? "Sold out" : "Available"}
+            </div>
 
             {!editionInfo?.soldOut && (
               <>
@@ -191,8 +202,7 @@ export const GalleryDetailEditionInfo = ({
 
         <h6 className="uppercase">Edition</h6>
         <div className="text-lg font-bold">
-          {photo.getEditionIndex(editionInfo?.nextId || 1)}{" "}
-          of 50
+          {photo.getEditionIndex(editionInfo?.nextId || 1)} of 50
         </div>
 
         <h6 className="uppercase">Original Id</h6>
@@ -220,7 +230,7 @@ export const GalleryDetailEditionInfo = ({
 
         <h6 className="uppercase">Token Standard</h6>
         <div className="text-lg font-bold">ERC-721</div>
-        
+
         <h6 className="uppercase">Blockchain</h6>
         <div className="text-lg font-bold">Ethereum</div>
 

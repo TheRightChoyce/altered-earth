@@ -123,20 +123,21 @@ export class Photo {
     setTokenLoaded: (loaded: boolean) => void,
     isEnabled: boolean
   ) => {
-    const { data, isFetched }: {data: any, isFetched: boolean} = useTheHydraContractRead({
-      functionName: "ownerOf",
-      args: [this.id],
-      watch: false,
-      enabled: isEnabled,
-      chainId: targetChainId, // needed for when we're on a testnet and a wallet isn't conected
+    const { data, isFetched }: { data: any; isFetched: boolean } =
+      useTheHydraContractRead({
+        functionName: "ownerOf",
+        args: [this.id],
+        watch: false,
+        enabled: isEnabled,
+        chainId: targetChainId, // needed for when we're on a testnet and a wallet isn't conected
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onError(error: any) {
-        if (error.reason !== "NOT_MINTED") {
-          throw error;
-        }
-      }
-    });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onError(error: any) {
+          if (error.reason !== "NOT_MINTED") {
+            throw error;
+          }
+        },
+      });
 
     useEffect(() => {
       setOwner(data?.toString());
@@ -150,20 +151,22 @@ export class Photo {
     setEditionInfo: (val: EditionInfoFromContract | undefined) => void,
     isEnabled: boolean
   ) => {
-    const { data, isFetched }: { data: any, isFetched: boolean} = useTheHydraContractRead({
-      functionName: "editionsGetInfoFromOriginal",
-      args: [originalId],
-      watch: false,
-      enabled: isEnabled,
-      chainId: targetChainId, // needed for when we're on a testnet and a wallet isn't conected
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, isFetched }: { data: any; isFetched: boolean } =
+      useTheHydraContractRead({
+        functionName: "editionsGetInfoFromOriginal",
+        args: [originalId],
+        watch: false,
+        enabled: isEnabled,
+        chainId: targetChainId, // needed for when we're on a testnet and a wallet isn't conected
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onError(error: any) {
-        if (error.reason !== "BeyondTheScopeOfConsciousness") {
-          throw error;
-        }
-      },
-    });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onError(error: any) {
+          if (error.reason !== "BeyondTheScopeOfConsciousness") {
+            throw error;
+          }
+        },
+      });
 
     useEffect(() => {
       setEditionInfo(new EditionInfoFromContract(data as Result));

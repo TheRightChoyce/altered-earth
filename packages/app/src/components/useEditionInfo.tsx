@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from "react";
 
 import { useTheHydraContractRead } from "../contracts";
@@ -8,27 +9,25 @@ export function useEditionInfo(
   setNextAvailableEditionId: (nextId: number) => void,
   setEditionSoldOut: (nextId: boolean) => void
 ) {
-  const { data } = useTheHydraContractRead({
+  const { data }: { data: any } = useTheHydraContractRead({
     functionName: "editionsGetInfoFromOriginal",
     args: [originalId],
     watch: false,
     enabled: enabled,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError(error: any) {
       console.log(error);
       if (error.reason !== "BeyondTheScopeOfConsciousness") {
         throw error;
       }
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onSettled(data, error: any) {
+    onSettled(data: any, error: any) {
       if (error && error.reason !== "BeyondTheScopeOfConsciousness") {
         throw error;
       }
       setNextAvailableEditionId(data?.nextId.toNumber());
       setEditionSoldOut(data?.soldOut);
     },
-    onSuccess(data) {
+    onSuccess(data: any) {
       setNextAvailableEditionId(data?.nextId.toNumber());
       setEditionSoldOut(data?.soldOut);
     },
