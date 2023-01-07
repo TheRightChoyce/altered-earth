@@ -43,7 +43,7 @@ const Layout: React.FC = ({ children }) => {
             <div className="pt-8 pb-8 flex flex-row items-center w-[100vw] absolute z-20">
               <div className="basis-1/2">
                 <Link href="/">
-                  <a>
+                  <a className="lg:hidden">
                     <h1 className="text-5xl lg:text-5xl m-auto custom-major-mono ml-8 font-extrabold">
                       <span className="backdrop-blur-sm inline-block">Ae</span>
                     </h1>

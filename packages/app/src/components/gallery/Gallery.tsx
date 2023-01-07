@@ -1,17 +1,13 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
-import { NavBar, TheHydraButton, TypeNavigationButton } from "../NavBar";
+import { NavBar, TheHydraButton } from "../NavBar";
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
-import { GalleryBreadcrumbs } from "./GalleryBreadcrumbs";
-import { ConnectNotice } from "./GalleryConnectNotice";
 import { GalleryGridPhoto } from "./GalleryGridPhoto";
-import { GalleryMintButton } from "./GalleryMintButton";
 import { TokenType } from "./tokenType";
 
 export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
@@ -48,20 +44,16 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left nav bar */}
-      <NavBar>
-        <div className="lg:w-full">
-          <TheHydraButton />
-        </div>
-        <div className="lg:w-full">
-          <TypeNavigationButton type="original" currentType={type.toString()} />
-        </div>
-        <div className="lg:w-full">
-          <TypeNavigationButton type="edition" currentType={type.toString()} />
-        </div>
-      </NavBar>
+      <div className="basis-[100px]">
+        <NavBar>
+          <div className="lg:w-full">
+            <TheHydraButton />
+          </div>
+        </NavBar>
+      </div>
 
       {/* content */}
-      <div className="flex flex-col items-center relative">
+      <div className="flex flex-col items-center relative left-34">
         <div className="relative m-auto w-full overflow-hidden h-[40vh]">
           <div className={`object-cover w-full h-[40vh]`}>
             <Image
