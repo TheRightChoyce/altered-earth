@@ -1,6 +1,5 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
@@ -9,8 +8,8 @@ import { useIsMounted } from "../../useIsMounted";
 import { NavBar, TheHydraButton, TypeNavigationButton } from "../NavBar";
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
-import { TypeToggle } from "../TypeToggle";
 import { GalleryBreadcrumbs } from "./GalleryBreadcrumbs";
+import { ConnectNotice } from "./GalleryConnectNotice";
 import { GalleryGridPhoto } from "./GalleryGridPhoto";
 import { GalleryMintButton } from "./GalleryMintButton";
 import { TokenType } from "./tokenType";
@@ -49,7 +48,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left nav bar */}
-      {/* <NavBar>
+      <NavBar>
         <div className="lg:w-full">
           <TheHydraButton />
         </div>
@@ -59,12 +58,12 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
         <div className="lg:w-full">
           <TypeNavigationButton type="edition" currentType={type.toString()} />
         </div>
-      </NavBar> */}
+      </NavBar>
 
       {/* content */}
       <div className="flex flex-col items-center relative">
-        <div className="relative m-auto w-full overflow-hidden h-[30vh]">
-          <div className={`object-cover w-full h-[30vh]`}>
+        <div className="relative m-auto w-full overflow-hidden h-[40vh]">
+          <div className={`object-cover w-full h-[40vh]`}>
             <Image
               src="/the-hydra/hydra-gallery-hero.png"
               alt="The Hydra Collection"
@@ -95,9 +94,9 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
               </div>
             )}
             <div className="container mb-4 tracking-wide text-md lg:text-xl lg:mb-8">
-              The collection consists of 50 1-of-1 original photos (tokens 0-49)
-              and 50 on-chain editions of 50. Each edition represents an
-              on-chain version of the original 1-of-1 photo.
+              The collection consists of fifty 1-of-1 original photos (tokens
+              0-49) and fifty editions of 50 (tokens 50-2,499). Each original
+              photo has a corresponding on-chain edition.
             </div>
 
             <div className="container mb-4 tracking-wide text-md lg:text-xl lg:mb-8 border-2 border-slate-600 rounded-md bg-slate-700 p-4">
@@ -107,19 +106,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
           </div>
         </div>
 
-        {!address && (
-          <div className="my-8 p-8 lg:mb-16 flex flex-col justify-center items-center w-100 bg-gray-700 m-auto">
-            <div className="basis-1">
-              <h4 className="text-xl lg:max-w-xl mb-8 text-center text-gray-200 uppercase">
-                altered earth is best experienced in a dream state. please
-                connect your wallet to dream
-              </h4>
-            </div>
-            <div className="">
-              <ConnectButton label="Connect wallet to dream" />
-            </div>
-          </div>
-        )}
+        {/* {!address && <ConnectNotice />} */}
 
         <div className="mt-16 px-4 sm:px-8 lg:px-32 w-full grid md:grid-cols-2 gap-4">
           {collection.photos.map((photo: Photo) => (

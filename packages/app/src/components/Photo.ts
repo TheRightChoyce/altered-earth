@@ -41,6 +41,7 @@ export class Photo {
   name = "";
   description = "";
   price = 0.25;
+  editionPrice = 0.05;
   previewImage = "";
   svgPreview = "";
   // Uris are set from the collection since it knows the root path

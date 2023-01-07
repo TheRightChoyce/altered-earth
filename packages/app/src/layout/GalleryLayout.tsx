@@ -41,18 +41,16 @@ const Layout: React.FC = ({ children }) => {
         <EthereumProviders>
           <div className="min-h-screen bg-slate-700 text-slate-100">
             <div className="pt-8 pb-8 flex flex-row items-center w-[100vw] absolute z-20">
-              <div className="basis-1/4">
+              <div className="basis-1/2">
                 <Link href="/">
                   <a>
-                    <h1 className="text-4xl lg:text-5xl m-auto custom-major-mono ml-8">
-                      Ae
+                    <h1 className="text-5xl lg:text-5xl m-auto custom-major-mono ml-8 font-extrabold">
+                      <span className="backdrop-blur-sm inline-block">Ae</span>
                     </h1>
                   </a>
                 </Link>
               </div>
-              <div className="basis-1/2">
-              </div>
-              <div className="basis-1/4 flex flex-row-reverse">
+              <div className="basis-1/2 flex flex-row-reverse">
                 {/* spacer since rainbowkit has its own layout */}
                 <div className="mr-8">
                   <ConnectButton

@@ -62,9 +62,7 @@ IGalleryGridPhoto) => {
               {type === TokenType.Edition && (
                 <div className="mb-2">
                   <h5 className="text-md lg:text-xl">Edition Price</h5>
-                  <h4 className="text-xl font-bold lg:text-3xl">
-                    {photo.price} ETH
-                  </h4>
+                  <h4 className="text-xl font-bold lg:text-3xl">0.05 ETH</h4>
                 </div>
               )}
               {/* <div className="basis-1/2">
