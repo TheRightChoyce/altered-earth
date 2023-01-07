@@ -16,7 +16,7 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
   };
 
   return (
-    <div className="hidden lg:justify-start lg:flex-row lg:w-36 lg:h-[100vh] lg:block bg-slate-900 lg:fixed z-50">
+    <div className="hidden lg:justify-start lg:flex-row lg:w-36 lg:h-[100vh] lg:block lg:fixed z-50 custom-side-bar-bg">
       <FloatingNavModal open={modalOpen} toggle={toggleModal} />
       <div className="lg:w-36 ">
         <div className="">
@@ -91,8 +91,8 @@ export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
   return (
     <div
       className={`${
-        open ? "left-34" : "left-[-100vw]"
-      } absolute z-40 w-[100vw] h-[100vh] bg-slate-800 left-36 pl-16 pt-8 transition-all ease-in-out duration-100 overflow-hidden border-r-[40vw] border-slate-900`}
+        open ? "left-36" : "left-[-100vw]"
+      } absolute z-40 w-[100vw] h-[100vh] bg-slate-900 pl-16 pt-8 transition-all ease-in-out duration-100 overflow-hidden `}
     >
       <div className="mb-16">
         <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-2 custom-major-mono h-18">

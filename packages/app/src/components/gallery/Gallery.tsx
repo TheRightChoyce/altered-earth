@@ -44,7 +44,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left nav bar */}
-      <div className="basis-[100px]">
+      <div className="basis-36">
         <NavBar>
           <div className="lg:w-full">
             <TheHydraButton />
@@ -53,15 +53,14 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
       </div>
 
       {/* content */}
-      <div className="flex flex-col items-center relative left-34">
-        <div className="relative m-auto w-full overflow-hidden h-[40vh]">
+      <div className="flex flex-col items-center relative">
+        <div className="relative w-full overflow-hidden h-[40vh]">
           <div className={`object-cover w-full h-[40vh]`}>
             <Image
               src="/the-hydra/hydra-gallery-hero.png"
               alt="The Hydra Collection"
               objectFit="cover"
               layout="fill"
-              sizes={"100vw"}
             />
           </div>
         </div>
@@ -70,7 +69,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
           <GalleryBreadcrumbs photoId={undefined} breadcrumb={`${type}s`} />
         </div> */}
 
-        <div className="flex flex-col lg:flex-row mt-16 px-4 sm:px-8 lg:px-32">
+        <div className="flex flex-col lg:flex-row mt-16 pr-24 pl-8 container">
           <div className="basis-1/2 lg:basis-full">
             <h1 className="text-5xl lg:text-7xl -ml-2 mb-4 leading-relaxed xl:text-7xl lg:mb-8 custom-major-mono lg:text-left">
               {collection.name}
@@ -100,7 +99,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
 
         {/* {!address && <ConnectNotice />} */}
 
-        <div className="mt-16 px-4 sm:px-8 lg:px-32 w-full grid md:grid-cols-2 gap-4">
+        <div className="mt-16 w-full grid md:grid-cols-2 gap-4 pr-24 pl-8 container">
           {collection.photos.map((photo: Photo) => (
             <>
               <GalleryGridPhoto

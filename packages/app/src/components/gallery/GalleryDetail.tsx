@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
+import { NavBar, TheHydraButton } from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
@@ -96,97 +97,109 @@ export const GalleryDetail = ({
   }
 
   return (
-    <div className="flex flex-col items-center relative">
-      {/* Image + token info */}
-      <div className="flex flex-row">
-        <div className="w-16 relative hidden sm:block">
-          <div className="inline-block absolute top-[50%]">
-            <GalleryNavPrevious
-              collection={collection}
-              photoId={originalId}
-              photoType={type.toString()}
-            />
+    <div className="flex flex-col lg:flex-row">
+      {/* Left nav bar */}
+      <div className="basis-[100px]">
+        <NavBar>
+          <div className="lg:w-full">
+            <TheHydraButton />
           </div>
-        </div>
-        <div className="relative m-auto pt-32 px-8 h-[70vh] sm:h-[80vh]">
-          <a
-            href={
-              type === "original"
-                ? photo.previewImage1024Uri
-                : photo.svgPreviewUri
-            }
-            target="_blank"
-            className="cursor-zoom-in"
-            rel="noreferrer"
-          >
-            <img
-              src={photo.previewImage1024Uri}
-              alt={photo.name}
-              className={`${originalImageClass} max-h-[60vh]`}
-            />
-            <div
-              className={`${editionImageClass} absolute w-[75%] h-[50%] top-[25%] left-[12.5%] border-8 border-slate-100`}
-            >
-              <img src={photo.svgPreviewUri} alt={photo.name} />
-            </div>
-          </a>
-        </div>
-        <div className="w-16 relative hidden sm:block">
-          <div className="inline-block absolute top-[50%]">
-            <GalleryNavNext
-              collection={collection}
-              photoId={originalId}
-              photoType={type.toString()}
-            />
-          </div>
-        </div>
+        </NavBar>
       </div>
 
-      <div className="bg-slate-800 px-4 sm:px-8 lg:px-32 w-full">
-        <div className="container max-w-3xl m-auto">
-          {/* Original / Edition toggle */}
-          <div className="w-full">
-            <GalleryDetailTypeToggle setType={setType} currentType={type} />
-          </div>
-
-          {/* Token Information */}
-          <div className="mt-8 mb-8">
-            <div className="flex flex-row">
-              <div className="basis-5/6">
-                <h2 className="text-3xl lg:text-6xl mb-2 font-bold">
-                  {photo.name}
-                </h2>
-              </div>
-
-              <div className="basis-1/6 sm:hidden">
-                {/* gallary photo nav */}
-                <GalleryNav
-                  collection={collection}
-                  photoId={originalId}
-                  photoType={type.toString()}
-                  photoLimit={50}
-                />
-              </div>
+      {/* content */}
+      <div className="flex flex-col items-center relative lg:pl-36">
+        {/* Image + token info */}
+        <div className="flex flex-row lg:basis-1/3">
+          <div className="w-16 relative hidden sm:block">
+            <div className="inline-block absolute top-[50%]">
+              <GalleryNavPrevious
+                collection={collection}
+                photoId={originalId}
+                photoType={type.toString()}
+              />
             </div>
-            <p className="text-lg italic leading-snug">{photo.description}</p>
           </div>
+          <div className="relative m-auto pt-32 px-8 h-[70vh] sm:h-[80vh]">
+            <a
+              href={
+                type === "original"
+                  ? photo.previewImage1024Uri
+                  : photo.svgPreviewUri
+              }
+              target="_blank"
+              className="cursor-zoom-in"
+              rel="noreferrer"
+            >
+              <img
+                src={photo.previewImage1024Uri}
+                alt={photo.name}
+                className={`${originalImageClass} max-h-[60vh]`}
+              />
+              <div
+                className={`${editionImageClass} absolute w-[75%] h-[50%] top-[25%] left-[12.5%] border-8 border-slate-100`}
+              >
+                <img src={photo.svgPreviewUri} alt={photo.name} />
+              </div>
+            </a>
+          </div>
+          <div className="w-16 relative hidden sm:block">
+            <div className="inline-block absolute top-[50%]">
+              <GalleryNavNext
+                collection={collection}
+                photoId={originalId}
+                photoType={type.toString()}
+              />
+            </div>
+          </div>
+        </div>
 
-          {/* Original / Edition info */}
-          {type == "original" && (
-            <GalleryDetailOriginalInfo
-              photo={photo}
-              connectedWalletAddress={address}
-              onMintSuccess={onMintSuccess}
-            />
-          )}
-          {type == "edition" && (
-            <GalleryDetailEditionInfo
-              photo={photo}
-              originalId={originalId}
-              connectedWalletAddress={address}
-              onMintSuccess={onMintSuccess}
-            />
-          )}
+        <div className="bg-slate-800 px-4 sm:px-8 lg:px-32 w-full lg:basis-2/3">
+          <div className="container max-w-3xl m-auto">
+            {/* Original / Edition toggle */}
+            <div className="w-full">
+              <GalleryDetailTypeToggle setType={setType} currentType={type} />
+            </div>
+
+            {/* Token Information */}
+            <div className="mt-8 mb-8">
+              <div className="flex flex-row">
+                <div className="basis-5/6">
+                  <h2 className="text-3xl lg:text-6xl mb-2 font-bold">
+                    {photo.name}
+                  </h2>
+                </div>
+
+                <div className="basis-1/6 sm:hidden">
+                  {/* gallary photo nav */}
+                  <GalleryNav
+                    collection={collection}
+                    photoId={originalId}
+                    photoType={type.toString()}
+                    photoLimit={50}
+                  />
+                </div>
+              </div>
+              <p className="text-lg italic leading-snug">{photo.description}</p>
+            </div>
+
+            {/* Original / Edition info */}
+            {type == "original" && (
+              <GalleryDetailOriginalInfo
+                photo={photo}
+                connectedWalletAddress={address}
+                onMintSuccess={onMintSuccess}
+              />
+            )}
+            {type == "edition" && (
+              <GalleryDetailEditionInfo
+                photo={photo}
+                originalId={originalId}
+                connectedWalletAddress={address}
+                onMintSuccess={onMintSuccess}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

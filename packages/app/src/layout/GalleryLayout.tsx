@@ -39,8 +39,16 @@ const Layout: React.FC = ({ children }) => {
       </Head>
       <GraphProvider value={graphClient}>
         <EthereumProviders>
-          <div className="min-h-screen bg-slate-700 text-slate-100">
-            <div className="pt-8 pb-8 flex flex-row items-center w-[100vw] absolute z-20">
+          <div className="min-h-screen bg-slate-900 text-slate-100">
+            <div className="absolute right-8 top-8">
+              <ConnectButton
+                label="Enter Dream State"
+                accountStatus="address"
+                chainStatus="none"
+                showBalance={false}
+              />
+            </div>
+            {/* <div className="pt-8 pb-8 flex flex-row items-center w-[100vw] absolute z-20">
               <div className="basis-1/2">
                 <Link href="/">
                   <a className="lg:hidden">
@@ -51,7 +59,6 @@ const Layout: React.FC = ({ children }) => {
                 </Link>
               </div>
               <div className="basis-1/2 flex flex-row-reverse">
-                {/* spacer since rainbowkit has its own layout */}
                 <div className="mr-8">
                   <ConnectButton
                     label="Enter Dream State"
@@ -61,7 +68,7 @@ const Layout: React.FC = ({ children }) => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="bg-slate-900">{children}</div>
             <Footer />
