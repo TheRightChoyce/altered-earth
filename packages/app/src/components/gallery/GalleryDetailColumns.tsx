@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
-import { NavBar, TheHydraButton } from "../NavBar";
+import { NavBar, TheHydraButton } from "../NavBarLarge";
 import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
@@ -65,7 +65,7 @@ export const GalleryDetail = ({
   // Adjust the opacity of the original when viewing an edition
   useEffect(() => {
     setOriginalImageClass(
-      `${type === "original" ? "opacity-100" : "opacity-20"}` // ease-linear transition-all duration-500`
+      `${type === "original" ? "block" : "hidden"}` // ease-linear transition-all duration-500`
     );
   }, [type]);
 
@@ -74,7 +74,7 @@ export const GalleryDetail = ({
   useEffect(() => {
     setEditionImageClass(
       `${
-        type === "original" ? "opacity-0" : "opacity-100"
+        type === "original" ? "hidden" : "block"
       } ease-linear transition-all duration-500`
     );
   }, [type]);
@@ -100,7 +100,7 @@ export const GalleryDetail = ({
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Left nav bar */}
-      <div className="basis-[100px]">
+      <div className="w-64">
         <NavBar>
           <div className="lg:w-full">
             <TheHydraButton />
@@ -109,10 +109,43 @@ export const GalleryDetail = ({
       </div>
 
       {/* content */}
-      <div className="flex flex-col items-center relative lg:flex-row-reverse">
+      <div className="w-[60vw] px-4 sm:px-8 bg-slate-800 h-full">
+        <div className="mt-8 bg-slate-600 h-[79vh] flex items-center place-content-center">
+          <a
+            href={
+              type === "original"
+                ? photo.previewImage1024Uri
+                : photo.svgPreviewUri
+            }
+            target="_blank"
+            className="cursor-zoom-in"
+            rel="noreferrer"
+          >
+            <div className={originalImageClass}>
+              <img
+                src={photo.previewImage1024Uri}
+                alt={photo.name}
+                className="h-[75vh] border-8 border-slate-200"
+              />
+            </div>
+
+            <div className={editionImageClass}>
+              <img
+                src={photo.svgPreviewUri}
+                alt={photo.name}
+                className="max-h-[50vh] border-8 border-slate-200"
+              />
+            </div>
+          </a>
+        </div>
+        {/* Original / Edition toggle */}
+        <div className="">
+          <GalleryDetailTypeToggle setType={setType} currentType={type} />
+        </div>
+
         {/* Image + token info */}
-        <div className="flex flex-row lg:basis-1/3">
-          <div className="w-16 relative hidden sm:block">
+        {/* <div className="flex flex-row">
+          <div className="w-16 relative hidden">
             <div className="inline-block absolute top-[50%]">
               <GalleryNavPrevious
                 collection={collection}
@@ -121,30 +154,8 @@ export const GalleryDetail = ({
               />
             </div>
           </div>
-          <div className="relative m-auto pt-32 px-8 h-[70vh] sm:h-[80vh]">
-            <a
-              href={
-                type === "original"
-                  ? photo.previewImage1024Uri
-                  : photo.svgPreviewUri
-              }
-              target="_blank"
-              className="cursor-zoom-in"
-              rel="noreferrer"
-            >
-              <img
-                src={photo.previewImage1024Uri}
-                alt={photo.name}
-                className={`${originalImageClass} max-h-[60vh]`}
-              />
-              <div
-                className={`${editionImageClass} absolute w-[75%] h-[50%] top-[25%] left-[12.5%] border-8 border-slate-100`}
-              >
-                <img src={photo.svgPreviewUri} alt={photo.name} />
-              </div>
-            </a>
-          </div>
-          <div className="w-16 relative hidden sm:block">
+          
+          <div className="w-16 relative hidden">
             <div className="inline-block absolute top-[50%]">
               <GalleryNavNext
                 collection={collection}
@@ -153,63 +164,38 @@ export const GalleryDetail = ({
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="bg-slate-800 px-4 sm:px-8 lg:px-32 w-full lg:basis-2/3">
-          <div className="container max-w-3xl m-auto">
-            {/* Original / Edition toggle */}
-            <div className="w-full">
-              <GalleryDetailTypeToggle setType={setType} currentType={type} />
-            </div>
+        <div className="">
+          <GalleryDetailTokenInfo
+            photo={photo}
+            collection={collection}
+            type={type}
+            originalId={originalId}
+          />
 
-            <GalleryDetailTokenInfo
+          {/* Original / Edition info */}
+          {type == "original" && (
+            <GalleryDetailOriginalInfo
               photo={photo}
-              collection={collection}
-              originalId={originalId}
-              type={type}
+              connectedWalletAddress={address}
+              onMintSuccess={onMintSuccess}
             />
-
-            {/* Token Information */}
-            <div className="mt-8 mb-8">
-              <div className="flex flex-row">
-                <div className="basis-5/6">
-                  <h2 className="text-3xl lg:text-6xl mb-2 font-bold">
-                    {photo.name}
-                  </h2>
-                </div>
-
-                <div className="basis-1/6 sm:hidden">
-                  {/* gallary photo nav */}
-                  <GalleryNav
-                    collection={collection}
-                    photoId={originalId}
-                    photoType={type.toString()}
-                    photoLimit={50}
-                  />
-                </div>
-              </div>
-              <p className="text-lg italic leading-snug">{photo.description}</p>
-            </div>
-
-            {/* Original / Edition info */}
-            {type == "original" && (
-              <GalleryDetailOriginalInfo
-                photo={photo}
-                connectedWalletAddress={address}
-                onMintSuccess={onMintSuccess}
-              />
-            )}
-            {type == "edition" && (
-              <GalleryDetailEditionInfo
-                photo={photo}
-                originalId={originalId}
-                connectedWalletAddress={address}
-                onMintSuccess={onMintSuccess}
-              />
-            )}
-          </div>
+          )}
+          {type == "edition" && (
+            <GalleryDetailEditionInfo
+              photo={photo}
+              originalId={originalId}
+              connectedWalletAddress={address}
+              onMintSuccess={onMintSuccess}
+            />
+          )}
+          {/* </div> */}
         </div>
       </div>
+
+      {/* Side bar */}
+      <div className="w-128">side</div>
     </div>
   );
 };

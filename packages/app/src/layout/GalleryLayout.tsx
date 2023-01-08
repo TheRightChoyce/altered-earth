@@ -40,14 +40,14 @@ const Layout: React.FC = ({ children }) => {
       <GraphProvider value={graphClient}>
         <EthereumProviders>
           <div className="min-h-screen bg-slate-900 text-slate-100">
-            <div className="absolute right-8 top-8">
+            {/* <div className="absolute right-8 top-8">
               <ConnectButton
                 label="Enter Dream State"
                 accountStatus="address"
                 chainStatus="none"
                 showBalance={false}
               />
-            </div>
+            </div> */}
             {/* <div className="pt-8 pb-8 flex flex-row items-center w-[100vw] absolute z-20">
               <div className="basis-1/2">
                 <Link href="/">

@@ -16,9 +16,9 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
   };
 
   return (
-    <div className="flex-col lg:justify-start lg:flex-row lg:w-36 lg:h-[100vh] lg:block lg:fixed z-50 custom-side-bar-bg">
+    <div className="flex-col lg:justify-start lg:flex-row lg:w-64 lg:h-[100vh] lg:block lg:fixed z-50 bg-slate-500">
       <FloatingNavModal open={modalOpen} toggle={toggleModal} />
-      <div className="lg:w-36 ">
+      <div className="w-full">
         <div className="">
           <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
         </div>
@@ -74,7 +74,7 @@ export const AlteredEarthButton = ({ open, toggle }: IModalToggle) => {
     <div
       onClick={() => toggle()}
       className={`${
-        open ? "bg-slate-800" : ""
+        open ? "" : ""
       } text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center cursor-pointer`}
     >
       <h1
@@ -91,7 +91,7 @@ export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
   return (
     <div
       className={`${
-        open ? "left-36" : "left-[-100vw]"
+        open ? "left-64" : "left-[-100vw]"
       } absolute z-40 w-[100vw] h-[100vh] bg-slate-900 pl-16 pt-8 transition-all ease-in-out duration-100 overflow-hidden `}
     >
       <div className="mb-16">
@@ -156,7 +156,7 @@ export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
 
 export const TheRightChoyceFloatingButton = () => {
   return (
-    <div className="hidden invisible lg:visible lg:block lg:fixed lg:bottom-[2vh] lg:w-34 lg:pl-2">
+    <div className="hidden invisible lg:visible lg:block lg:fixed lg:bottom-[2vh] lg:w-64 lg:pl-2">
       <div className="flex justify-center">
         <div>
           <a href="https://therightchoyce.com" target="_blank" rel="noreferrer">
