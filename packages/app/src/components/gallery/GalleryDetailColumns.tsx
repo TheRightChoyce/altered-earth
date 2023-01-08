@@ -98,7 +98,7 @@ export const GalleryDetail = ({
   }
 
   return (
-    <div className="flex flex-col lg:flex-row">
+    <div className="flex flex-col lg:flex-row bg-slate-900">
       {/* Left nav bar */}
       <div className="w-64">
         <NavBar>
@@ -108,9 +108,17 @@ export const GalleryDetail = ({
         </NavBar>
       </div>
 
-      {/* content */}
-      <div className="w-[60vw] px-4 sm:px-8 bg-slate-800 h-full">
-        <div className="mt-8 bg-slate-600 h-[79vh] flex items-center place-content-center">
+      <div>
+        <div className="text-center">
+          <GalleryNav
+            collection={collection}
+            photoId={originalId}
+            photoType={type}
+            photoLimit={50}
+          />
+        </div>
+
+        <div className="lg:w-[40vw] flex items-center place-content-center pt-16 pb-16 px-16">
           <a
             href={
               type === "original"
@@ -125,7 +133,7 @@ export const GalleryDetail = ({
               <img
                 src={photo.previewImage1024Uri}
                 alt={photo.name}
-                className="h-[75vh] border-8 border-slate-200"
+                className="w-full border-8 border-slate-200"
               />
             </div>
 
@@ -138,33 +146,14 @@ export const GalleryDetail = ({
             </div>
           </a>
         </div>
+      </div>
+
+      {/* content */}
+      <div className="px-4 sm:px-8 bg-slate-800 h-full lg:w-[40vw]">
         {/* Original / Edition toggle */}
         <div className="">
           <GalleryDetailTypeToggle setType={setType} currentType={type} />
         </div>
-
-        {/* Image + token info */}
-        {/* <div className="flex flex-row">
-          <div className="w-16 relative hidden">
-            <div className="inline-block absolute top-[50%]">
-              <GalleryNavPrevious
-                collection={collection}
-                photoId={originalId}
-                photoType={type.toString()}
-              />
-            </div>
-          </div>
-          
-          <div className="w-16 relative hidden">
-            <div className="inline-block absolute top-[50%]">
-              <GalleryNavNext
-                collection={collection}
-                photoId={originalId}
-                photoType={type.toString()}
-              />
-            </div>
-          </div>
-        </div> */}
 
         <div className="">
           <GalleryDetailTokenInfo
@@ -193,9 +182,6 @@ export const GalleryDetail = ({
           {/* </div> */}
         </div>
       </div>
-
-      {/* Side bar */}
-      <div className="w-128">side</div>
     </div>
   );
 };

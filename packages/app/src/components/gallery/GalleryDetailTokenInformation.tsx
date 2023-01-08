@@ -19,7 +19,9 @@ export const GalleryDetailTokenInfo = ({
     <div className="mt-8 mb-8">
       <div className="flex flex-row">
         <div className="basis-5/6">
-          <h2 className="text-3xl lg:text-6xl mb-2 font-bold">{photo.name}</h2>
+          <h2 className="text-3xl lg:text-6xl mb-2 font-bold custom-major-mono">
+            the hydrA #{photo.id}
+          </h2>
         </div>
 
         <div className="basis-1/6 sm:hidden">

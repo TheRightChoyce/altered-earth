@@ -16,7 +16,7 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
   };
 
   return (
-    <div className="flex-col lg:justify-start lg:flex-row lg:w-64 lg:h-[100vh] lg:block lg:fixed z-50 bg-slate-500">
+    <div className="flex-col lg:justify-start lg:flex-row lg:w-64 lg:h-[100vh] lg:block lg:fixed z-50 bg-slate-800">
       <FloatingNavModal open={modalOpen} toggle={toggleModal} />
       <div className="w-full">
         <div className="">

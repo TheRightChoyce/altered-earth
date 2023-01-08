@@ -130,24 +130,22 @@ export const GalleryDetailOriginalInfo = ({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row">
-        <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-8 lg:basis-1/2 lg:mr-8">
-          {mintComponentReducer(
-            mintState,
-            photo,
-            connectedWalletAddress,
-            onMintSuccess
-          )}
-        </div>
+      <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-8 lg:basis-1/2 lg:mr-8">
+        {mintComponentReducer(
+          mintState,
+          photo,
+          connectedWalletAddress,
+          onMintSuccess
+        )}
+      </div>
 
-        <div className="lg:basis-1/2">
-          <h4 className="text-2xl mb-4 font-bold">Description</h4>
-          <p className="mb-8">
-            An altered reality forever wandering the Ethereum blockchain. This
-            is an original 1-of-1 artwork that comes with a high-res immutable
-            image stored on IPFS. Each token conforms to the ERC-721 standard.
-          </p>
-        </div>
+      <div className="lg:basis-1/2">
+        <h4 className="text-2xl mb-4 font-bold">Description</h4>
+        <p className="mb-8">
+          An altered reality forever wandering the Ethereum blockchain. This is
+          an original 1-of-1 artwork that comes with a high-res immutable image
+          stored on IPFS. Each token conforms to the ERC-721 standard.
+        </p>
       </div>
 
       {/* Show owner when owned */}
