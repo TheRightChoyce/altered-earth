@@ -100,13 +100,11 @@ export const GalleryDetail = ({
   return (
     <div className="flex flex-col lg:flex-row bg-slate-900">
       {/* Left nav bar */}
-      <div className="w-64">
-        <NavBar>
-          <div className="lg:w-full">
-            <TheHydraButton />
-          </div>
-        </NavBar>
-      </div>
+      <NavBar>
+        <div className="lg:w-full">
+          <TheHydraButton />
+        </div>
+      </NavBar>
 
       <div>
         <div className="text-center">

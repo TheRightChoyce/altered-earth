@@ -1,8 +1,8 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-import { Button } from "../../Button";
-import { MintButton } from "../../MintButton";
-import { Photo } from "../Photo";
+import { Button } from "../Button";
+import { MintButton } from "../MintButton";
+import { Photo } from "./Photo";
 
 interface ICustomConnectButton {
   connectMessage: string | undefined;
@@ -38,10 +38,10 @@ export const CustomConnectButton = ({
                   <Button
                     onClick={openConnectModal}
                     type="button"
-                    className="bg-slate-600"
+                    className="bg-pink-600"
                   >
                     <div className="m-0 w-full">
-                      {connectMessage || "Dream state required"}
+                      {connectMessage || "Connect Web3 Wallet"}
                     </div>
                   </Button>
                 );

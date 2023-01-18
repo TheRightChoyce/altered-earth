@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
+import { CustomConnectButton } from "./ConnectButton";
+
 interface IModalToggle {
   open: boolean;
   toggle: () => void;
@@ -16,15 +18,14 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
   };
 
   return (
-    <div className="flex-col lg:justify-start lg:flex-row lg:w-36 lg:h-[100vh] lg:block lg:fixed z-50 custom-side-bar-bg">
+    <div className="flex flex-row z-50 fixed w-[100vw] custom-side-bar-bg justify-between px-4 lg:px-0 lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block lg:fixed ">
       <FloatingNavModal open={modalOpen} toggle={toggleModal} />
-      <div className="lg:w-36 ">
-        <div className="">
-          <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
-        </div>
-        <div className="hidden lg:block">{children}</div>
-        <TheRightChoyceFloatingButton />
-      </div>
+      <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
+      <MenuButton open={modalOpen} toggle={toggleModal} />
+
+      <div className="hidden lg:block">{children}</div>
+
+      <TheRightChoyceFloatingButton />
     </div>
   );
 };
@@ -75,13 +76,32 @@ export const AlteredEarthButton = ({ open, toggle }: IModalToggle) => {
       onClick={() => toggle()}
       className={`${
         open ? "bg-slate-800" : ""
-      } text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center cursor-pointer`}
+      } lg:h-32 flex items-center justify-center cursor-pointer`}
     >
       <h1
         onClick={() => toggle()}
-        className="text-4xl lg:text-5xl m-auto custom-major-mono"
+        className="text-2xl lg:text-5xl custom-major-mono"
       >
-        {open ? "x" : "Ae"}
+        <span className="lg:hidden">Altered eArth</span>
+        <span className="hidden lg:block">{open ? "x" : "Ae"}</span>
+      </h1>
+    </div>
+  );
+};
+
+export const MenuButton = ({ open, toggle }: IModalToggle) => {
+  return (
+    <div
+      onClick={() => toggle()}
+      className={`${
+        open ? "bg-slate-800" : ""
+      } flex items-center justify-center cursor-pointer lg:hidden lg:h-32 `}
+    >
+      <h1
+        onClick={() => toggle()}
+        className="text-4xl lg:text-5xl custom-major-mono px-4"
+      >
+        {open ? "x" : "V"}
       </h1>
     </div>
   );
@@ -91,10 +111,10 @@ export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
   return (
     <div
       className={`${
-        open ? "left-36" : "left-[-100vw]"
-      } absolute z-40 w-[100vw] h-[100vh] bg-slate-900 pl-16 pt-8 transition-all ease-in-out duration-100 overflow-hidden `}
+        open ? "opacity-100" : "opacity-0"
+      } fixed z-40 top-16 left-0 w-[100vw] h-[100vh] bg-slate-900 transition-all ease-in-out duration-100 backdrop-filter backdrop-blur-xl bg-opacity-90 px-4 lg:top-0 lg:left-36 lg:px-8 pt-8`}
     >
-      <div className="mb-16">
+      <div className="mb-16 hidden lg:block">
         <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-2 custom-major-mono h-18">
           Altered eArth
         </h1>
@@ -103,11 +123,16 @@ export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
         </h2>
       </div>
 
+      <div className="mb-16 lg:hidden">
+        <h5 className="text-lg text-slate-400">Web3 Account</h5>
+        <CustomConnectButton connectMessage="Connect Web3 Wallet" />
+      </div>
+
       <div className="mb-16">
         <h5 className="text-lg text-slate-400">Collections</h5>
         <ul>
           <li>
-            <h2 className="text-6xl custom-major-mono ml-[-2px]">
+            <h2 className="text-4xl lg:text-6xl custom-major-mono ml-[-2px]">
               <Link href={"/the-hydra"}>
                 <a className="hover:text-slate-300">the HydrA</a>
               </Link>
