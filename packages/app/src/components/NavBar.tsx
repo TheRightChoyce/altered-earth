@@ -18,15 +18,18 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
   };
 
   return (
-    <div className="flex flex-row z-50 fixed w-[100vw] custom-side-bar-bg justify-between px-4 lg:px-0 lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block lg:fixed pb-2">
+    <>
       <FloatingNavModal open={modalOpen} toggle={toggleModal} />
-      <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
-      <MenuButton open={modalOpen} toggle={toggleModal} />
 
-      <div className="hidden lg:block">{children}</div>
+      <div className="flex flex-row z-50 fixed w-[100vw] custom-side-bar-bg justify-between px-4 lg:px-0 lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block pb-2">
+        <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
+        <MenuButton open={modalOpen} toggle={toggleModal} />
 
-      <TheRightChoyceFloatingButton />
-    </div>
+        <div className="hidden lg:block">{children}</div>
+
+        <TheRightChoyceFloatingButton />
+      </div>
+    </>
   );
 };
 
@@ -111,8 +114,10 @@ export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
   return (
     <div
       className={`${
-        open ? "opacity-100" : "opacity-0 w-1 h-1"
-      } fixed z-40 top-16 left-0 w-[100vw] h-[100vh] bg-slate-900 transition-opacity ease-in-out duration-100 backdrop-filter backdrop-blur-xl bg-opacity-90 px-4 lg:top-0 lg:left-36 lg:px-8 pt-8`}
+        open
+          ? "opacity-100 fixed w-[100vw] h-[100vh] top-16 left-0 px-4 lg:top-0 lg:left-36 lg:px-8 pt-8 z-40 bg-slate-900 backdrop-filter backdrop-blur-xl bg-opacity-90 "
+          : "opacity-0 absolute w-1 h-1"
+      } transition-opacity ease-in-out duration-100`}
     >
       <div className="mb-16 hidden lg:block">
         <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-2 custom-major-mono h-18">
