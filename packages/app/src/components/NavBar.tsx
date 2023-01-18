@@ -18,7 +18,7 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
   };
 
   return (
-    <div className="flex flex-row z-50 fixed w-[100vw] custom-side-bar-bg justify-between px-4 lg:px-0 lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block lg:fixed ">
+    <div className="flex flex-row z-50 fixed w-[100vw] custom-side-bar-bg justify-between px-4 lg:px-0 lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block lg:fixed pb-2">
       <FloatingNavModal open={modalOpen} toggle={toggleModal} />
       <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
       <MenuButton open={modalOpen} toggle={toggleModal} />
@@ -111,8 +111,8 @@ export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
   return (
     <div
       className={`${
-        open ? "opacity-100" : "opacity-0"
-      } fixed z-40 top-16 left-0 w-[100vw] h-[100vh] bg-slate-900 transition-all ease-in-out duration-100 backdrop-filter backdrop-blur-xl bg-opacity-90 px-4 lg:top-0 lg:left-36 lg:px-8 pt-8`}
+        open ? "opacity-100" : "opacity-0 w-1 h-1"
+      } fixed z-40 top-16 left-0 w-[100vw] h-[100vh] bg-slate-900 transition-opacity ease-in-out duration-100 backdrop-filter backdrop-blur-xl bg-opacity-90 px-4 lg:top-0 lg:left-36 lg:px-8 pt-8`}
     >
       <div className="mb-16 hidden lg:block">
         <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-2 custom-major-mono h-18">
@@ -123,9 +123,11 @@ export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
         </h2>
       </div>
 
-      <div className="mb-16 lg:hidden">
+      <div className="mb-16">
         <h5 className="text-lg text-slate-400">Web3 Account</h5>
-        <CustomConnectButton connectMessage="Connect Web3 Wallet" />
+        <div className="lg:w-96">
+          <CustomConnectButton connectMessage="Connect Web3 Wallet" />
+        </div>
       </div>
 
       <div className="mb-16">
