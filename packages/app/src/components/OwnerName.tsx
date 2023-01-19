@@ -3,13 +3,7 @@ import { Address } from "./Address";
 
 const zeroAddress = "0x0000000000000000000000000000000000000000";
 
-export const OwnerName = ({
-  address,
-  className,
-}: {
-  address: string | undefined;
-  className: string;
-}) => {
+export const OwnerName = ({ address }: { address: string | undefined }) => {
   const ens = useENS(address || zeroAddress);
 
   if (ens.address === zeroAddress) {
@@ -18,10 +12,4 @@ export const OwnerName = ({
   const addressFormatted = Address(address || zeroAddress);
 
   return ens.name || addressFormatted;
-  // return (
-  //   <div className={className}>
-  //     <h4 className="text-xl mb-2">{ens.name || addressFormatted}</h4>
-  //     {/* <h6 className="text-sm">is wandering this reality</h6> */}
-  //   </div>
-  // );
 };
