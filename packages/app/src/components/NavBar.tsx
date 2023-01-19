@@ -5,6 +5,10 @@ import React, { useState } from "react";
 
 import { CustomConnectButton } from "./ConnectButton";
 
+interface IModalOpen {
+  open: boolean;
+}
+
 interface IModalToggle {
   open: boolean;
   toggle: () => void;
@@ -19,7 +23,7 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
 
   return (
     <>
-      <FloatingNavModal open={modalOpen} toggle={toggleModal} />
+      <FloatingNavModal open={modalOpen} />
 
       <div className="flex flex-row z-50 fixed w-[100vw] custom-side-bar-bg justify-between px-4 lg:px-0 lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block pb-2">
         <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
@@ -110,7 +114,7 @@ export const MenuButton = ({ open, toggle }: IModalToggle) => {
   );
 };
 
-export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
+export const FloatingNavModal = ({ open }: IModalOpen) => {
   return (
     <div
       className={`${
