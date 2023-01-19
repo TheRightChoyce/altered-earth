@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Alchemy } from "alchemy-sdk";
 import { Result } from "ethers/lib/utils";
 import { useEffect } from "react";
