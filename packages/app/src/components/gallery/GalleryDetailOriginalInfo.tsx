@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { theHydraContract } from "../../contracts";
@@ -40,10 +41,16 @@ const renderMintButton = (
   );
 };
 
-const renderOwned = (photo: Photo) => {
+const renderOwned = (photo: Photo, owner: string | undefined) => {
   return (
     <div>
-      <div className="flex flex-col">
+      {renderOwner(owner)}
+      <div>
+        {/* <Link href={`?type=edition`}>
+          Click here to purchase an edition instead
+        </Link> */}
+      </div>
+      {/* <div className="flex flex-col">
         <div className="mb-2">
           <h5 className="text-xl">Minted</h5>
           <h4 className="text-3xl line-through">0.25 ETH</h4>
@@ -57,7 +64,7 @@ const renderOwned = (photo: Photo) => {
         <div className="basis-1/2">
           <LooksRareButton tokenId={photo.id} />
         </div>
-      </div>
+  </div> */}
     </div>
   );
 };
@@ -91,6 +98,7 @@ const mintStateReducer = (
 const mintComponentReducer = (
   mintState: MintState,
   photo: Photo,
+  owner: string | undefined,
   connectedWalletAddress: string | undefined,
   onMintSuccess: (owner: string, tx: string) => void
 ) => {
@@ -98,13 +106,30 @@ const mintComponentReducer = (
     case MintState.Unknown:
       return renderSpinner();
     case MintState.OriginalOwned:
-      return renderOwned(photo);
+      return renderOwned(photo, owner);
     case MintState.OriginalAvailable:
     case MintState.NotConnected:
       return renderMintButton(photo, connectedWalletAddress, onMintSuccess);
     default:
       return renderSpinner();
   }
+};
+
+const renderOwner = (owner: string | undefined) => {
+  return (
+    <div className="mt-8 mb-12 flex flex-row items-center content-center justify-center">
+      <div className="text-xl font-bold">Owner:</div>
+      <div className="ml-4 rounded-lg bg-slate-900 px-4 py-1">
+        <div className="flex flex-row items-center">
+          <span className="rounded-full bg-pink-600 h-4 w-4 inline-block mr-2"></span>
+          <OwnerName
+            address={owner || "Unknown"}
+            className="lg:text-2xl ml-8"
+          />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export const GalleryDetailOriginalInfo = ({
@@ -130,85 +155,75 @@ export const GalleryDetailOriginalInfo = ({
 
   return (
     <>
-      <div className="rounded-md border-2 p-4 border-slate-900 bg-slate-700 mb-8 lg:basis-1/2 lg:mr-8">
+      <div className="mb-8 lg:basis-1/2 lg:mr-8">
         {mintComponentReducer(
           mintState,
           photo,
+          owner,
           connectedWalletAddress,
           onMintSuccess
         )}
       </div>
 
-      <div className="lg:basis-1/2">
-        <h4 className="text-2xl mb-4 font-bold">Description</h4>
-        <p className="mb-8">
-          An altered reality forever wandering the Ethereum blockchain. This is
-          an original 1-of-1 artwork that comes with a high-res immutable image
-          stored on IPFS. Each token conforms to the ERC-721 standard.
-        </p>
-      </div>
+      <div className="bg-slate-800 px-4 py-8">
+        <div className="lg:basis-1/2">
+          <h4 className="text-2xl mb-4 font-bold">Description</h4>
+          <p className="mb-8">
+            An altered reality forever wandering the Ethereum blockchain. This
+            is an original 1-of-1 artwork that comes with a high-res immutable
+            image stored on IPFS. Each token conforms to the ERC-721 standard.
+          </p>
+        </div>
 
-      {/* Show owner when owned */}
-      {mintState === MintState.OriginalOwned && (
-        <div className="mt-8 mb-12 flex flex-row items-center content-center justify-center">
-          <div className="text-xl font-bold">Owner:</div>
-          <div className="ml-4 rounded-lg bg-slate-900 px-4 py-1">
-            <div className="flex flex-row items-center">
-              <span className="rounded-full bg-pink-600 h-4 w-4 inline-block mr-2"></span>
-              <OwnerName address={owner} className="lg:text-2xl ml-8" />
-            </div>
+        <h4 className="text-2xl mb-4 font-bold">Attributes</h4>
+        <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
+          <h6 className="uppercase">Type</h6>
+          <div className="text-lg font-bold">Original</div>
+
+          <h6 className="uppercase">Chakra</h6>
+          <div className="text-lg font-bold">{photo.attributes["Chakra"]}</div>
+
+          <h6 className="uppercase">Season</h6>
+          <div className="text-lg font-bold">{photo.attributes["Season"]}</div>
+        </div>
+
+        <h4 className="text-2xl mb-4 font-bold">Details</h4>
+        <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
+          <h6 className="uppercase">Token Id</h6>
+          <div className="text-lg font-bold">{photo.id}</div>
+
+          <h6 className="uppercase">Contract</h6>
+          <div className="text-lg font-bold">
+            <a
+              href={`https://${process.env.NEXT_PUBLIC_CHAIN_NAME?.toLowerCase()}.etherscan.io/address/${
+                theHydraContract.address
+              }`}
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              {Address(theHydraContract.address)}
+            </a>
           </div>
+
+          <h6 className="uppercase">Medium</h6>
+          <div className="text-lg font-bold">image (JPG)</div>
+
+          <h6 className="uppercase">Dimensions</h6>
+          <div className="text-lg font-bold">3024 x 4032</div>
+
+          <h6 className="uppercase">Token Standard</h6>
+          <div className="text-lg font-bold">ERC-721</div>
+
+          <h6 className="uppercase">Blockchain</h6>
+          <div className="text-lg font-bold">Ethereum</div>
+
+          <h6 className="uppercase">Metadata</h6>
+          <div className="text-lg font-bold">IPFS</div>
+
+          <h6 className="uppercase">Royalties</h6>
+          <div className="text-lg font-bold">7.5%</div>
         </div>
-      )}
-
-      <h4 className="text-2xl mb-4 font-bold">Attributes</h4>
-      <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
-        <h6 className="uppercase">Type</h6>
-        <div className="text-lg font-bold">Original</div>
-
-        <h6 className="uppercase">Chakra</h6>
-        <div className="text-lg font-bold">{photo.attributes["Chakra"]}</div>
-
-        <h6 className="uppercase">Season</h6>
-        <div className="text-lg font-bold">{photo.attributes["Season"]}</div>
-      </div>
-
-      <h4 className="text-2xl mb-4 font-bold">Details</h4>
-      <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
-        <h6 className="uppercase">Token Id</h6>
-        <div className="text-lg font-bold">{photo.id}</div>
-
-        <h6 className="uppercase">Contract</h6>
-        <div className="text-lg font-bold">
-          <a
-            href={`https://${process.env.NEXT_PUBLIC_CHAIN_NAME?.toLowerCase()}.etherscan.io/address/${
-              theHydraContract.address
-            }`}
-            target="_blank"
-            rel="noreferrer"
-            className="underline"
-          >
-            {Address(theHydraContract.address)}
-          </a>
-        </div>
-
-        <h6 className="uppercase">Medium</h6>
-        <div className="text-lg font-bold">image (JPG)</div>
-
-        <h6 className="uppercase">Dimensions</h6>
-        <div className="text-lg font-bold">3024 x 4032</div>
-
-        <h6 className="uppercase">Token Standard</h6>
-        <div className="text-lg font-bold">ERC-721</div>
-
-        <h6 className="uppercase">Blockchain</h6>
-        <div className="text-lg font-bold">Ethereum</div>
-
-        <h6 className="uppercase">Metadata</h6>
-        <div className="text-lg font-bold">IPFS</div>
-
-        <h6 className="uppercase">Royalties</h6>
-        <div className="text-lg font-bold">7.5%</div>
       </div>
     </>
   );

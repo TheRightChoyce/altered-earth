@@ -5,11 +5,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
-import { NavBar, TheHydraButton } from "../NavBarLarge";
+import { NavBar, TheHydraButton } from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
-import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
+import {
+  GalleryDetailTokenInfo,
+  GalleryDetailTokenInfoCentered,
+} from "./GalleryDetailTokenInformation";
 import { GalleryDetailTypeToggle } from "./GalleryDetailTypeToggle";
 import { GalleryNav, GalleryNavNext, GalleryNavPrevious } from "./GalleryNav";
 import { TokenType } from "./tokenType";
@@ -98,7 +101,7 @@ export const GalleryDetail = ({
   }
 
   return (
-    <div className="flex flex-col lg:flex-row bg-slate-900">
+    <>
       {/* Left nav bar */}
       <NavBar>
         <div className="lg:w-full">
@@ -106,80 +109,86 @@ export const GalleryDetail = ({
         </div>
       </NavBar>
 
-      <div>
-        <div className="text-center">
-          <GalleryNav
-            collection={collection}
-            photoId={originalId}
-            photoType={type}
-            photoLimit={50}
-          />
+      <div className="flex flex-col lg:flex-row-reverse pt-16">
+        {/* Image */}
+        <div>
+          {/* <div className="text-center">
+            <GalleryNav
+            
+              collection={collection}
+              photoId={originalId}
+              photoType={type}
+              photoLimit={50}
+            />
+          </div> */}
+
+          <div className="lg:w-[40vw] flex items-center place-content-center py-8 px-4 lg:pt-16 lg:pb-16 lg:px-16">
+            <a
+              href={
+                type === "original"
+                  ? photo.previewImage1024Uri
+                  : photo.svgPreviewUri
+              }
+              target="_blank"
+              className="cursor-zoom-in"
+              rel="noreferrer"
+            >
+              <div className={originalImageClass}>
+                <img
+                  src={photo.previewImage1024Uri}
+                  alt={photo.name}
+                  className="w-full"
+                />
+              </div>
+
+              <div className={editionImageClass}>
+                <img
+                  src={photo.svgPreviewUri}
+                  alt={photo.name}
+                  className="max-h-[50vh] border-8 border-slate-200"
+                />
+              </div>
+            </a>
+          </div>
         </div>
 
-        <div className="lg:w-[40vw] flex items-center place-content-center pt-16 pb-16 px-16">
-          <a
-            href={
-              type === "original"
-                ? photo.previewImage1024Uri
-                : photo.svgPreviewUri
-            }
-            target="_blank"
-            className="cursor-zoom-in"
-            rel="noreferrer"
-          >
-            <div className={originalImageClass}>
-              <img
-                src={photo.previewImage1024Uri}
-                alt={photo.name}
-                className="w-full border-8 border-slate-200"
-              />
-            </div>
-
-            <div className={editionImageClass}>
-              <img
-                src={photo.svgPreviewUri}
-                alt={photo.name}
-                className="max-h-[50vh] border-8 border-slate-200"
-              />
-            </div>
-          </a>
-        </div>
-      </div>
-
-      {/* content */}
-      <div className="px-4 sm:px-8 bg-slate-800 h-full lg:w-[40vw]">
-        {/* Original / Edition toggle */}
-        <div className="">
-          <GalleryDetailTypeToggle setType={setType} currentType={type} />
-        </div>
-
-        <div className="">
-          <GalleryDetailTokenInfo
+        <div className="px-4">
+          <GalleryDetailTokenInfoCentered
             photo={photo}
             collection={collection}
             type={type}
             originalId={originalId}
           />
+        </div>
 
-          {/* Original / Edition info */}
-          {type == "original" && (
-            <GalleryDetailOriginalInfo
-              photo={photo}
-              connectedWalletAddress={address}
-              onMintSuccess={onMintSuccess}
-            />
-          )}
-          {type == "edition" && (
-            <GalleryDetailEditionInfo
-              photo={photo}
-              originalId={originalId}
-              connectedWalletAddress={address}
-              onMintSuccess={onMintSuccess}
-            />
-          )}
-          {/* </div> */}
+        {/* content */}
+        <div className="h-full lg:ml-36 lg:w-[40vw]">
+          {/* Original / Edition toggle */}
+          {/* <div className="">
+            <GalleryDetailTypeToggle setType={setType} currentType={type} />
+          </div> */}
+
+          <div className="">
+            {/* Original / Edition info */}
+            {type == "original" && (
+              <GalleryDetailOriginalInfo
+                photo={photo}
+                connectedWalletAddress={address}
+                onMintSuccess={onMintSuccess}
+              />
+            )}
+            {type == "edition" && (
+              <GalleryDetailEditionInfo
+                photo={photo}
+                originalId={originalId}
+                connectedWalletAddress={address}
+                onMintSuccess={onMintSuccess}
+              />
+            )}
+            {/* </div> */}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

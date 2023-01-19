@@ -23,17 +23,23 @@ export const GalleryDetailTokenInfo = ({
             the hydrA #{photo.id}
           </h2>
         </div>
-
-        <div className="basis-1/6 sm:hidden">
-          {/* gallary photo nav */}
-          <GalleryNav
-            collection={collection}
-            photoId={originalId}
-            photoType={type}
-            photoLimit={50}
-          />
-        </div>
       </div>
+      <p className="mt-4 text-lg italic leading-snug">{photo.description}</p>
+    </div>
+  );
+};
+
+export const GalleryDetailTokenInfoCentered = ({
+  photo,
+  collection,
+  originalId,
+  type,
+}: IGalleryDetailTokenInfo) => {
+  return (
+    <div className="text-center">
+      <h2 className="text-3xl lg:text-6xl font-bold custom-major-mono">
+        the hydrA #{photo.id}
+      </h2>
       <p className="mt-4 text-lg italic leading-snug">{photo.description}</p>
     </div>
   );

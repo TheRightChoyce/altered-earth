@@ -99,7 +99,7 @@ export const GalleryDetail = ({
 
   return (
     <div className="flex flex-col lg:flex-row">
-      {/* Left nav bar */}
+      {/* nav bar */}
       <div className="basis-[100px]">
         <NavBar>
           <div className="lg:w-full">
@@ -109,7 +109,7 @@ export const GalleryDetail = ({
       </div>
 
       {/* content */}
-      <div className="flex flex-col items-center relative lg:flex-row-reverse">
+      <div className="flex flex-col items-center relative lg:flex-row">
         {/* Image + token info */}
         <div className="flex flex-row lg:basis-1/3">
           <div className="w-16 relative hidden sm:block">
@@ -155,7 +155,7 @@ export const GalleryDetail = ({
           </div>
         </div>
 
-        <div className="bg-slate-800 px-4 sm:px-8 lg:px-32 w-full lg:basis-2/3">
+        <div className="px-4 sm:px-8 lg:px-32 w-full lg:basis-2/3">
           <div className="container max-w-3xl m-auto">
             {/* Original / Edition toggle */}
             <div className="w-full">

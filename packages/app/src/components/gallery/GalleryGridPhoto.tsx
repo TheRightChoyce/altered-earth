@@ -46,8 +46,8 @@ IGalleryGridPhoto) => {
           <div className="px-4 py-4 flex flex-col">
             <h2 className="mb-2 font-bold">
               <span className="text-xl lg:text-3xl">{photo.name}</span>
-              <span className="text-md">
-                {type === TokenType.Edition ? " (On-chain Edition)" : ""}
+              <span className="text-md px-3 py-1 bg-slate-600 rounded-lg ml-2 float-right">
+                {type === TokenType.Edition ? "Edition" : "Original"}
               </span>
             </h2>
             <div className="flex flex-row">
