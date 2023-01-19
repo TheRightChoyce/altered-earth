@@ -9,7 +9,10 @@ import { OwnerName } from "../OwnerName";
 import { Photo } from "../Photo";
 import { Spinner } from "../Spinner";
 import { GalleryMintButton } from "./GalleryMintButton";
+import { MintComponent } from "./MintComponent";
 import { MintState } from "./mintState";
+import { mintStateReducer } from "./MintStateReducerOriginal";
+import { Owner } from "./Owner";
 
 interface OriginalInfo {
   photo: Photo;
@@ -17,82 +20,12 @@ interface OriginalInfo {
   onMintSuccess: (owner: string, tx: string) => void;
 }
 
-const renderMintButton = (
-  photo: Photo,
-  connectedWalletAddress: string | undefined,
-  onMintSuccess: (owner: string, tx: string) => void
-) => {
-  return (
-    <div className="flex flex-col">
-      <div className="mb-2">
-        <h5 className="text-xl">Original Price</h5>
-        <h4 className="text-3xl">0.25 ETH</h4>
-      </div>
-      <div className="w-full">
-        <GalleryMintButton
-          photo={photo}
-          address={connectedWalletAddress}
-          isOriginal={true}
-          onSuccess={onMintSuccess}
-          isCorrectNetwork={true}
-        />
-      </div>
-    </div>
-  );
-};
-
-const renderOwned = (photo: Photo, owner: string | undefined) => {
-  return (
-    <div>
-      {renderOwner(owner)}
-      <div>
-        {/* <Link href={`?type=edition`}>
-          Click here to purchase an edition instead
-        </Link> */}
-      </div>
-      {/* <div className="flex flex-col">
-        <div className="mb-2">
-          <h5 className="text-xl">Minted</h5>
-          <h4 className="text-3xl line-through">0.25 ETH</h4>
-        </div>
-      </div>
-
-      <div className="mb-[2vh] flex flex-row">
-        <div className="basis-1/2 mr-4">
-          <OpenSeaButton tokenId={photo.id} />
-        </div>
-        <div className="basis-1/2">
-          <LooksRareButton tokenId={photo.id} />
-        </div>
-  </div> */}
-    </div>
-  );
-};
-
 const renderSpinner = () => {
   return (
     <div className="pt-8">
       <Spinner />
     </div>
   );
-};
-
-const mintStateReducer = (
-  tokenLoaded: boolean,
-  owner: string | undefined,
-  connectedWalletAddress: string | undefined
-) => {
-  if (!tokenLoaded) {
-    return MintState.Unknown;
-  } else if (!connectedWalletAddress) {
-    return MintState.NotConnected;
-  } else if (owner !== undefined) {
-    return MintState.OriginalOwned;
-  } else if (owner === undefined) {
-    return MintState.OriginalAvailable;
-  }
-
-  return MintState.Unknown;
 };
 
 const mintComponentReducer = (
@@ -106,30 +39,19 @@ const mintComponentReducer = (
     case MintState.Unknown:
       return renderSpinner();
     case MintState.OriginalOwned:
-      return renderOwned(photo, owner);
+      return <Owner owner={owner} />;
     case MintState.OriginalAvailable:
     case MintState.NotConnected:
-      return renderMintButton(photo, connectedWalletAddress, onMintSuccess);
+      return (
+        <MintComponent
+          photo={photo}
+          connectedWalletAddress={connectedWalletAddress}
+          onMintSuccess={onMintSuccess}
+        />
+      );
     default:
       return renderSpinner();
   }
-};
-
-const renderOwner = (owner: string | undefined) => {
-  return (
-    <div className="mt-8 mb-12 flex flex-row items-center content-center justify-center">
-      <div className="text-xl font-bold">Owner:</div>
-      <div className="ml-4 rounded-lg bg-slate-900 px-4 py-1">
-        <div className="flex flex-row items-center">
-          <span className="rounded-full bg-pink-600 h-4 w-4 inline-block mr-2"></span>
-          <OwnerName
-            address={owner || "Unknown"}
-            className="lg:text-2xl ml-8"
-          />
-        </div>
-      </div>
-    </div>
-  );
 };
 
 export const GalleryDetailOriginalInfo = ({

@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -9,10 +10,7 @@ import { NavBar, TheHydraButton } from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
-import {
-  GalleryDetailTokenInfo,
-  GalleryDetailTokenInfoCentered,
-} from "./GalleryDetailTokenInformation";
+import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
 import { GalleryDetailTypeToggle } from "./GalleryDetailTypeToggle";
 import { GalleryNav, GalleryNavNext, GalleryNavPrevious } from "./GalleryNav";
 import { TokenType } from "./tokenType";
@@ -109,7 +107,7 @@ export const GalleryDetail = ({
         </div>
       </NavBar>
 
-      <div className="flex flex-col lg:flex-row-reverse pt-16">
+      <div className="flex flex-col lg:flex-row-reverse pt-16 lg:pt-0">
         {/* Image */}
         <div>
           {/* <div className="text-center">
@@ -122,7 +120,7 @@ export const GalleryDetail = ({
             />
           </div> */}
 
-          <div className="lg:w-[40vw] flex items-center place-content-center py-8 px-4 lg:pt-16 lg:pb-16 lg:px-16">
+          <div className="lg:w-[45vw] flex items-center place-content-center py-8 px-4 lg:py-0 lg:px-0">
             <a
               href={
                 type === "original"
@@ -152,17 +150,17 @@ export const GalleryDetail = ({
           </div>
         </div>
 
-        <div className="px-4">
-          <GalleryDetailTokenInfoCentered
-            photo={photo}
-            collection={collection}
-            type={type}
-            originalId={originalId}
-          />
-        </div>
-
         {/* content */}
         <div className="h-full lg:ml-36 lg:w-[40vw]">
+          <div className="px-4">
+            <GalleryDetailTokenInfo
+              photo={photo}
+              collection={collection}
+              type={type}
+              originalId={originalId}
+            />
+          </div>
+
           {/* Original / Edition toggle */}
           {/* <div className="">
             <GalleryDetailTypeToggle setType={setType} currentType={type} />

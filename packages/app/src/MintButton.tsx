@@ -14,12 +14,14 @@ export const MintButton = ({
   label,
   isOriginal,
   onSuccess,
+  className,
 }: {
   tokenId: number;
   disabled: boolean | undefined;
   label: string | undefined;
   isOriginal: boolean;
   onSuccess: (owner: string, tx: string) => void;
+  className: string | undefined;
 }) => {
   const { connector } = useAccount();
 
@@ -69,6 +71,7 @@ export const MintButton = ({
     <Button
       disabled={disabled}
       pending={alterRealityResult.type === "pending"}
+      className={className}
       onClick={(event) => {
         event.preventDefault();
         const toastId = toast.loading("Starting…");

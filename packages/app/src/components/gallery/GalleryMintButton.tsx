@@ -163,6 +163,7 @@ export const GalleryMintButton = ({
       label="Alter your Reality"
       isOriginal={isOriginal}
       onSuccess={onSuccess}
+      className="shadow-md"
     />
   );
 };
