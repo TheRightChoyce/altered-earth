@@ -2,27 +2,14 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
 import { NavBar, TheHydraButton } from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
-import {
-  GalleryDetailArtworkEdition,
-  GalleryDetailArtworkOriginal,
-} from "./GalleryDetailArtwork";
 import { GalleryDetailEdition } from "./GalleryDetailEdition";
-import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
 import { GalleryDetailOriginal } from "./GalleryDetailOriginal";
-import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
-import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
-import { GalleryDetailTypeToggle } from "./GalleryDetailTypeToggle";
-import { GalleryNav, GalleryNavNext, GalleryNavPrevious } from "./GalleryNav";
-import {
-  mintStateReducerEdition,
-  mintStateReducerOriginal,
-} from "./MintStateReducers";
 import { TokenType } from "./tokenType";
 
 const notFound = (
@@ -67,28 +54,10 @@ export const GalleryDetail = ({
   };
 
   // The type we are viewing -- either edition or original
-  const [type, setType] = useState(initTokenType(photoId, originalId));
+  const [type] = useState(initTokenType(photoId, originalId));
 
   // Navigation helpers
   const [previousPhoto, setPreviousPhoto] = useState(-1);
-
-  const [originalImageClass, setOriginalImageClass] = useState("");
-  // Adjust the opacity of the original when viewing an edition
-  useEffect(() => {
-    setOriginalImageClass(
-      `${type === "original" ? "block" : "hidden"}` // ease-linear transition-all duration-500`
-    );
-  }, [type]);
-
-  const [editionImageClass, setEditionImageClass] = useState("");
-  // Adjust the opacity of the edition when viewing an edition
-  useEffect(() => {
-    setEditionImageClass(
-      `${
-        type === "original" ? "hidden" : "block"
-      } ease-linear transition-all duration-500`
-    );
-  }, [type]);
 
   const onMintSuccess = (owner: string, tx: string) => {
     // setHasOwner(true);

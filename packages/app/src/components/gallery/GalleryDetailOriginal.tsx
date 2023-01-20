@@ -1,4 +1,3 @@
-import { NavBar, TheHydraButton } from "../NavBar";
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailArtworkOriginal } from "./GalleryDetailArtwork";
