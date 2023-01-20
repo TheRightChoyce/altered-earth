@@ -1,8 +1,11 @@
+import { useState } from "react";
+
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailArtworkOriginal } from "./GalleryDetailArtwork";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
 import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
+import { MintState } from "./mintState";
 import { TokenType } from "./tokenType";
 
 interface IGalleryDetailOriginal {
@@ -20,6 +23,11 @@ export const GalleryDetailOriginal = ({
   connectedWalletAddress,
   onMintSuccess,
 }: IGalleryDetailOriginal) => {
+  // Token specific info
+  const [mintState, setMintState] = useState(MintState.Unknown);
+  const [tokenLoaded, setTokenLoaded] = useState(true);
+  const [owner, setOwner] = useState<string | undefined>(undefined);
+
   return (
     <>
       <div className="flex flex-col lg:flex-row-reverse pt-16 lg:pt-0 lg:basis-1/2">

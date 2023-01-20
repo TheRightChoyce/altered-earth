@@ -138,6 +138,7 @@ export const GalleryMintButton = ({
   address,
   isCorrectNetwork,
   isOriginal,
+  label,
   onSuccess,
   disabled,
 }: {
@@ -145,6 +146,7 @@ export const GalleryMintButton = ({
   address: string | undefined;
   isCorrectNetwork: boolean | undefined;
   isOriginal: boolean;
+  label?: string;
   onSuccess: (owner: string, tx: string) => void;
   disabled?: boolean | undefined;
 }) => {
@@ -160,7 +162,7 @@ export const GalleryMintButton = ({
     <MintButton
       tokenId={photo.id}
       disabled={disabled}
-      label="Alter your Reality"
+      label={label || "Alter your Reality"}
       isOriginal={isOriginal}
       onSuccess={onSuccess}
       className="shadow-md"

@@ -58,6 +58,7 @@ export const MintComponent = ({
           isOriginal={true}
           onSuccess={onMintSuccess}
           isCorrectNetwork={true}
+          label={"Mint Original"}
         />
       </div>
     </div>
