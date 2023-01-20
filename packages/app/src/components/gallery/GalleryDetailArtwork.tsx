@@ -2,7 +2,6 @@
 import React from "react";
 
 import { Photo } from "../Photo";
-import { TokenType } from "./tokenType";
 
 interface IGalleryDetailArtworkOriginal {
   photo: Photo;
@@ -59,11 +58,11 @@ export const GalleryDetailArtworkEdition = ({
               className="w-full opacity-20"
             />
           </div>
-          <div className="absolute top-[25vh] right-[10vw] shadow-2xl">
+          <div className="absolute top-[22vh] left-[12.5vw] lg:top-[25vh] lg:right-[10vw] shadow-2xl">
             <img
               src={photo.svgPreviewUri}
               alt={photo.name}
-              className="max-h-[50vh] border-8 border-slate-200"
+              className="max-w-[75vw] border-8 border-slate-200"
             />
           </div>
         </a>
