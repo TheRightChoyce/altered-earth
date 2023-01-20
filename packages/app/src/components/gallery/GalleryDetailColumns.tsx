@@ -12,7 +12,9 @@ import {
   GalleryDetailArtworkEdition,
   GalleryDetailArtworkOriginal,
 } from "./GalleryDetailArtwork";
+import { GalleryDetailEdition } from "./GalleryDetailEdition";
 import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
+import { GalleryDetailOriginal } from "./GalleryDetailOriginal";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
 import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
 import { GalleryDetailTypeToggle } from "./GalleryDetailTypeToggle";
@@ -106,83 +108,25 @@ export const GalleryDetail = ({
     return notFound;
   }
 
-  return (
-    <>
-      {/* Left nav bar */}
-      <NavBar>
-        <div className="lg:w-full">
-          <TheHydraButton />
-        </div>
-      </NavBar>
-
-      <div className="flex flex-col lg:flex-row-reverse pt-16 lg:pt-0 lg:basis-1/2">
-        {/* Image */}
-        {type === TokenType.Original ? (
-          <GalleryDetailArtworkOriginal photo={photo} />
-        ) : (
-          <GalleryDetailArtworkEdition photo={photo} />
-        )}
-        {/* <div>
-          <div className="lg:w-[45vw] flex items-center place-content-center py-8 px-4 lg:py-0 lg:px-0">
-            <a
-              href={
-                type === "original"
-                  ? photo.previewImage1024Uri
-                  : photo.svgPreviewUri
-              }
-              target="_blank"
-              className="cursor-zoom-in"
-              rel="noreferrer"
-            >
-              <div className={originalImageClass}>
-                <img
-                  src={photo.previewImage1024Uri}
-                  alt={photo.name}
-                  className="w-full"
-                />
-              </div>
-
-              <div className={editionImageClass}>
-                <img
-                  src={photo.svgPreviewUri}
-                  alt={photo.name}
-                  className="max-h-[50vh] border-8 border-slate-200"
-                />
-              </div>
-            </a>
-          </div>
-        </div> */}
-
-        {/* content */}
-        <div className="h-full lg:basis-1/2 lg:pl-28 lg:pr-8 lg:pt-8">
-          <GalleryDetailTokenInfo
-            photo={photo}
-            collection={collection}
-            type={type}
-            originalId={originalId}
-          />
-
-          <div className="">
-            {/* Original / Edition info */}
-            {type == "original" && (
-              <GalleryDetailOriginalInfo
-                photo={photo}
-                connectedWalletAddress={address}
-                onMintSuccess={onMintSuccess}
-              />
-            )}
-            {type == "edition" && (
-              <GalleryDetailEditionInfo
-                photo={photo}
-                originalId={originalId}
-                connectedWalletAddress={address}
-                onMintSuccess={onMintSuccess}
-              />
-            )}
-            {/* </div> */}
-          </div>
-        </div>
-      </div>
-    </>
-  );
+  if (type === TokenType.Original) {
+    return (
+      <GalleryDetailOriginal
+        photo={photo}
+        collection={collection}
+        originalId={originalId}
+        connectedWalletAddress={address}
+        onMintSuccess={onMintSuccess}
+      />
+    );
+  } else {
+    return (
+      <GalleryDetailEdition
+        photo={photo}
+        collection={collection}
+        originalId={originalId}
+        connectedWalletAddress={address}
+        onMintSuccess={onMintSuccess}
+      />
+    );
+  }
 };

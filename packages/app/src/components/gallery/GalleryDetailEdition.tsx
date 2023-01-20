@@ -1,12 +1,12 @@
 import { NavBar, TheHydraButton } from "../NavBar";
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
-import { GalleryDetailArtworkOriginal } from "./GalleryDetailArtwork";
-import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
+import { GalleryDetailArtworkEdition } from "./GalleryDetailArtwork";
+import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
 import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
 import { TokenType } from "./tokenType";
 
-interface IGalleryDetailOriginal {
+interface IGalleryDetailEdition {
   photo: Photo;
   collection: PhotoCollection;
   originalId: number;
@@ -14,13 +14,13 @@ interface IGalleryDetailOriginal {
   onMintSuccess: (owner: string, tx: string) => void;
 }
 
-export const GalleryDetailOriginal = ({
+export const GalleryDetailEdition = ({
   photo,
   collection,
   originalId,
   connectedWalletAddress,
   onMintSuccess,
-}: IGalleryDetailOriginal) => {
+}: IGalleryDetailEdition) => {
   return (
     <>
       {/* Left nav bar */}
@@ -31,19 +31,20 @@ export const GalleryDetailOriginal = ({
       </NavBar>
       <div className="flex flex-col lg:flex-row-reverse pt-16 lg:pt-0 lg:basis-1/2">
         {/* Image */}
-        <GalleryDetailArtworkOriginal photo={photo} />
+        <GalleryDetailArtworkEdition photo={photo} />
 
         {/* content */}
         <div className="h-full lg:basis-1/2 lg:pl-28 lg:pr-8 lg:pt-8">
           <GalleryDetailTokenInfo
             photo={photo}
             collection={collection}
-            type={TokenType.Original}
+            type={TokenType.Edition}
             originalId={originalId}
           />
 
-          <GalleryDetailOriginalInfo
+          <GalleryDetailEditionInfo
             photo={photo}
+            originalId={originalId}
             connectedWalletAddress={connectedWalletAddress}
             onMintSuccess={onMintSuccess}
           />
