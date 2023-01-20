@@ -23,12 +23,6 @@ export const GalleryDetailEdition = ({
 }: IGalleryDetailEdition) => {
   return (
     <>
-      {/* Left nav bar */}
-      <NavBar>
-        <div className="lg:w-full">
-          <TheHydraButton />
-        </div>
-      </NavBar>
       <div className="flex flex-col lg:flex-row-reverse pt-16 lg:pt-0 lg:basis-1/2">
         {/* Image */}
         <GalleryDetailArtworkEdition photo={photo} />

@@ -108,25 +108,32 @@ export const GalleryDetail = ({
     return notFound;
   }
 
-  if (type === TokenType.Original) {
-    return (
-      <GalleryDetailOriginal
-        photo={photo}
-        collection={collection}
-        originalId={originalId}
-        connectedWalletAddress={address}
-        onMintSuccess={onMintSuccess}
-      />
-    );
-  } else {
-    return (
-      <GalleryDetailEdition
-        photo={photo}
-        collection={collection}
-        originalId={originalId}
-        connectedWalletAddress={address}
-        onMintSuccess={onMintSuccess}
-      />
-    );
-  }
+  return (
+    <>
+      {/* Left nav bar */}
+      <NavBar>
+        <div className="lg:w-full">
+          <TheHydraButton />
+        </div>
+      </NavBar>
+      {type === TokenType.Original && (
+        <GalleryDetailOriginal
+          photo={photo}
+          collection={collection}
+          originalId={originalId}
+          connectedWalletAddress={address}
+          onMintSuccess={onMintSuccess}
+        />
+      )}
+      {type === TokenType.Edition && (
+        <GalleryDetailEdition
+          photo={photo}
+          collection={collection}
+          originalId={originalId}
+          connectedWalletAddress={address}
+          onMintSuccess={onMintSuccess}
+        />
+      )}
+    </>
+  );
 };
