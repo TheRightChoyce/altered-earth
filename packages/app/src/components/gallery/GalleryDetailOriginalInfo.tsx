@@ -1,17 +1,12 @@
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { theHydraContract } from "../../contracts";
-import { LooksRareButton } from "../../LooksRareButton";
-import { OpenSeaButton } from "../../OpenSeaButton";
 import { Address } from "../Address";
-import { OwnerName } from "../OwnerName";
 import { Photo } from "../Photo";
 import { Spinner } from "../Spinner";
-import { GalleryMintButton } from "./GalleryMintButton";
-import { MintComponent } from "./MintComponent";
+import { MintComponentOriginal } from "./MintComponent";
 import { MintState } from "./mintState";
-import { mintStateReducer } from "./MintStateReducerOriginal";
+import { mintStateReducerOriginal } from "./MintStateReducers";
 import { Owner } from "./Owner";
 
 interface OriginalInfo {
@@ -43,7 +38,7 @@ const mintComponentReducer = (
     case MintState.OriginalAvailable:
     case MintState.NotConnected:
       return (
-        <MintComponent
+        <MintComponentOriginal
           photo={photo}
           connectedWalletAddress={connectedWalletAddress}
           onMintSuccess={onMintSuccess}
@@ -65,7 +60,9 @@ export const GalleryDetailOriginalInfo = ({
   const [owner, setOwner] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    setMintState(mintStateReducer(tokenLoaded, owner, connectedWalletAddress));
+    setMintState(
+      mintStateReducerOriginal(tokenLoaded, owner, connectedWalletAddress)
+    );
   }, [owner, connectedWalletAddress, tokenLoaded]);
 
   // Use and watch the owner of this token

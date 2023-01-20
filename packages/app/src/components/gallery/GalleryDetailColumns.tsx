@@ -8,11 +8,19 @@ import { useAccount } from "wagmi";
 import { useIsMounted } from "../../useIsMounted";
 import { NavBar, TheHydraButton } from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
+import {
+  GalleryDetailArtworkEdition,
+  GalleryDetailArtworkOriginal,
+} from "./GalleryDetailArtwork";
 import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
 import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
 import { GalleryDetailTypeToggle } from "./GalleryDetailTypeToggle";
 import { GalleryNav, GalleryNavNext, GalleryNavPrevious } from "./GalleryNav";
+import {
+  mintStateReducerEdition,
+  mintStateReducerOriginal,
+} from "./MintStateReducers";
 import { TokenType } from "./tokenType";
 
 const notFound = (
@@ -109,17 +117,12 @@ export const GalleryDetail = ({
 
       <div className="flex flex-col lg:flex-row-reverse pt-16 lg:pt-0 lg:basis-1/2">
         {/* Image */}
-        <div>
-          {/* <div className="text-center">
-            <GalleryNav
-            
-              collection={collection}
-              photoId={originalId}
-              photoType={type}
-              photoLimit={50}
-            />
-          </div> */}
-
+        {type === TokenType.Original ? (
+          <GalleryDetailArtworkOriginal photo={photo} />
+        ) : (
+          <GalleryDetailArtworkEdition photo={photo} />
+        )}
+        {/* <div>
           <div className="lg:w-[45vw] flex items-center place-content-center py-8 px-4 lg:py-0 lg:px-0">
             <a
               href={
@@ -148,7 +151,7 @@ export const GalleryDetail = ({
               </div>
             </a>
           </div>
-        </div>
+        </div> */}
 
         {/* content */}
         <div className="h-full lg:basis-1/2 lg:pl-28 lg:pr-8 lg:pt-8">
@@ -158,11 +161,6 @@ export const GalleryDetail = ({
             type={type}
             originalId={originalId}
           />
-
-          {/* Original / Edition toggle */}
-          {/* <div className="">
-            <GalleryDetailTypeToggle setType={setType} currentType={type} />
-          </div> */}
 
           <div className="">
             {/* Original / Edition info */}
