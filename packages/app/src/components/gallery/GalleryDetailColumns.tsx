@@ -107,7 +107,7 @@ export const GalleryDetail = ({
         </div>
       </NavBar>
 
-      <div className="flex flex-col lg:flex-row-reverse pt-16 lg:pt-0">
+      <div className="flex flex-col lg:flex-row-reverse pt-16 lg:pt-0 lg:basis-1/2">
         {/* Image */}
         <div>
           {/* <div className="text-center">
@@ -151,15 +151,13 @@ export const GalleryDetail = ({
         </div>
 
         {/* content */}
-        <div className="h-full lg:ml-36 lg:w-[40vw]">
-          <div className="px-4">
-            <GalleryDetailTokenInfo
-              photo={photo}
-              collection={collection}
-              type={type}
-              originalId={originalId}
-            />
-          </div>
+        <div className="h-full lg:basis-1/2 lg:pl-28 lg:pr-8 lg:pt-8">
+          <GalleryDetailTokenInfo
+            photo={photo}
+            collection={collection}
+            type={type}
+            originalId={originalId}
+          />
 
           {/* Original / Edition toggle */}
           {/* <div className="">

@@ -77,7 +77,7 @@ export const GalleryDetailOriginalInfo = ({
 
   return (
     <>
-      <div className="mb-8 lg:basis-1/2 lg:mr-8">
+      <div className="mb-8 lg:basis-1/2">
         {mintComponentReducer(
           mintState,
           photo,
