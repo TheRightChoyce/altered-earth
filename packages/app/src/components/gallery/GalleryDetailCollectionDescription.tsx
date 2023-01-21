@@ -1,11 +1,27 @@
 import Link from "next/link";
 
-export const GalleryDetailCollectionDescription = () => {
+import { TokenType } from "./tokenType";
+
+interface IGalleryDetailCollectionDescription {
+  tokenType?: TokenType;
+}
+
+export const GalleryDetailCollectionDescription = ({
+  tokenType,
+}: IGalleryDetailCollectionDescription) => {
   return (
     <div className="lg:basis-1/2">
       <h4 className="text-2xl font-bold leading-relaxed">Description</h4>
       <p className="mb-8 leading-normal">
         An altered reality forever wandering the Ethereum blockchain.
+        {tokenType === TokenType.Edition && (
+          <span>
+            This edition is an on-chain SVG with 256 colors and is a 64x64 pixel
+            representation of the original 1-of-1 artwork. The metadata and SVG
+            are immutable, conform to the ERC-721 standard, and exist entirely
+            on the Ethereum blockchain.
+          </span>
+        )}
       </p>
       <h4 className="text-2xl font-bold leading-relaxed">Original Artwork</h4>
       <p className="mb-8">

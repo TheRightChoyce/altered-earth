@@ -23,7 +23,7 @@ interface IGalleryNavButton {
 
 interface IGalleryTypeButton {
   type: string;
-  currentType: string;
+  currentType?: string;
   setType: (val: string) => void;
 }
 
@@ -263,11 +263,7 @@ export const NavigateNextButton = ({
   );
 };
 
-export const GalleryTypeButon = ({
-  type,
-  currentType,
-  setType,
-}: IGalleryTypeButton) => {
+export const GalleryTypeButon = ({ type, setType }: IGalleryTypeButton) => {
   const href = `?type=${type}`;
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();

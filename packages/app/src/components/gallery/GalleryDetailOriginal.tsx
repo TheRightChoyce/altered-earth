@@ -103,12 +103,6 @@ export const GalleryDetailOriginal = ({
               className="animate-pulse ease-linear"
             />
           </div>
-
-          {/* <GalleryDetailOriginalInfo
-            photo={photo}
-            connectedWalletAddress={connectedWalletAddress}
-            onMintSuccess={onMintSuccess}
-          /> */}
         </div>
       </div>
       <div className="flex flex-row lg:pl-44 lg:pr-8 lg:mt-16">

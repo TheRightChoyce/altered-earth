@@ -12,6 +12,7 @@ interface IMintComponent {
   tokenType?: TokenType | undefined;
   loading?: boolean;
   owner?: string;
+  tokensRemaning?: number;
 }
 
 export const MintComponentOriginal = ({
@@ -33,6 +34,27 @@ export const MintComponentOriginal = ({
   );
 };
 
+export const MintComponentEdition = ({
+  photo,
+  connectedWalletAddress,
+  onMintSuccess,
+  loading,
+  owner,
+  tokensRemaning,
+}: IMintComponent) => {
+  return (
+    <MintComponent
+      photo={photo}
+      connectedWalletAddress={connectedWalletAddress}
+      onMintSuccess={onMintSuccess}
+      tokenType={TokenType.Edition}
+      loading={loading}
+      owner={owner}
+      tokensRemaning={tokensRemaning}
+    />
+  );
+};
+
 export const MintComponent = ({
   photo,
   connectedWalletAddress,
@@ -40,6 +62,7 @@ export const MintComponent = ({
   tokenType,
   loading,
   owner,
+  tokensRemaning,
 }: IMintComponent) => {
   if (owner) {
     return (
@@ -63,7 +86,10 @@ export const MintComponent = ({
         <div className="text-right">
           <h5 className="">Available</h5>
           <h4 className="text-3xl font-bold">
-            {tokenType === TokenType.Original ? "1 of 1" : "45 of 50"}
+            {tokenType === TokenType.Original && "1 of 1"}
+            {tokenType === TokenType.Edition && (
+              <span>{tokensRemaning || 45} of 50</span>
+            )}
           </h4>
         </div>
       </div>
@@ -74,7 +100,13 @@ export const MintComponent = ({
           isOriginal={true}
           onSuccess={onMintSuccess}
           isCorrectNetwork={true}
-          label={loading ? "Loading.." : "Mint Original"}
+          label={
+            loading
+              ? "Loading.."
+              : `Mint ${
+                  tokenType === TokenType.Original ? "Original" : "Edition"
+                }`
+          }
           pending={loading}
         />
       </div>
@@ -86,6 +118,7 @@ export const MintComponentOwned = ({
   photo,
   tokenType,
   owner,
+  tokensRemaning,
 }: IMintComponent) => {
   return (
     <div className="flex flex-col px-8 py-6 bg-slate-800 rounded-lg h-48">
@@ -104,7 +137,9 @@ export const MintComponentOwned = ({
         <div className="text-right">
           <h5 className="">Available</h5>
           <h4 className="text-3xl font-bold">
-            {tokenType === TokenType.Original ? "0 of 1" : "45 of 50"}
+            {tokenType === TokenType.Original
+              ? "0 of 1"
+              : `${tokensRemaning} of 50`}
           </h4>
         </div>
       </div>

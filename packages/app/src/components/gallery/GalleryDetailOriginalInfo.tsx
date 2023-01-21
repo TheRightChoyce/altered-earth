@@ -2,13 +2,13 @@ import { theHydraContract } from "../../contracts";
 import { Address } from "../Address";
 import { Photo } from "../Photo";
 
-interface OriginalInfo {
+interface IOriginalInfo {
   photo: Photo;
   connectedWalletAddress: string | undefined;
   onMintSuccess: (owner: string, tx: string) => void;
 }
 
-export const GalleryDetailOriginalInfo = ({ photo }: OriginalInfo) => {
+export const GalleryDetailOriginalInfo = ({ photo }: IOriginalInfo) => {
   return (
     <div className="lg:pl-4 lg:basis-1/2">
       <h4 className="text-2xl font-bold leading-relaxed">Attributes</h4>
