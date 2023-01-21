@@ -1,8 +1,10 @@
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailArtworkOriginal } from "./GalleryDetailArtwork";
+import { GalleryDetailCollectionDescription } from "./GalleryDetailCollectionDescription";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
 import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
 import { MintComponentOriginal } from "./MintComponent";
@@ -91,12 +93,32 @@ export const GalleryDetailOriginal = ({
             connectedWalletAddress,
             onMintSuccess
           )}
+          <div className="text-center mt-8 hidden lg:block">
+            <small className="block mb-2">scroll for more info</small>
+            <Image
+              src="/arrow-down.svg"
+              width={64}
+              height={64}
+              alt="Scroll for more info"
+              className="animate-pulse ease-linear"
+            />
+          </div>
 
           {/* <GalleryDetailOriginalInfo
             photo={photo}
             connectedWalletAddress={connectedWalletAddress}
             onMintSuccess={onMintSuccess}
           /> */}
+        </div>
+      </div>
+      <div className="flex flex-row lg:pl-44 lg:pr-8 lg:mt-16">
+        <div className="lg:flex lg:flex-row px-4 py-8">
+          <GalleryDetailCollectionDescription />
+          <GalleryDetailOriginalInfo
+            photo={photo}
+            connectedWalletAddress={connectedWalletAddress}
+            onMintSuccess={onMintSuccess}
+          />
         </div>
       </div>
     </>
