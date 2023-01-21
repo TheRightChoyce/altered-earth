@@ -96,7 +96,7 @@ export const AlteredEarthButton = ({ open, toggle }: IModalToggle) => {
       onClick={() => toggle()}
       className={`${
         open ? "bg-slate-800" : ""
-      } lg:h-28 flex items-center justify-center cursor-pointer`}
+      } lg:h-28 flex items-center justify-center cursor-pointer hover:animate-pulse hover:bg-slate-700`}
     >
       <h1
         onClick={() => toggle()}
@@ -281,13 +281,10 @@ export const GalleryTypeButon = ({
       className={`text-lg transition-all duration-500 inline-block py-2 w-full`}
     >
       <div className="lg:h-24 flex flex-col items-center justify-center hover:bg-slate-700">
-        <h1 className="text-5xl custom-major-mono">
+        <h1 className="text-3xl custom-major-mono font-bold">
           {type === "original" ? "o" : "e"}
         </h1>
-        <small className="uppercase">
-          {type === "original" && "Original"}
-          {type === "edition" && "Edition"}
-        </small>
+        <small className="uppercase">Browse {type}s</small>
       </div>
     </a>
   );
