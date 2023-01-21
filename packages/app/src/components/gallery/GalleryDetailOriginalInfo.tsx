@@ -74,16 +74,6 @@ export const GalleryDetailOriginalInfo = ({
 
   return (
     <>
-      <div className="mb-8 lg:basis-1/2">
-        {mintComponentReducer(
-          mintState,
-          photo,
-          owner,
-          connectedWalletAddress,
-          onMintSuccess
-        )}
-      </div>
-
       <div className="bg-slate-800 px-4 py-8">
         <div className="lg:basis-1/2">
           <h4 className="text-2xl mb-4 font-bold">Description</h4>

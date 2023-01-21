@@ -141,14 +141,16 @@ export const GalleryMintButton = ({
   label,
   onSuccess,
   disabled,
+  pending,
 }: {
   photo: Photo;
   address: string | undefined;
   isCorrectNetwork: boolean | undefined;
   isOriginal: boolean;
   label?: string;
-  onSuccess: (owner: string, tx: string) => void;
+  onSuccess?: (owner: string, tx: string) => void;
   disabled?: boolean | undefined;
+  pending?: boolean;
 }) => {
   if (!isCorrectNetwork) {
     return <NetworkSwitchButton />;
@@ -165,6 +167,7 @@ export const GalleryMintButton = ({
       label={label || "Alter your Reality"}
       isOriginal={isOriginal}
       onSuccess={onSuccess}
+      pending={pending}
       className="shadow-md"
     />
   );

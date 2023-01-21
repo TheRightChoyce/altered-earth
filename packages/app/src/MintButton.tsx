@@ -15,13 +15,15 @@ export const MintButton = ({
   isOriginal,
   onSuccess,
   className,
+  pending,
 }: {
   tokenId: number;
   disabled: boolean | undefined;
   label: string | undefined;
   isOriginal: boolean;
-  onSuccess: (owner: string, tx: string) => void;
+  onSuccess?: (owner: string, tx: string) => void;
   className: string | undefined;
+  pending?: boolean;
 }) => {
   const { connector } = useAccount();
 
@@ -70,7 +72,7 @@ export const MintButton = ({
   return (
     <Button
       disabled={disabled}
-      pending={alterRealityResult.type === "pending"}
+      pending={pending || alterRealityResult.type === "pending"}
       className={className}
       onClick={(event) => {
         event.preventDefault();
@@ -88,7 +90,9 @@ export const MintButton = ({
               closeButton: true,
             });
             console.log(receipt);
-            onSuccess(receipt.from, receipt.transactionHash);
+            if (onSuccess) {
+              onSuccess(receipt.from, receipt.transactionHash);
+            }
           },
           (error) => {
             toast.update(toastId, {

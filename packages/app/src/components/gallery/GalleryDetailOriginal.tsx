@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailArtworkOriginal } from "./GalleryDetailArtwork";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
 import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
+import { MintComponentLoading, MintComponentOriginal } from "./MintComponent";
 import { MintState } from "./mintState";
+import { mintStateReducerOriginal } from "./MintStateReducers";
 import { TokenType } from "./tokenType";
 
 interface IGalleryDetailOriginal {
@@ -15,6 +17,31 @@ interface IGalleryDetailOriginal {
   connectedWalletAddress?: string | undefined;
   onMintSuccess: (owner: string, tx: string) => void;
 }
+
+const mintComponentReducer = (
+  mintState: MintState,
+  photo: Photo,
+  owner: string | undefined,
+  connectedWalletAddress: string | undefined,
+  onMintSuccess: (owner: string, tx: string) => void
+) => {
+  let loading = false;
+
+  switch (mintState) {
+    case MintState.Unknown:
+      loading = true;
+      break;
+  }
+  return (
+    <MintComponentOriginal
+      photo={photo}
+      connectedWalletAddress={connectedWalletAddress}
+      onMintSuccess={onMintSuccess}
+      loading={loading}
+      owner={owner}
+    />
+  );
+};
 
 export const GalleryDetailOriginal = ({
   photo,
@@ -27,6 +54,19 @@ export const GalleryDetailOriginal = ({
   const [mintState, setMintState] = useState(MintState.Unknown);
   const [tokenLoaded, setTokenLoaded] = useState(true);
   const [owner, setOwner] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setMintState(
+      mintStateReducerOriginal(tokenLoaded, owner, connectedWalletAddress)
+    );
+  }, [owner, connectedWalletAddress, tokenLoaded]);
+
+  // Use and watch the owner of this token
+  photo?.getOwnerFromContract(
+    setOwner,
+    setTokenLoaded,
+    mintState !== MintState.NotConnected
+  );
 
   return (
     <>
@@ -43,11 +83,20 @@ export const GalleryDetailOriginal = ({
             originalId={originalId}
           />
 
-          <GalleryDetailOriginalInfo
+          {/* Mint */}
+          {mintComponentReducer(
+            mintState,
+            photo,
+            owner,
+            connectedWalletAddress,
+            onMintSuccess
+          )}
+
+          {/* <GalleryDetailOriginalInfo
             photo={photo}
             connectedWalletAddress={connectedWalletAddress}
             onMintSuccess={onMintSuccess}
-          />
+          /> */}
         </div>
       </div>
     </>
