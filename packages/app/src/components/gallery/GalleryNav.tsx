@@ -7,7 +7,7 @@ interface GalleryNavParams {
   collection: PhotoCollection;
   photoId: number;
   photoType: string;
-  photoLimit: number;
+  photoLimit?: number;
 }
 
 interface GalleryNavButtonParams {
@@ -54,13 +54,7 @@ export const GalleryNav = ({
   collection,
   photoId,
   photoType,
-  photoLimit,
 }: GalleryNavParams) => {
-  const navigatePreviousPhotoId =
-    photoId == 0 ? collection.photos.length - 1 : photoId - 1;
-  const navigateNextPhotoId =
-    photoId == collection.photos.length - 1 ? 0 : photoId + 1;
-
   return (
     <div className="flex flex-row w-full sm:w-[256px]" id="nav">
       <div className="basis-1/2 text-center mr-4">

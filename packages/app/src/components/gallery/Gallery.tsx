@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import Reac from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
@@ -12,22 +11,7 @@ import { TokenType } from "./tokenType";
 
 export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   const isMounted = useIsMounted();
-  const router = useRouter();
-
-  const { address, isReconnecting, isDisconnected } = useAccount();
-  const [imageClass, setImageClass] = useState(
-    "grayscale-0 transition-all ease-in-out duration-5000"
-  );
-  const [type, setType] = useState(router.query.type || "original");
-
-  useEffect(() => {
-    setImageClass(
-      (isReconnecting || address) && !isDisconnected
-        ? "grayscale-0 transition-all ease-in-out duration-5000"
-        : "grayscale"
-    );
-    setType(router.query.type || "original");
-  }, [address, isReconnecting, isDisconnected, router]);
+  const { address } = useAccount();
 
   if (!isMounted) {
     return null;

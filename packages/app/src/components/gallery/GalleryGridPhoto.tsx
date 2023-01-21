@@ -2,20 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Photo } from "../Photo";
-import { GalleryMintButton } from "./GalleryMintButton";
 import { TokenType } from "./tokenType";
 
 interface IGalleryGridPhoto {
   photo: Photo;
   type: TokenType;
-  connectedWalletAddress: string | undefined;
+  connectedWalletAddress?: string;
   // onMintSuccess: (owner: string, tx: string) => void;
 }
 
 export const GalleryGridPhoto = ({
   photo,
   type,
-  connectedWalletAddress,
 }: // onMintSuccess,
 IGalleryGridPhoto) => {
   return (

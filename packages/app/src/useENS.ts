@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect } from "react";
 import createStore from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -9,7 +10,7 @@ type State = {
 };
 
 export const useStore = createStore<State>(
-  persist((set) => ({ resolvedAddresses: {} }), { name: "resolved-ens" })
+  persist(() => ({ resolvedAddresses: {} }), { name: "resolved-ens" })
 );
 
 export const useENS = (address: string) => {

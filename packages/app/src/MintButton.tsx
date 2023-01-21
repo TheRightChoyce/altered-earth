@@ -22,7 +22,7 @@ export const MintButton = ({
   label: string | undefined;
   isOriginal: boolean;
   onSuccess?: (owner: string, tx: string) => void;
-  className: string | undefined;
+  className?: string;
   pending?: boolean;
 }) => {
   const { connector } = useAccount();

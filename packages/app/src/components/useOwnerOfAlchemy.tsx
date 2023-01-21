@@ -1,8 +1,6 @@
 import { Alchemy } from "alchemy-sdk";
 import { BigNumberish } from "ethers";
-import { useEffect, useState } from "react";
-
-import NFTContract from "../contractAddress";
+// import { useEffect } from "react";
 
 export function useOwnerOf(
   alchemy: Alchemy,
@@ -11,7 +9,7 @@ export function useOwnerOf(
   setTokenLoaded: (isLoaded: boolean) => void,
   setOwner: (owner: string | undefined) => void
 ) {
-  let ownerAddress: string | undefined;
+  // let ownerAddress: string | undefined;
 
   if (!tokenId) {
     setTokenLoaded(false);
@@ -69,8 +67,8 @@ export function useOwnerOf(
   //     setOwner(data?.toString());
   //   },
   // });
-  useEffect(() => {
-    setOwner(ownerAddress ? ownerAddress : undefined);
-    setTokenLoaded(true);
-  }, [ownerAddress, setOwner]);
+  // useEffect(() => {
+  //   setOwner(ownerAddress ? ownerAddress : undefined);
+  //   setTokenLoaded(true);
+  // }, [ownerAddress, setOwner]);
 }
