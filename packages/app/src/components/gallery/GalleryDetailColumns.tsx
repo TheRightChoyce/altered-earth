@@ -99,12 +99,12 @@ export const GalleryDetail = ({
             currentType={type}
             setType={setType}
           />
-          <NavigatePreviousButton
+          <NavigateNextButton
             photoId={photoId}
             collection={collection}
             photoType={type}
           />
-          <NavigateNextButton
+          <NavigatePreviousButton
             photoId={photoId}
             collection={collection}
             photoType={type}
