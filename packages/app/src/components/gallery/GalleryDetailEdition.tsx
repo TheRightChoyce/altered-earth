@@ -118,8 +118,8 @@ export const GalleryDetailEdition = ({
       </div>
 
       <div className="flex flex-row lg:pl-44 lg:pr-8 lg:mt-16">
-        <div className="lg:flex lg:flex-row px-4 py-8">
-          <GalleryDetailCollectionDescription tokenType={TokenType.Edition} />
+        <div className="flex flex-col-reverse lg:flex lg:flex-row px-4 py-8">
+          <GalleryDetailCollectionDescription />
           <GalleryDetailEditionInfo
             photo={photo}
             originalId={originalId}

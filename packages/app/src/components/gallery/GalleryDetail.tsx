@@ -111,6 +111,29 @@ export const GalleryDetail = ({
           />
         </div>
       </NavBar>
+      {/* <div className="flex flex-row lg:hidden w-full justify-around pt-24">
+        <NavigatePreviousButton
+          photoId={photoId}
+          collection={collection}
+          photoType={type}
+        />
+        <GalleryTypeButon
+          type={TokenType.Original}
+          currentType={type}
+          setType={setType}
+        />
+        <GalleryTypeButon
+          type={TokenType.Edition}
+          currentType={type}
+          setType={setType}
+        />
+        <NavigateNextButton
+          photoId={photoId}
+          collection={collection}
+          photoType={type}
+        />
+      </div> */}
+
       {type === TokenType.Original && (
         <GalleryDetailOriginal
           photo={photo}

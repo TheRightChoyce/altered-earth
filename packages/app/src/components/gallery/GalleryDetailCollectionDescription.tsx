@@ -1,42 +1,22 @@
 import Link from "next/link";
 
-import { TokenType } from "./tokenType";
-
-interface IGalleryDetailCollectionDescription {
-  tokenType?: TokenType;
-}
-
-export const GalleryDetailCollectionDescription = ({
-  tokenType,
-}: IGalleryDetailCollectionDescription) => {
+export const GalleryDetailCollectionDescription = () => {
   return (
     <div className="lg:basis-1/2">
-      <h4 className="text-2xl font-bold leading-relaxed">Description</h4>
-      <p className="mb-8 leading-normal">
-        An altered reality forever wandering the Ethereum blockchain.
-        {tokenType === TokenType.Edition && (
-          <span>
-            This edition is an on-chain SVG with 256 colors and is a 64x64 pixel
-            representation of the original 1-of-1 artwork. The metadata and SVG
-            are immutable, conform to the ERC-721 standard, and exist entirely
-            on the Ethereum blockchain.
-          </span>
-        )}
-      </p>
       <h4 className="text-2xl font-bold leading-relaxed">Original Artwork</h4>
       <p className="mb-8">
-        The original is a 1-of-1 artwork that comes with a high-res immutable
-        image stored on IPFS. Each token conforms to the ERC-721 standard.
-        Purchasing an original allows the current owner to gift up to 5
-        editions.
+        Original artworks are 1-of-1s that come with a high-res immutable image
+        stored on IPFS. Each NFT conforms to the ERC-721 standard. Purchasing an
+        original artwork also allows the current owner to gift up to 5 total
+        editions. Editions gifted by a previous owner count toward this total.
       </p>
       <h4 className="text-2xl font-bold leading-relaxed">Edition Artwork</h4>
       <p className="mb-8">
-        There are editions of 50 for each original artwork. Editions are an
-        on-chain SVG version of their corresponding original artwork. They have
-        256 colors and are a 64x64 pixels. Both the metadata and SVG are
-        immutable, conform to the ERC-721 standard, and exist entirely on the
-        Ethereum blockchain.
+        Editions are an on-chain SVG version of their corresponding original
+        artwork. Each edition has a total of 50 available. Editions have 256
+        colors and are 64x64 pixels, rendered as a fully on-chain SVG. Both the
+        metadata and SVG are immutable, conform to the ERC-721 standard, and
+        exist entirely on the Ethereum blockchain.
       </p>
       <h4 className="text-2xl font-bold leading-relaxed">Gifting</h4>
       <p className="mb-8">

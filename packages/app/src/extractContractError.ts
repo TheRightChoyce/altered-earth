@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TheHydra__factory } from "@web3-scaffold/contracts/types";
 
 const contractInterface = TheHydra__factory.createInterface();

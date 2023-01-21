@@ -11,6 +11,10 @@ interface IOriginalInfo {
 export const GalleryDetailOriginalInfo = ({ photo }: IOriginalInfo) => {
   return (
     <div className="lg:pl-4 lg:basis-1/2">
+      <h4 className="text-2xl font-bold leading-relaxed">Description</h4>
+      <p className="mb-8 leading-normal">
+        An altered reality forever wandering the Ethereum blockchain.
+      </p>
       <h4 className="text-2xl font-bold leading-relaxed">Attributes</h4>
       <div className="grid grid-cols-2 gap-y-0 mb-8 lg:grid-cols-4">
         <h6 className="uppercase">Type</h6>

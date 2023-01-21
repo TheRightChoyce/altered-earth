@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Reac from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
