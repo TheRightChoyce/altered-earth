@@ -1,54 +1,12 @@
-import Link from "next/link";
-import { useEffect, useState } from "react";
-
 import { theHydraContract } from "../../contracts";
 import { Address } from "../Address";
 import { Photo } from "../Photo";
-import { Spinner } from "../Spinner";
-import { MintComponentOriginal } from "./MintComponent";
-import { MintState } from "./mintState";
-import { mintStateReducerOriginal } from "./MintStateReducers";
-import { Owner } from "./Owner";
 
 interface OriginalInfo {
   photo: Photo;
   connectedWalletAddress: string | undefined;
   onMintSuccess: (owner: string, tx: string) => void;
 }
-
-const renderSpinner = () => {
-  return (
-    <div className="pt-8">
-      <Spinner />
-    </div>
-  );
-};
-
-const mintComponentReducer = (
-  mintState: MintState,
-  photo: Photo,
-  owner: string | undefined,
-  connectedWalletAddress: string | undefined,
-  onMintSuccess: (owner: string, tx: string) => void
-) => {
-  switch (mintState) {
-    case MintState.Unknown:
-      return renderSpinner();
-    case MintState.OriginalOwned:
-      return <Owner owner={owner} />;
-    case MintState.OriginalAvailable:
-    case MintState.NotConnected:
-      return (
-        <MintComponentOriginal
-          photo={photo}
-          connectedWalletAddress={connectedWalletAddress}
-          onMintSuccess={onMintSuccess}
-        />
-      );
-    default:
-      return renderSpinner();
-  }
-};
 
 export const GalleryDetailOriginalInfo = ({ photo }: OriginalInfo) => {
   return (
