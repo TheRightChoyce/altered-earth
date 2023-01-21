@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import { CustomConnectButton } from "./ConnectButton";
+import { PhotoCollection } from "./PhotoCollection";
 
 interface IModalOpen {
   open: boolean;
@@ -12,6 +13,18 @@ interface IModalOpen {
 interface IModalToggle {
   open: boolean;
   toggle: () => void;
+}
+
+interface IGalleryNavButton {
+  collection: PhotoCollection;
+  photoId: number;
+  photoType: string;
+}
+
+interface IGalleryTypeButton {
+  type: string;
+  currentType: string;
+  setType: (val: string) => void;
 }
 
 export const NavBar = ({ children }: { children?: React.ReactNode }) => {
@@ -83,7 +96,7 @@ export const AlteredEarthButton = ({ open, toggle }: IModalToggle) => {
       onClick={() => toggle()}
       className={`${
         open ? "bg-slate-800" : ""
-      } lg:h-32 flex items-center justify-center cursor-pointer`}
+      } lg:h-28 flex items-center justify-center cursor-pointer`}
     >
       <h1
         onClick={() => toggle()}
@@ -102,7 +115,7 @@ export const MenuButton = ({ open, toggle }: IModalToggle) => {
       onClick={() => toggle()}
       className={`${
         open ? "bg-slate-800" : ""
-      } flex items-center justify-center cursor-pointer lg:hidden lg:h-32 `}
+      } flex items-center justify-center cursor-pointer lg:hidden lg:h-28`}
     >
       <h1
         onClick={() => toggle()}
@@ -209,16 +222,91 @@ export const TheRightChoyceFloatingButton = () => {
   );
 };
 
+export const NavigatePreviousButton = ({
+  collection,
+  photoId,
+  photoType,
+}: IGalleryNavButton) => {
+  return (
+    <Link
+      href={`/the-hydra/${
+        photoId == 0 ? collection.photos.length - 1 : photoId - 1
+      }?type=${photoType}`}
+    >
+      <a className="lg:h-24 flex flex-col items-center justify-center hover:bg-slate-700">
+        <div>
+          <Image src="/arrow-left.svg" width={32} height={32} alt="Previous" />
+        </div>
+        <small className="uppercase mt-[-2px]">previous</small>
+      </a>
+    </Link>
+  );
+};
+export const NavigateNextButton = ({
+  collection,
+  photoId,
+  photoType,
+}: IGalleryNavButton) => {
+  return (
+    <Link
+      href={`/the-hydra/${
+        photoId == collection.photos.length - 1 ? 0 : photoId + 1
+      }?type=${photoType}`}
+    >
+      <a className="lg:h-24 flex flex-col items-center justify-center hover:bg-slate-700">
+        <div>
+          <Image src="/arrow-right.svg" width={32} height={32} alt="Next" />
+        </div>
+        <small className="uppercase mt-[-2px]">next</small>
+      </a>
+    </Link>
+  );
+};
+
+export const GalleryTypeButon = ({
+  type,
+  currentType,
+  setType,
+}: IGalleryTypeButton) => {
+  const href = `?type=${type}`;
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setType(type);
+  };
+  return (
+    <a
+      onClick={handleClick}
+      href={href}
+      aria-current="page"
+      className={`text-lg transition-all duration-500 inline-block py-2 w-full`}
+    >
+      <div className="lg:h-24 flex flex-col items-center justify-center hover:bg-slate-700">
+        <h1 className="text-5xl custom-major-mono">
+          {type === "original" ? "o" : "e"}
+        </h1>
+        <small className="uppercase">
+          {type === "original" && "Original"}
+          {type === "edition" && "Edition"}
+        </small>
+      </div>
+    </a>
+  );
+};
+
 export const TheHydraButton = () => {
   return (
     <Link href="/the-hydra">
       <a>
-        <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center">
+        <div className="text-center h-24 px-4 lg:px-0 lg:h-32 flex flex-col items-center justify-center hover:bg-slate-700">
           <div className="pt-2 lg:pt-0">
             <h1 className="text-5xl custom-major-mono">H</h1>
           </div>
           <div>
-            <small className="uppercase">The Hydra</small>
+            <small className="uppercase">
+              The Hydra
+              <br />
+              Gallery
+            </small>
           </div>
         </div>
       </a>

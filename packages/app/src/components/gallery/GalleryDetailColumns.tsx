@@ -6,7 +6,13 @@ import { useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
-import { NavBar, TheHydraButton } from "../NavBar";
+import {
+  GalleryTypeButon,
+  NavBar,
+  NavigateNextButton,
+  NavigatePreviousButton,
+  TheHydraButton,
+} from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailEdition } from "./GalleryDetailEdition";
 import { GalleryDetailOriginal } from "./GalleryDetailOriginal";
@@ -54,7 +60,7 @@ export const GalleryDetail = ({
   };
 
   // The type we are viewing -- either edition or original
-  const [type] = useState(initTokenType(photoId, originalId));
+  const [type, setType] = useState(initTokenType(photoId, originalId));
 
   // Navigation helpers
   const [previousPhoto, setPreviousPhoto] = useState(-1);
@@ -83,6 +89,26 @@ export const GalleryDetail = ({
       <NavBar>
         <div className="lg:w-full">
           <TheHydraButton />
+          <GalleryTypeButon
+            type={TokenType.Original}
+            currentType={type}
+            setType={setType}
+          />
+          <GalleryTypeButon
+            type={TokenType.Edition}
+            currentType={type}
+            setType={setType}
+          />
+          <NavigatePreviousButton
+            photoId={photoId}
+            collection={collection}
+            photoType={type}
+          />
+          <NavigateNextButton
+            photoId={photoId}
+            collection={collection}
+            photoType={type}
+          />
         </div>
       </NavBar>
       {type === TokenType.Original && (

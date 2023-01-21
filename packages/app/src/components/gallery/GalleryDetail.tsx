@@ -1,11 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
+import { cp } from "fs";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
-import { NavBar, TheHydraButton } from "../NavBar";
+import {
+  NavBar,
+  NavigateNextButton,
+  NavigatePreviousButton,
+  TheHydraButton,
+} from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
@@ -104,6 +110,16 @@ export const GalleryDetail = ({
         <NavBar>
           <div className="lg:w-full">
             <TheHydraButton />
+            <NavigatePreviousButton
+              photoId={photoId}
+              collection={collection}
+              photoType={type}
+            />
+            <NavigateNextButton
+              photoId={photoId}
+              collection={collection}
+              photoType={type}
+            />
           </div>
         </NavBar>
       </div>
