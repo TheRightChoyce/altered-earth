@@ -1,14 +1,13 @@
 import React from "react";
 
 import { Photo } from "../Photo";
-import { Spinner } from "../Spinner";
 import { GalleryMintButton } from "./GalleryMintButton";
 import { Owner } from "./Owner";
 import { TokenType } from "./tokenType";
 
 interface IMintComponent {
   photo: Photo;
-  connectedWalletAddress: string | undefined;
+  connectedWalletAddress?: string | undefined;
   onMintSuccess?: (owner: string, tx: string) => void;
   tokenType?: TokenType | undefined;
   loading?: boolean;
@@ -40,7 +39,13 @@ export const MintComponent = ({
   onMintSuccess,
   tokenType,
   loading,
+  owner,
 }: IMintComponent) => {
+  if (owner) {
+    return (
+      <MintComponentOwned photo={photo} tokenType={tokenType} owner={owner} />
+    );
+  }
   return (
     <div className="flex flex-col px-8 py-6 bg-slate-800 rounded-lg h-48">
       <div className="mb-2 flex flex-row w-full justify-between">
@@ -77,31 +82,19 @@ export const MintComponent = ({
   );
 };
 
-export const MintComponentLoading = () => {
-  return (
-    <div className="flex flex-col px-8 py-6 bg-slate-800 rounded-lg h-48">
-      <div className="mb-2 flex flex-row w-full items-center justify-center h-48">
-        <div>
-          <Spinner />
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export const MintComponentOwned = ({
   photo,
   tokenType,
   owner,
 }: IMintComponent) => {
   return (
-    <div className="flex flex-col px-8 py-6 bg-slate-800 rounded-lg">
+    <div className="flex flex-col px-8 py-6 bg-slate-800 rounded-lg h-48">
       <div className="mb-2 flex flex-row w-full justify-between">
         <div>
           <h5 className="">
             {tokenType === TokenType.Original ? "Original" : "Edition"} Price
           </h5>
-          <h4 className="text-3xl font-bold line-through-">
+          <h4 className="text-3xl font-bold line-through">
             {tokenType === TokenType.Original
               ? photo.price
               : photo.editionPrice}{" "}

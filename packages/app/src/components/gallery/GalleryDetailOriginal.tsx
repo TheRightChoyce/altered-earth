@@ -5,7 +5,7 @@ import { PhotoCollection } from "../PhotoCollection";
 import { GalleryDetailArtworkOriginal } from "./GalleryDetailArtwork";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
 import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
-import { MintComponentLoading, MintComponentOriginal } from "./MintComponent";
+import { MintComponentOriginal } from "./MintComponent";
 import { MintState } from "./mintState";
 import { mintStateReducerOriginal } from "./MintStateReducers";
 import { TokenType } from "./tokenType";
