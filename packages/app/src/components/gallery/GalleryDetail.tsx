@@ -1,23 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
-import { cp } from "fs";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
 import {
+  GalleryTypeButon,
   NavBar,
   NavigateNextButton,
   NavigatePreviousButton,
   TheHydraButton,
 } from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
-import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
-import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
-import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
-import { GalleryDetailTypeToggle } from "./GalleryDetailTypeToggle";
-import { GalleryNav, GalleryNavNext, GalleryNavPrevious } from "./GalleryNav";
+import { GalleryDetailEdition } from "./GalleryDetailEdition";
+import { GalleryDetailOriginal } from "./GalleryDetailOriginal";
 import { TokenType } from "./tokenType";
 
 const notFound = (
@@ -67,24 +65,6 @@ export const GalleryDetail = ({
   // Navigation helpers
   const [previousPhoto, setPreviousPhoto] = useState(-1);
 
-  const [originalImageClass, setOriginalImageClass] = useState("");
-  // Adjust the opacity of the original when viewing an edition
-  useEffect(() => {
-    setOriginalImageClass(
-      `${type === "original" ? "opacity-100" : "opacity-20"}` // ease-linear transition-all duration-500`
-    );
-  }, [type]);
-
-  const [editionImageClass, setEditionImageClass] = useState("");
-  // Adjust the opacity of the edition when viewing an edition
-  useEffect(() => {
-    setEditionImageClass(
-      `${
-        type === "original" ? "opacity-0" : "opacity-100"
-      } ease-linear transition-all duration-500`
-    );
-  }, [type]);
-
   const onMintSuccess = (owner: string, tx: string) => {
     // setHasOwner(true);
     console.debug(owner, tx);
@@ -104,128 +84,51 @@ export const GalleryDetail = ({
   }
 
   return (
-    <div className="flex flex-col lg:flex-row">
-      {/* nav bar */}
-      <div className="basis-[100px]">
-        <NavBar>
-          <div className="lg:w-full">
-            <TheHydraButton />
-            <NavigatePreviousButton
-              photoId={photoId}
-              collection={collection}
-              photoType={type}
-            />
-            <NavigateNextButton
-              photoId={photoId}
-              collection={collection}
-              photoType={type}
-            />
-          </div>
-        </NavBar>
-      </div>
-
-      {/* content */}
-      <div className="flex flex-col items-center relative lg:flex-row">
-        {/* Image + token info */}
-        <div className="flex flex-row lg:basis-1/3">
-          <div className="w-16 relative hidden sm:block">
-            <div className="inline-block absolute top-[50%]">
-              <GalleryNavPrevious
-                collection={collection}
-                photoId={originalId}
-                photoType={type.toString()}
-              />
-            </div>
-          </div>
-          <div className="relative m-auto pt-32 px-8 h-[70vh] sm:h-[80vh]">
-            <a
-              href={
-                type === "original"
-                  ? photo.previewImage1024Uri
-                  : photo.svgPreviewUri
-              }
-              target="_blank"
-              className="cursor-zoom-in"
-              rel="noreferrer"
-            >
-              <img
-                src={photo.previewImage1024Uri}
-                alt={photo.name}
-                className={`${originalImageClass} max-h-[60vh]`}
-              />
-              <div
-                className={`${editionImageClass} absolute w-[75%] h-[50%] top-[25%] left-[12.5%] border-8 border-slate-100`}
-              >
-                <img src={photo.svgPreviewUri} alt={photo.name} />
-              </div>
-            </a>
-          </div>
-          <div className="w-16 relative hidden sm:block">
-            <div className="inline-block absolute top-[50%]">
-              <GalleryNavNext
-                collection={collection}
-                photoId={originalId}
-                photoType={type.toString()}
-              />
-            </div>
-          </div>
+    <>
+      {/* Left nav bar */}
+      <NavBar>
+        <div className="lg:w-full">
+          <TheHydraButton />
+          <GalleryTypeButon
+            type={TokenType.Original}
+            currentType={type}
+            setType={setType}
+          />
+          <GalleryTypeButon
+            type={TokenType.Edition}
+            currentType={type}
+            setType={setType}
+          />
+          <NavigateNextButton
+            photoId={photoId}
+            collection={collection}
+            photoType={type}
+          />
+          <NavigatePreviousButton
+            photoId={photoId}
+            collection={collection}
+            photoType={type}
+          />
         </div>
-
-        <div className="px-4 sm:px-8 lg:px-32 w-full lg:basis-2/3">
-          <div className="container max-w-3xl m-auto">
-            {/* Original / Edition toggle */}
-            <div className="w-full">
-              <GalleryDetailTypeToggle setType={setType} currentType={type} />
-            </div>
-
-            <GalleryDetailTokenInfo
-              photo={photo}
-              collection={collection}
-              originalId={originalId}
-              type={type}
-            />
-
-            {/* Token Information */}
-            <div className="mt-8 mb-8">
-              <div className="flex flex-row">
-                <div className="basis-5/6">
-                  <h2 className="text-3xl lg:text-6xl mb-2 font-bold">
-                    {photo.name}
-                  </h2>
-                </div>
-
-                <div className="basis-1/6 sm:hidden">
-                  {/* gallary photo nav */}
-                  <GalleryNav
-                    collection={collection}
-                    photoId={originalId}
-                    photoType={type.toString()}
-                    photoLimit={50}
-                  />
-                </div>
-              </div>
-              <p className="text-lg italic leading-snug">{photo.description}</p>
-            </div>
-
-            {/* Original / Edition info */}
-            {type == "original" && (
-              <GalleryDetailOriginalInfo
-                photo={photo}
-                connectedWalletAddress={address}
-                onMintSuccess={onMintSuccess}
-              />
-            )}
-            {type == "edition" && (
-              <GalleryDetailEditionInfo
-                photo={photo}
-                originalId={originalId}
-                connectedWalletAddress={address}
-                onMintSuccess={onMintSuccess}
-              />
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+      </NavBar>
+      {type === TokenType.Original && (
+        <GalleryDetailOriginal
+          photo={photo}
+          collection={collection}
+          originalId={originalId}
+          connectedWalletAddress={address}
+          onMintSuccess={onMintSuccess}
+        />
+      )}
+      {type === TokenType.Edition && (
+        <GalleryDetailEdition
+          photo={photo}
+          collection={collection}
+          originalId={originalId}
+          connectedWalletAddress={address}
+          onMintSuccess={onMintSuccess}
+        />
+      )}
+    </>
   );
 };

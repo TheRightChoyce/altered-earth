@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import type { ReactElement } from "react";
 
-import { GalleryDetail } from "../../components/gallery/GalleryDetailColumns";
+import { GalleryDetail } from "../../components/gallery/GalleryDetail";
 import { theHydraCollection } from "../../data/the-hydra";
 import Layout from "../../layout/GalleryLayout";
 import { useIsMounted } from "../../useIsMounted";
