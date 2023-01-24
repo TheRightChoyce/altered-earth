@@ -82,7 +82,7 @@ export const GalleryDetailEdition = ({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row-reverse pt-16 lg:pt-0 lg:basis-1/2">
+      <div className="flex flex-col lg:flex-row-reverse lg:basis-1/2">
         {/* Image */}
         <GalleryDetailArtworkEdition photo={photo} />
 

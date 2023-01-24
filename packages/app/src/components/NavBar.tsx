@@ -38,7 +38,7 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
     <>
       <FloatingNavModal open={modalOpen} />
 
-      <div className="flex flex-row z-50 fixed w-[100vw] bg-slate-900 justify-between px-4 lg:px-0 lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block pb-2">
+      <div className="flex flex-row z-50 fixed w-[100vw] justify-between px-4 lg:px-0 lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block pb-2 bg-slate-900 lg:bg-slate-800">
         <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
         <MenuButton open={modalOpen} toggle={toggleModal} />
 
