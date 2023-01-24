@@ -14,8 +14,10 @@ import {
   TheHydraButton,
 } from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
+import { TypeToggleSmall } from "../TypeToggle";
 import { GalleryDetailEdition } from "./GalleryDetailEdition";
 import { GalleryDetailOriginal } from "./GalleryDetailOriginal";
+import { GalleryNav } from "./GalleryNav";
 import { TokenType } from "./tokenType";
 
 const notFound = (
@@ -111,28 +113,20 @@ export const GalleryDetail = ({
           />
         </div>
       </NavBar>
-      {/* <div className="flex flex-row lg:hidden w-full justify-around pt-24">
-        <NavigatePreviousButton
-          photoId={photoId}
-          collection={collection}
-          photoType={type}
-        />
-        <GalleryTypeButon
-          type={TokenType.Original}
+
+      {/* Mobile navs */}
+      <div className="pt-16 lg:hidden">
+        <TypeToggleSmall
           currentType={type}
+          photoId={photo.id}
           setType={setType}
         />
-        <GalleryTypeButon
-          type={TokenType.Edition}
-          currentType={type}
-          setType={setType}
-        />
-        <NavigateNextButton
-          photoId={photoId}
+        <GalleryNav
           collection={collection}
-          photoType={type}
+          photoId={photo.id}
+          photoType={TokenType.Original}
         />
-      </div> */}
+      </div>
 
       {type === TokenType.Original && (
         <GalleryDetailOriginal

@@ -1,12 +1,16 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 const TypeNavigationLink = ({
   type,
   currentType,
+  photoId,
+  setType,
 }: {
   type: string;
   currentType: string;
+  photoId?: number;
+  setType?: Dispatch<SetStateAction<string>>;
 }) => {
   const router = useRouter();
   const href = `?type=${type}`;
@@ -14,15 +18,18 @@ const TypeNavigationLink = ({
     e.preventDefault();
     router.push(
       {
-        pathname: router.pathname,
+        pathname: `/the-hydra/${photoId}`,
         query: { type: type },
       },
       {
-        pathname: router.pathname,
+        pathname: `/the-hydra/${photoId}`,
         query: { type: type },
       },
       { scroll: false }
     );
+    if (setType) {
+      setType(type);
+    }
   };
 
   return (
@@ -33,9 +40,9 @@ const TypeNavigationLink = ({
       className={`
               ${
                 type == currentType
-                  ? "text-slate-100"
+                  ? "text-slate-100 font-bold"
                   : "text-slate-600 hover:text-slate-400"
-              } px-4 py-2 lg:w-64 text-2xl transition-all duration-500
+              } px-4 py-2 text-sm transition-all duration-500
             `}
     >
       Browse {type}s
@@ -53,6 +60,38 @@ export const TypeToggle = ({ currentType }: { currentType: string }) => {
       <div>
         <TypeNavigationLink type={"edition"} currentType={currentType} />
       </div>
+    </div>
+  );
+};
+
+export const TypeToggleSmall = ({
+  currentType,
+  photoId,
+  setType,
+}: {
+  currentType: string;
+  photoId: number;
+  setType: Dispatch<SetStateAction<string>>;
+}) => {
+  return (
+    <div className="bg-slate-800 flex w-full justify-center py-2 px-4 uppercase text-sm">
+      <span>
+        <TypeNavigationLink
+          type={"original"}
+          currentType={currentType}
+          photoId={photoId}
+          setType={setType}
+        />
+      </span>
+      <span className="mx-2"> \\ </span>
+      <span>
+        <TypeNavigationLink
+          type={"edition"}
+          currentType={currentType}
+          photoId={photoId}
+          setType={setType}
+        />
+      </span>
     </div>
   );
 };

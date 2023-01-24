@@ -18,7 +18,7 @@ export const GalleryDetailArtworkOriginal = ({
 }: IGalleryDetailArtworkOriginal) => {
   return (
     <div>
-      <div className="lg:w-[45vw] flex items-center place-content-center py-8 px-4 lg:py-0 lg:px-0">
+      <div className="lg:w-[45vw] flex items-center place-content-center pb-8 px-4 lg:py-0 lg:px-0">
         <a
           href={photo.previewImage1024Uri}
           target="_blank"

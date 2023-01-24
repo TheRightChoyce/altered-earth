@@ -14,12 +14,16 @@ interface GalleryNavButtonParams {
   collection: PhotoCollection;
   photoId: number;
   photoType: string;
+  display?: string;
 }
+
+const linkClassName = "border-b-2 border-slate-700 text-sm font-extralight";
 
 export const GalleryNavPrevious = ({
   collection,
   photoId,
   photoType,
+  display,
 }: GalleryNavButtonParams) => {
   const navigatePreviousPhotoId =
     photoId == 0 ? collection.photos.length - 1 : photoId - 1;
@@ -27,7 +31,10 @@ export const GalleryNavPrevious = ({
   return (
     <Link href={`/the-hydra/${navigatePreviousPhotoId}?type=${photoType}`}>
       <a>
-        <Image src="/arrow-left.svg" width={32} height={32} alt="Previous" />
+        {display === "text" && <span className={linkClassName}>Prev</span>}
+        {display !== "text" && (
+          <Image src="/arrow-left.svg" width={32} height={32} alt="Previous" />
+        )}
       </a>
     </Link>
   );
@@ -37,6 +44,7 @@ export const GalleryNavNext = ({
   collection,
   photoId,
   photoType,
+  display,
 }: GalleryNavButtonParams) => {
   const navigateNextPhotoId =
     photoId == collection.photos.length - 1 ? 0 : photoId + 1;
@@ -44,7 +52,10 @@ export const GalleryNavNext = ({
   return (
     <Link href={`/the-hydra/${navigateNextPhotoId}?type=${photoType}`}>
       <a>
-        <Image src="/arrow-right.svg" width={32} height={32} alt="Previous" />
+        {display === "text" && <span className={linkClassName}>Next</span>}
+        {display !== "text" && (
+          <Image src="/arrow-right.svg" width={32} height={32} alt="Previous" />
+        )}
       </a>
     </Link>
   );
@@ -56,23 +67,35 @@ export const GalleryNav = ({
   photoType,
 }: GalleryNavParams) => {
   return (
-    <div className="flex flex-row w-full sm:w-[256px]" id="nav">
-      <div className="basis-1/2 text-center mr-4">
-        <GalleryNavPrevious
-          collection={collection}
-          photoId={photoId}
-          photoType={photoType}
-        />
+    <div
+      className="flex flex-row w-full justify-between items-center px-4 h-14"
+      id="nav"
+    >
+      <div className="basis-1/2">
+        <Link href={`/${collection.slug}`}>
+          <a className={linkClassName}>Back to gallery</a>
+        </Link>
       </div>
-      {/* <div className="basis-1/2 text-center">
+      <div className="flex flex-row" id="nav">
+        <div className="basis-1/2 text-center mr-8">
+          <GalleryNavPrevious
+            collection={collection}
+            photoId={photoId}
+            photoType={photoType}
+            display={"text"}
+          />
+        </div>
+        {/* <div className="basis-1/2 text-center">
         {photoId + 1} of {photoLimit}
       </div> */}
-      <div className="basis-1/2 text-center">
-        <GalleryNavNext
-          collection={collection}
-          photoId={photoId}
-          photoType={photoType}
-        />
+        <div className="basis-1/2 text-center">
+          <GalleryNavNext
+            collection={collection}
+            photoId={photoId}
+            photoType={photoType}
+            display={"text"}
+          />
+        </div>
       </div>
     </div>
   );

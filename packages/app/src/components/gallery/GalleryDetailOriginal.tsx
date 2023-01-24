@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
+import { TypeToggleSmall } from "../TypeToggle";
 import { GalleryDetailArtworkOriginal } from "./GalleryDetailArtwork";
 import { GalleryDetailCollectionDescription } from "./GalleryDetailCollectionDescription";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
 import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
+import { GalleryNav } from "./GalleryNav";
 import { MintComponentOriginal } from "./MintComponent";
 import { MintState } from "./mintState";
 import { mintStateReducerOriginal } from "./MintStateReducers";
@@ -72,7 +74,7 @@ export const GalleryDetailOriginal = ({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row-reverse pt-16 lg:pt-0 lg:basis-1/2">
+      <div className="flex flex-col lg:flex-row-reverse lg:pt-0 lg:basis-1/2">
         {/* Image */}
         <GalleryDetailArtworkOriginal photo={photo} />
 
