@@ -82,6 +82,14 @@ export class Photo {
     }
   }
 
+  getNameForMajorMono = () => {
+    return `the HydrA #${this.id}`;
+    // return this.name
+    //   .toLocaleLowerCase()
+    //   .replaceAll("h", "H")
+    //   .replaceAll("a", "A");
+  };
+
   getEditionIdStart = () => {
     return this.id * 50 + 50;
   };

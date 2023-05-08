@@ -1,6 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import Link from "next/link";
 
+import { Button } from "../../Button";
 import { Photo } from "../Photo";
 import { TokenType } from "./tokenType";
 
@@ -19,62 +21,38 @@ IGalleryGridPhoto) => {
   return (
     <div
       key={`${photo.id}-${type}`}
-      className="bg-slate-800 mb-4 flex flex-col rounded-lg"
+      className="bg-slate-800 mb-4 flex flex-col justify-center px-8 py-8"
     >
       <Link href={`/the-hydra/${photo.id}?type=${type}`}>
-        <a>
-          <div className="m-auto">
-            <div className="lg:w-80 h-80 object-cover overflow-hidden rounded-t-lg m-auto text-center">
-              <Image
-                layout={"responsive"}
-                objectFit="cover"
-                width="100%"
-                height="100%"
-                src={
-                  type === TokenType.Original
-                    ? photo.previewImageUri
-                    : photo.svgPreviewUri
-                }
-                alt={photo.name}
-                priority={true}
-                sizes={"100vw"}
-              />
-            </div>
+        <div className="flex flex-row justify-center cursor-pointer align-middle">
+          <div className="h-[192px] w-[192px] overflow-hidden">
+            <img
+              className="h-full w-[192px] object-cover"
+              src={
+                type === TokenType.Original
+                  ? photo.previewImageUri
+                  : photo.svgPreviewUri
+              }
+              alt={photo.name}
+            />
           </div>
-          <div className="px-4 py-4 flex flex-col">
-            <h2 className="mb-2 font-bold">
-              <span className="text-xl lg:text-3xl">{photo.name}</span>
-              <span className="text-md px-3 py-1 bg-slate-600 rounded-lg ml-2 float-right">
-                {type === TokenType.Edition ? "Edition" : "Original"}
-              </span>
-            </h2>
-            <div className="flex flex-row">
-              {type === TokenType.Original && (
-                <div className="mb-2">
-                  <h5 className="text-md lg:text-xl">Original Price</h5>
-                  <h4 className="text-xl font-bold lg:text-3xl">
-                    {photo.price} ETH
-                  </h4>
-                </div>
-              )}
-              {type === TokenType.Edition && (
-                <div className="mb-2">
-                  <h5 className="text-md lg:text-xl">Edition Price</h5>
-                  <h4 className="text-xl font-bold lg:text-3xl">0.05 ETH</h4>
-                </div>
-              )}
-              {/* <div className="basis-1/2">
-                <GalleryMintButton
-                  photo={photo}
-                  address={connectedWalletAddress}
-                  isOriginal={true}
-                  onSuccess={() => {}}
-                  isCorrectNetwork={true}
-                />
-              </div> */}
-            </div>
-          </div>
-        </a>
+        </div>
+      </Link>
+      <h2 className="my-4 text-xl lg:text-2xl custom-major-mono text-center">
+        {photo.getNameForMajorMono()}
+      </h2>
+      <div className="text-md mb-2 text-center">
+        {type === TokenType.Edition ? "Edition of 50" : "Original 1-of-1"}
+      </div>
+
+      <h4 className="text-xl font-bold lg:text-2xl text-center mb-2">
+        {type === TokenType.Original ? photo.price : "0.05"} ETH
+      </h4>
+
+      <Link href={`/the-hydra/${photo.id}?type=${type}`}>
+        <Button>
+          View {type === TokenType.Original ? "Original" : "Edition"}
+        </Button>
       </Link>
     </div>
   );

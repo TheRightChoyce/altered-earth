@@ -107,6 +107,7 @@ export type Token = {
 export type Token_Filter = {
   /** Filter for the block changed event. */
   readonly _change_block?: InputMaybe<BlockChangedFilter>;
+  readonly and?: InputMaybe<ReadonlyArray<InputMaybe<Token_Filter>>>;
   readonly id?: InputMaybe<Scalars['ID']>;
   readonly id_gt?: InputMaybe<Scalars['ID']>;
   readonly id_gte?: InputMaybe<Scalars['ID']>;
@@ -115,6 +116,7 @@ export type Token_Filter = {
   readonly id_lte?: InputMaybe<Scalars['ID']>;
   readonly id_not?: InputMaybe<Scalars['ID']>;
   readonly id_not_in?: InputMaybe<ReadonlyArray<Scalars['ID']>>;
+  readonly or?: InputMaybe<ReadonlyArray<InputMaybe<Token_Filter>>>;
   readonly owner?: InputMaybe<Scalars['Bytes']>;
   readonly owner_contains?: InputMaybe<Scalars['Bytes']>;
   readonly owner_gt?: InputMaybe<Scalars['Bytes']>;

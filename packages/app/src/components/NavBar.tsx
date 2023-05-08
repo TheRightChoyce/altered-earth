@@ -92,20 +92,27 @@ export const TypeNavigationButton = ({
 
 export const AlteredEarthButton = ({ open, toggle }: IModalToggle) => {
   return (
-    <div
-      onClick={() => toggle()}
-      className={`${
-        open ? "bg-slate-800" : ""
-      } lg:h-28 flex items-center justify-center cursor-pointer hover:animate-pulse hover:bg-slate-700`}
-    >
-      <h1
+    <>
+      <div
         onClick={() => toggle()}
-        className="text-3xl lg:text-5xl custom-major-mono font-extrabold"
+        className={`${
+          open ? "bg-slate-800" : ""
+        } hidden h-24 px-4 lg:px-0 lg:h-32 lg:flex items-center justify-center cursor-pointer hover:animate-pulse hover:bg-slate-700`}
       >
-        <span className="lg:hidden">Ae</span>
-        <span className="hidden lg:block">{open ? "x" : "Ae"}</span>
-      </h1>
-    </div>
+        <h1 className="text-3xl lg:text-5xl custom-major-mono font-extrabold">
+          {!open && <span>Ae</span>}
+          {open && <span>x</span>}
+        </h1>
+      </div>
+
+      <div className="lg:hidden flex items-center justify-center cursor-pointer">
+        <Link href="/">
+          <h1 className="text-3xl lg:text-5xl custom-major-mono font-extrabold">
+            <span>Ae</span>
+          </h1>
+        </Link>
+      </div>
+    </>
   );
 };
 
@@ -295,11 +302,7 @@ export const TheHydraButton = () => {
             <h1 className="text-5xl custom-major-mono">H</h1>
           </div>
           <div>
-            <small className="uppercase">
-              The Hydra
-              <br />
-              Gallery
-            </small>
+            <small className="uppercase">The Hydra</small>
           </div>
         </div>
       </a>

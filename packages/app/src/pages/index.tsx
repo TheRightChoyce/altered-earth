@@ -13,34 +13,24 @@ const HomePage: NextPageWithLayout = () => {
     "grayscale-0 transition-all ease-in-out duration-5000"
   );
 
-  useEffect(() => {
-    setImageClass(
-      (isReconnecting || address) && !isDisconnected
-        ? "grayscale-0 transition-all ease-in-out duration-5000"
-        : "grayscale"
-    );
-  }, [address, isReconnecting, isDisconnected]);
-
   return (
     <div className="flex flex-col lg:flex-row">
-      {/* Left nav bar -- none */}
-      <NavBar />
+      <div className="lg:basis-36">
+        <NavBar />
+      </div>
 
       {/* content */}
-      <div className="w-[100vw] lg:pl-8 lg:w-[90vw] lg:ml-[10vw]">
-        <div className="px-2 mt-[5vh] mb-[10vh] text-center lg:text-left">
-          <div className="w-[100vw] md:w-[70vw] mx-auto lg:mx-0">
-            <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-2 custom-major-mono">
-              Altered eArth
-            </h1>
-            <h2 className="text-lg md:text-xl lg:text-3xl">
-              Exploring the earth in unseen ways
-            </h2>
-          </div>
+      <div className="flex flex-col">
+        <div className="text-center lg:text-left px-4 lg:pl-8 lg:pr-24">
+          <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-2 custom-major-mono">
+            Altered eArth
+          </h1>
+          <h2 className="text-lg md:text-xl lg:text-3xl">
+            Exploring the earth in unseen ways
+          </h2>
         </div>
-        <div
-          className={`${imageClass} mx-auto lg:mx-0 text-center lg:text-left`}
-        >
+
+        <div className="px-4 lg:pl-8 lg:pr-24">
           <div className="mb-16">
             <Link href="/the-hydra">
               <a>
