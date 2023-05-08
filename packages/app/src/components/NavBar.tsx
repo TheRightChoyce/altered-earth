@@ -38,7 +38,7 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
     <>
       <FloatingNavModal open={modalOpen} />
 
-      <div className="flex flex-row z-50 fixed w-[100vw] justify-between px-4 lg:px-0 lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block pb-2 bg-slate-900 lg:bg-slate-800">
+      <div className="absolute z-50 top-0 flex flex-row w-[100vw] justify-between lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block">
         <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
         <MenuButton open={modalOpen} toggle={toggleModal} />
 
@@ -93,7 +93,7 @@ export const TypeNavigationButton = ({
 export const AlteredEarthButton = ({ open, toggle }: IModalToggle) => {
   return (
     <>
-      <div
+      {/* <div
         onClick={() => toggle()}
         className={`${
           open ? "bg-slate-800" : ""
@@ -103,11 +103,11 @@ export const AlteredEarthButton = ({ open, toggle }: IModalToggle) => {
           {!open && <span>Ae</span>}
           {open && <span>x</span>}
         </h1>
-      </div>
+      </div> */}
 
-      <div className="lg:hidden flex items-center justify-center cursor-pointer">
+      <div className="flex items-center justify-center cursor-pointer">
         <Link href="/">
-          <h1 className="text-3xl lg:text-5xl custom-major-mono font-extrabold">
+          <h1 className="text-3xl lg:text-5xl custom-major-mono font-extrabold px-4 py-8">
             <span>Ae</span>
           </h1>
         </Link>
@@ -122,11 +122,11 @@ export const MenuButton = ({ open, toggle }: IModalToggle) => {
       onClick={() => toggle()}
       className={`${
         open ? "bg-slate-800" : ""
-      } flex items-center justify-center cursor-pointer lg:hidden lg:h-28`}
+      } flex items-center justify-center cursor-pointer lg:hidden lg:h-28 px-4`}
     >
       <h1
         onClick={() => toggle()}
-        className="text-4xl lg:text-5xl custom-major-mono px-4"
+        className="text-4xl lg:text-5xl custom-major-mono font-bold"
       >
         {open ? "x" : "V"}
       </h1>

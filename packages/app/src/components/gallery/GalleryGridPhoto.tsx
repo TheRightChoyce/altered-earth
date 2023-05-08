@@ -21,13 +21,14 @@ IGalleryGridPhoto) => {
   return (
     <div
       key={`${photo.id}-${type}`}
-      className="bg-slate-800 mb-4 flex flex-col justify-center px-8 py-8"
+      className="bg-slate-800 flex flex-col justify-center cursor-pointer"
     >
       <Link href={`/the-hydra/${photo.id}?type=${type}`}>
-        <div className="flex flex-row justify-center cursor-pointer align-middle">
-          <div className="h-[192px] w-[192px] overflow-hidden">
+        <div>
+          {/* Image */}
+          <div className="h-[90vw] w-[90vw] md:h-[256px] md:w-[256px] overflow-hidden relative">
             <img
-              className="h-full w-[192px] object-cover"
+              className="h-full w-[90vw] md:w-[256px] object-cover opacity-40"
               src={
                 type === TokenType.Original
                   ? photo.previewImageUri
@@ -35,44 +36,29 @@ IGalleryGridPhoto) => {
               }
               alt={photo.name}
             />
+            {/* Hover text center */}
+            <h2 className="absolute z-50 text-2xl custom-major-mono top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+              {photo.getNameForMajorMono()}
+            </h2>
+          </div>
+
+          {/* Price */}
+          <div className="flex flex-row gap-16 justify-around p-4">
+            <div className="flex flex-col align-middle">
+              <h4 className="text-sm font-medium">Mint Price</h4>
+              <h2 className="text-2xl font-bold">
+                {type === TokenType.Original ? photo.price : "0.05"} ETH
+              </h2>
+            </div>
+            <div className="flex flex-col">
+              <h4 className="text-2m font-medium">Available</h4>
+              <h2 className="text-2xl font-bold">
+                {type === TokenType.Edition ? "50 of 50" : "1 of 1"}
+              </h2>
+            </div>
           </div>
         </div>
-      </Link>
-      <h2 className="my-4 text-xl lg:text-2xl custom-major-mono text-center">
-        {photo.getNameForMajorMono()}
-      </h2>
-      <div className="text-md mb-2 text-center">
-        {type === TokenType.Edition ? "Edition of 50" : "Original 1-of-1"}
-      </div>
-
-      <h4 className="text-xl font-bold lg:text-2xl text-center mb-2">
-        {type === TokenType.Original ? photo.price : "0.05"} ETH
-      </h4>
-
-      <Link href={`/the-hydra/${photo.id}?type=${type}`}>
-        <Button>
-          View {type === TokenType.Original ? "Original" : "Edition"}
-        </Button>
       </Link>
     </div>
   );
 };
-
-{
-  /* <Link href={`/the-hydra/${photo.id}?type=edition`}>
-                <a>
-                  <div className="relative h-48 w-48 md:h-64 md:w-64 6object-cover bg-slate-200">
-                    <Image
-                      layout={"responsive"}
-                      objectFit="cover"
-                      width="100%"
-                      height="100%"
-                      src={photo.svgPreviewUri}
-                      alt={photo.name}
-                      priority={true}
-                        sizes={"100vw"}
-                    />
-                  </div>
-                </a>
-              </Link> */
-}
