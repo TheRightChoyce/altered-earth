@@ -46,7 +46,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
         <NavBar />
 
         {/* Title */}
-        <div className="absolute z-50 top-[20vh] text-center flex flex-col gap-8">
+        <div className="absolute z-10 top-[20vh] text-center flex flex-col gap-8">
           <img src="/the-hydra/title.svg" alt="THE HYDRA" />
           <div className="font-medium">
             Created by:{" "}
@@ -77,7 +77,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
         </div>
 
         {/* Stats */}
-        <div className="absolute z-50 bottom-[5vh] text-center flex flex-col gap-8">
+        <div className="absolute z-10 bottom-[5vh] text-center flex flex-col gap-8">
           <div className="flex flex-row gap-16">
             <div className="flex flex-col align-middle">
               <h4 className="text-md font-medium">Total</h4>

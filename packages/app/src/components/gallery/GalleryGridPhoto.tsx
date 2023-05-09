@@ -37,7 +37,7 @@ IGalleryGridPhoto) => {
               alt={photo.name}
             />
             {/* Hover text center */}
-            <h2 className="absolute z-50 text-2xl custom-major-mono top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+            <h2 className="absolute z-10 text-2xl custom-major-mono top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
               {photo.getNameForMajorMono()}
             </h2>
           </div>
