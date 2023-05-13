@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import React, { Dispatch, SetStateAction } from "react";
 
+import { TokenType } from "./tokenType";
+
 const NavigationLink = ({
   type,
   currentType,
@@ -10,7 +12,8 @@ const NavigationLink = ({
   type: string;
   currentType: string;
   photoId?: number;
-  setType?: Dispatch<SetStateAction<string>>;
+  // setType?: Dispatch<SetStateAction<string>>;
+  setType?: (type: TokenType) => void;
 }) => {
   const router = useRouter();
   const pathName = `/the-hydra${photoId ? `/${photoId}` : ""}`;
@@ -56,10 +59,11 @@ export const GalleryBrowseNav = ({
   setType,
 }: {
   currentType: string;
-  setType?: Dispatch<SetStateAction<string>>;
+  // setType?: Dispatch<SetStateAction<string>>;
+  setType?: (type: TokenType) => void;
 }) => {
   return (
-    <div className="bg-slate-800 border-y-2 border-slate-700 flex flex-row justify-center content-center py-4">
+    <div className="bg-slate-800 flex flex-row justify-center content-center py-4 gap-4">
       <NavigationLink
         type={"Original"}
         currentType={currentType}

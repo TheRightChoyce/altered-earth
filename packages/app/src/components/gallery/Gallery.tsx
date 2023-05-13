@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
@@ -24,6 +24,14 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
       ? router.query.type[0]
       : router.query.type) || TokenType.Original
   );
+
+  const [loading, setLoading] = useState(false);
+
+  const changeType = (newType: TokenType) => {
+    setLoading(true);
+    setType(newType);
+    setTimeout(() => setLoading(false), 1000);
+  };
 
   if (!isMounted) {
     return null;
@@ -106,34 +114,41 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
       </div>
 
       {/* Gallery navigation */}
-      <GalleryBrowseNav currentType={type} setType={setType} />
+      <GalleryBrowseNav currentType={type} setType={changeType} />
 
       {/* photo gallery */}
-      <div className="px-4">
-        <div>
-          <div className="grid md:grid-cols-2 xl:grid-cols-4 auto-cols-max gap-8 justify-center px-8">
-            {collection.photos.map((photo: Photo) => (
-              <>
-                {type == TokenType.Original && (
-                  <GalleryGridPhoto
-                    photo={photo}
-                    type={TokenType.Original}
-                    connectedWalletAddress={address}
-                  />
-                )}
+      {loading && (
+        <div className="animate-spin text-center pt-16">
+          <h1 className="text-7xl custom-major-mono">AE</h1>
+        </div>
+      )}
+      {!loading && (
+        <div className="px-4">
+          <div>
+            <div className="grid md:grid-cols-2 xl:grid-cols-4 auto-cols-max gap-8 justify-center px-8">
+              {collection.photos.map((photo: Photo) => (
+                <>
+                  {type == TokenType.Original && (
+                    <GalleryGridPhoto
+                      photo={photo}
+                      type={TokenType.Original}
+                      connectedWalletAddress={address}
+                    />
+                  )}
 
-                {type == TokenType.Edition && (
-                  <GalleryGridPhoto
-                    photo={photo}
-                    type={TokenType.Edition}
-                    connectedWalletAddress={address}
-                  />
-                )}
-              </>
-            ))}
+                  {type == TokenType.Edition && (
+                    <GalleryGridPhoto
+                      photo={photo}
+                      type={TokenType.Edition}
+                      connectedWalletAddress={address}
+                    />
+                  )}
+                </>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
