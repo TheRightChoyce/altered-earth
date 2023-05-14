@@ -14,10 +14,9 @@ import {
   TheHydraButton,
 } from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
-import { TypeToggleSmall } from "../TypeToggle";
+import { Spinner } from "../Spinner";
 import { GalleryDetailEdition } from "./GalleryDetailEdition";
 import { GalleryDetailOriginal } from "./GalleryDetailOriginal";
-import { GalleryNav } from "./GalleryNav";
 import { TokenType } from "./tokenType";
 
 const notFound = (
@@ -78,7 +77,11 @@ export const GalleryDetail = ({
   }
 
   if (!isMounted) {
-    return <div>...</div>;
+    return (
+      <div className="text-center pt-32 h-96">
+        <Spinner />
+      </div>
+    );
   }
 
   if (!photo) {
@@ -87,6 +90,28 @@ export const GalleryDetail = ({
 
   return (
     <>
+      <div className="flex flex-col gap-8 align-bottom">
+        {type === TokenType.Original && (
+          <GalleryDetailOriginal
+            photo={photo}
+            collection={collection}
+            originalId={originalId}
+            connectedWalletAddress={address}
+            onMintSuccess={onMintSuccess}
+            setType={setType}
+          />
+        )}
+        {type === TokenType.Edition && (
+          <GalleryDetailEdition
+            photo={photo}
+            collection={collection}
+            originalId={originalId}
+            connectedWalletAddress={address}
+            onMintSuccess={onMintSuccess}
+            setType={setType}
+          />
+        )}
+      </div>
       {/* Left nav bar */}
       <NavBar>
         <div className="lg:w-full">
@@ -113,39 +138,6 @@ export const GalleryDetail = ({
           />
         </div>
       </NavBar>
-
-      {/* Mobile navs */}
-      <div className="pt-16 lg:hidden">
-        <TypeToggleSmall
-          currentType={type}
-          photoId={photo.id}
-          setType={setType}
-        />
-        <GalleryNav
-          collection={collection}
-          photoId={photo.id}
-          photoType={TokenType.Original}
-        />
-      </div>
-
-      {type === TokenType.Original && (
-        <GalleryDetailOriginal
-          photo={photo}
-          collection={collection}
-          originalId={originalId}
-          connectedWalletAddress={address}
-          onMintSuccess={onMintSuccess}
-        />
-      )}
-      {type === TokenType.Edition && (
-        <GalleryDetailEdition
-          photo={photo}
-          collection={collection}
-          originalId={originalId}
-          connectedWalletAddress={address}
-          onMintSuccess={onMintSuccess}
-        />
-      )}
     </>
   );
 };

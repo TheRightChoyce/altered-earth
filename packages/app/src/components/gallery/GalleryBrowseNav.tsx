@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 
 import { TokenType } from "./tokenType";
 
@@ -9,7 +9,7 @@ const NavigationLink = ({
   photoId,
   setType,
 }: {
-  type: string;
+  type: TokenType;
   currentType: string;
   photoId?: number;
   // setType?: Dispatch<SetStateAction<string>>;
@@ -32,7 +32,7 @@ const NavigationLink = ({
       { scroll: false }
     );
     if (setType) {
-      setType(type.toLowerCase());
+      setType(type);
     }
   };
 
@@ -65,15 +65,58 @@ export const GalleryBrowseNav = ({
   return (
     <div className="bg-slate-800 flex flex-row justify-center content-center py-4 gap-4">
       <NavigationLink
-        type={"Original"}
+        type={TokenType.Original}
         currentType={currentType}
         setType={setType}
       />
       <NavigationLink
-        type={"Edition"}
+        type={TokenType.Edition}
         currentType={currentType}
         setType={setType}
       />
     </div>
+  );
+};
+
+export const ToggleTypeButton = ({
+  type,
+  currentType,
+  photoId,
+  setType,
+}: {
+  type: TokenType;
+  currentType: TokenType;
+  photoId?: number;
+  setType?: (type: TokenType) => void;
+}) => {
+  const router = useRouter();
+  const pathName = `/the-hydra${photoId ? `/${photoId}` : ""}`;
+  const href = `?type=${type.toLowerCase()}`;
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push(
+      {
+        pathname: pathName,
+        query: { type: type.toLowerCase() },
+      },
+      {
+        pathname: pathName,
+        query: { type: type.toLowerCase() },
+      },
+      { scroll: true }
+    );
+    if (setType) {
+      setType(type);
+    }
+  };
+  return (
+    <a
+      onClick={handleClick}
+      href={href}
+      aria-current="page"
+      className="text-md underline underline-offset-4"
+    >
+      View the {currentType === TokenType.Original ? "edition" : "original"}
+    </a>
   );
 };

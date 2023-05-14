@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 import React from "react";
 
 import { Photo } from "../Photo";
@@ -13,6 +14,34 @@ interface IGalleryDetailArtworkEdition {
 }
 
 export const GalleryDetailArtworkOriginal = ({
+  photo,
+  children,
+}: IGalleryDetailArtworkOriginal) => {
+  return (
+    <div className="relative w-[100vw] overflow-hidden h-[75vh]">
+      <div className="object-cover w-full">
+        <a
+          href={photo.previewImage1024Uri}
+          target="_blank"
+          className="cursor-zoom-in"
+          rel="noreferrer"
+        >
+          <Image
+            src={photo.previewImage1024Uri}
+            alt={photo.name}
+            objectFit="cover"
+            layout="fill"
+            className="opacity-80"
+          />
+
+          {children}
+        </a>
+      </div>
+    </div>
+  );
+};
+
+export const GalleryDetailArtworkOriginalOld = ({
   photo,
   children,
 }: IGalleryDetailArtworkOriginal) => {
@@ -43,8 +72,8 @@ export const GalleryDetailArtworkEdition = ({
   photo,
 }: IGalleryDetailArtworkEdition) => {
   return (
-    <div>
-      <div className="lg:w-[45vw] flex items-center place-content-center pb-8 px-4 lg:py-0 lg:px-0">
+    <div className="relative w-[100vw] overflow-hidden h-[75vh]">
+      <div className="object-cover w-full">
         <a
           href={photo.svgPreviewUri}
           target="_blank"
@@ -52,13 +81,15 @@ export const GalleryDetailArtworkEdition = ({
           rel="noreferrer"
         >
           <div className="block">
-            <img
+            <Image
               src={photo.previewImage1024Uri}
               alt={photo.name}
-              className="w-full opacity-20"
+              objectFit="cover"
+              layout="fill"
+              className="opacity-30"
             />
           </div>
-          <div className="absolute top-[22vh] right-[12.5vw] lg:top-[15vw] lg:right-[10vw] shadow-2xl">
+          <div className="absolute top-[18vh] right-[12.5vw] lg:top-[15vw] lg:right-[10vw] shadow-2xl">
             <img
               src={photo.svgPreviewUri}
               alt={photo.name}

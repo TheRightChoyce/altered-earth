@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
+import { ToggleTypeButton } from "./GalleryBrowseNav";
 import { GalleryDetailArtworkOriginal } from "./GalleryDetailArtwork";
 import { GalleryDetailCollectionDescription } from "./GalleryDetailCollectionDescription";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
 import { GalleryDetailTokenInfo } from "./GalleryDetailTokenInformation";
+import { GalleryNav } from "./GalleryNav";
 import { MintComponentOriginal } from "./MintComponent";
 import { MintState } from "./mintState";
 import { mintStateReducerOriginal } from "./MintStateReducers";
@@ -18,6 +20,7 @@ interface IGalleryDetailOriginal {
   originalId: number;
   connectedWalletAddress?: string | undefined;
   onMintSuccess: (owner: string, tx: string) => void;
+  setType?: (type: TokenType) => void;
 }
 
 const mintComponentReducer = (
@@ -51,6 +54,7 @@ export const GalleryDetailOriginal = ({
   originalId,
   connectedWalletAddress,
   onMintSuccess,
+  setType,
 }: IGalleryDetailOriginal) => {
   // Token specific info
   const [mintState, setMintState] = useState(MintState.Unknown);
@@ -73,11 +77,19 @@ export const GalleryDetailOriginal = ({
   return (
     <>
       <div className="flex flex-col lg:flex-row-reverse lg:basis-1/2">
-        {/* Image */}
-        <GalleryDetailArtworkOriginal photo={photo} />
+        {/* Full Hero */}
+        <div className="flex flex-col items-center relative">
+          {/* Hero */}
+          <GalleryDetailArtworkOriginal photo={photo} />
+        </div>
+        <GalleryNav
+          collection={collection}
+          photoId={photo.id}
+          photoType={TokenType.Original}
+        />
 
         {/* content */}
-        <div className="h-full lg:basis-1/2 lg:pl-28 lg:pr-8 lg:pt-8">
+        <div className="h-full mt-8 lg:basis-1/2 lg:pl-28 lg:pr-8 lg:pt-8">
           <GalleryDetailTokenInfo
             photo={photo}
             collection={collection}
@@ -93,6 +105,21 @@ export const GalleryDetailOriginal = ({
             connectedWalletAddress,
             onMintSuccess
           )}
+
+          {/* Type toggle button */}
+          <div className="text-center mt-16">
+            You are viewing the original.
+            <br />
+            <ToggleTypeButton
+              currentType={TokenType.Original}
+              type={TokenType.Edition}
+              photoId={photo.id}
+              setType={setType}
+            />{" "}
+            instead.
+          </div>
+
+          {/* Scroll notice */}
           <div className="text-center mt-8 hidden lg:block">
             <small className="block mb-2">scroll for more info</small>
             <Image

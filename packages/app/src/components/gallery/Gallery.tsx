@@ -1,14 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
 import { NavBar } from "../NavBar";
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
+import { Spinner } from "../Spinner";
 import { GalleryBrowseNav } from "./GalleryBrowseNav";
 import { GalleryGridPhoto } from "./GalleryGridPhoto";
 import { TokenType } from "./tokenType";
@@ -30,11 +30,15 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
   const changeType = (newType: TokenType) => {
     setLoading(true);
     setType(newType);
-    setTimeout(() => setLoading(false), 1000);
+    setTimeout(() => setLoading(false), 250);
   };
 
   if (!isMounted) {
-    return null;
+    return (
+      <div className="text-center pt-32 h-96">
+        <Spinner />
+      </div>
+    );
   }
 
   if (!collection) {
@@ -44,8 +48,6 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
       </div>
     );
   }
-
-  console.log(type);
 
   return (
     <div className="flex flex-col gap-8 align-bottom">
@@ -118,8 +120,8 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
 
       {/* photo gallery */}
       {loading && (
-        <div className="animate-spin text-center pt-16">
-          <h1 className="text-7xl custom-major-mono">AE</h1>
+        <div className="text-center pt-32 h-64">
+          <Spinner />
         </div>
       )}
       {!loading && (

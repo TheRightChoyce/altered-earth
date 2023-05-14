@@ -29,7 +29,9 @@ export const GalleryNavPrevious = ({
     photoId == 0 ? collection.photos.length - 1 : photoId - 1;
 
   return (
-    <Link href={`/the-hydra/${navigatePreviousPhotoId}?type=${photoType}`}>
+    <Link
+      href={`/${collection.slug}/${navigatePreviousPhotoId}?type=${photoType}`}
+    >
       <a>
         {display === "text" && <span className={linkClassName}>Prev</span>}
         {display !== "text" && (
