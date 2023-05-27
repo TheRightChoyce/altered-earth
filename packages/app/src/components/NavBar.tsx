@@ -167,7 +167,7 @@ export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
     <div
       className={`${
         open
-          ? "opacity-100 fixed w-[100vw] h-[100vh] top-0 left-0 px-4 pt-4 z-50 bg-slate-900 backdrop-filter backdrop-blur-xl bg-opacity-90 transition-all flex"
+          ? "opacity-100 fixed w-[100vw] h-[100vh] top-0 left-0 px-4 pt-4 z-50 bg-slate-900 backdrop-filter backdrop-blur-xl bg-opacity-90 transition-all flex flex-col"
           : "opacity-0 fixed overflow-hidden transition-opacity hidden"
       } ease-in-out duration-100`}
     >
