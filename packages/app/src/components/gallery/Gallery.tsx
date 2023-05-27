@@ -9,28 +9,32 @@ import { NavBar } from "../NavBar";
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
 import { Spinner } from "../Spinner";
-import { GalleryBrowseNav } from "./GalleryBrowseNav";
+import { GalleryActionNavigation } from "./GalleryBrowseNav";
 import { GalleryGridPhoto } from "./GalleryGridPhoto";
 import { TokenType } from "./tokenType";
 
-export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
+export const Gallery = ({
+  collection,
+  tokenType,
+}: {
+  collection: PhotoCollection;
+  tokenType: TokenType;
+}) => {
   const isMounted = useIsMounted();
   const { address } = useAccount();
   const router = useRouter();
 
   // The type we are viewing -- either edition or original
-  const [type, setType] = useState<string>(
-    (router.query.type instanceof Array
-      ? router.query.type[0]
-      : router.query.type) || TokenType.Original
-  );
-
+  const [type, setType] = useState(tokenType);
   const [loading, setLoading] = useState(false);
+
+  console.log(tokenType);
 
   const changeType = (newType: TokenType) => {
     setLoading(true);
     setType(newType);
     setTimeout(() => setLoading(false), 250);
+    // router.push(`/the-hydra/${newType}`, undefined, { shallow: true });
   };
 
   if (!isMounted) {
@@ -126,7 +130,13 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
 
       {/* Gallery navigation */}
       <div className="mb-8">
-        <GalleryBrowseNav currentType={type} setType={changeType} />
+        <GalleryActionNavigation currentType={type} />
+        {/* <div>
+          <a onClick={() => changeType(TokenType.Original)}>Original</a>
+        </div>
+        <div>
+          <a onClick={() => changeType(TokenType.Edition)}>Edition</a>
+        </div> */}
       </div>
 
       {/* photo gallery */}
@@ -136,13 +146,14 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
         </div>
       )}
       {!loading && (
-        <div className="px-4">
+        <div className="px-4" id="browse">
           <div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 auto-cols-max gap-8 justify-center px-8">
               {collection.photos.map((photo: Photo) => (
                 <>
                   {type == TokenType.Original && (
                     <GalleryGridPhoto
+                      key={photo.id}
                       photo={photo}
                       type={TokenType.Original}
                       connectedWalletAddress={address}
@@ -151,6 +162,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
 
                   {type == TokenType.Edition && (
                     <GalleryGridPhoto
+                      key={photo.id}
                       photo={photo}
                       type={TokenType.Edition}
                       connectedWalletAddress={address}

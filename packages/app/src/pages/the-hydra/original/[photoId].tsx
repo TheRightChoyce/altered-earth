@@ -1,25 +1,26 @@
 import { NextRouter, useRouter } from "next/router";
 import type { ReactElement } from "react";
 
-import { GalleryDetail } from "../../components/gallery/GalleryDetail";
-import { TokenType } from "../../components/gallery/tokenType";
-import { theHydraCollection } from "../../data/the-hydra";
-import Layout from "../../layout/GalleryLayout";
-import { useIsMounted } from "../../useIsMounted";
-import type { NextPageWithLayout } from "../_app";
+import { Gallery } from "../../../components/gallery/Gallery";
+import { GalleryDetail } from "../../../components/gallery/GalleryDetail";
+import { TokenType } from "../../../components/gallery/tokenType";
+import { theHydraCollection } from "../../../data/the-hydra";
+import Layout from "../../../layout/GalleryLayout";
+import { useIsMounted } from "../../../useIsMounted";
+import type { NextPageWithLayout } from "../../_app";
 
-const getTokenTypeFromRoute = (router: NextRouter) => {
-  if (!router.query.photo || router.query.photo.length === 0) {
+const getTokenTypeFromRouter = (router: NextRouter) => {
+  if (!router.query.type || router.query.type.length === 0) {
     return TokenType.Original;
   }
 
-  if ((router.query.photo[0] as string).toLowerCase() === "edition") {
+  if ((router.query.type[0] as string).toLowerCase() === "edition") {
     return TokenType.Edition;
   }
   return TokenType.Original;
 };
 
-const getPhotoIdFromRoute = (router: NextRouter) => {
+const getPhotoIdFromRouter = (router: NextRouter) => {
   if (!router.query.photoId) {
     throw new Error("No photoId");
   }
@@ -34,6 +35,8 @@ const TheHydraDetailPage: NextPageWithLayout = () => {
   const router = useRouter();
   const isMounted = useIsMounted();
 
+  console.log("type", router.query);
+
   // Ensure the router is giving us a photoId.. sometimes it gets delayed!
   if (!isMounted) {
     return null;
@@ -44,8 +47,8 @@ const TheHydraDetailPage: NextPageWithLayout = () => {
       <>
         <GalleryDetail
           collection={theHydraCollection}
-          photoId={getPhotoIdFromRoute(router)}
-          tokenType={getTokenTypeFromRoute(router)}
+          photoId={getPhotoIdFromRouter(router)}
+          tokenType={getTokenTypeFromRouter(router)}
         />
       </>
     );

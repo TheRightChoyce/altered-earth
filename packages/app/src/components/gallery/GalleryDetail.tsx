@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 

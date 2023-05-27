@@ -21,7 +21,7 @@ IGalleryGridPhoto) => {
       key={`${photo.id}-${type}`}
       className="gallery-grid-photo bg-slate-800 flex flex-col justify-center cursor-pointer rounded-lg"
     >
-      <Link href={`/the-hydra/${photo.id}?type=${type}`}>
+      <Link href={`/the-hydra/${type}/${photo.id}`}>
         <div className="relative">
           <div className="w-full h-64 md:h-96 ">
             <img

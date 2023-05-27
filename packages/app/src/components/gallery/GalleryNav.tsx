@@ -29,9 +29,7 @@ export const GalleryNavPrevious = ({
     photoId == 0 ? collection.photos.length - 1 : photoId - 1;
 
   return (
-    <Link
-      href={`/${collection.slug}/${navigatePreviousPhotoId}?type=${photoType}`}
-    >
+    <Link href={`/${collection.slug}/${photoType}/${navigatePreviousPhotoId}`}>
       <a>
         {display === "text" && <span className={linkClassName}>Prev</span>}
         {display !== "text" && (
@@ -52,7 +50,7 @@ export const GalleryNavNext = ({
     photoId == collection.photos.length - 1 ? 0 : photoId + 1;
 
   return (
-    <Link href={`/the-hydra/${navigateNextPhotoId}?type=${photoType}`}>
+    <Link href={`/${collection.slug}/${photoType}/${navigateNextPhotoId}`}>
       <a>
         {display === "text" && <span className={linkClassName}>Next</span>}
         {display !== "text" && (
@@ -74,7 +72,7 @@ export const GalleryNav = ({
       id="nav"
     >
       <div className="basis-1/2">
-        <Link href={`/${collection.slug}`}>
+        <Link href={`/${collection.slug}/${photoType}`}>
           <a className={linkClassName}>Back to gallery</a>
         </Link>
       </div>

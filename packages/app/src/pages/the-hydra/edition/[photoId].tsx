@@ -8,17 +8,6 @@ import Layout from "../../../layout/GalleryLayout";
 import { useIsMounted } from "../../../useIsMounted";
 import type { NextPageWithLayout } from "../../_app";
 
-const getTokenTypeFromRouter = (router: NextRouter) => {
-  if (!router.query.type || router.query.type.length === 0) {
-    return TokenType.Original;
-  }
-
-  if ((router.query.type[0] as string).toLowerCase() === "edition") {
-    return TokenType.Edition;
-  }
-  return TokenType.Original;
-};
-
 const getPhotoIdFromRouter = (router: NextRouter) => {
   if (!router.query.photoId) {
     throw new Error("No photoId");
@@ -34,6 +23,8 @@ const TheHydraDetailPage: NextPageWithLayout = () => {
   const router = useRouter();
   const isMounted = useIsMounted();
 
+  console.log("type", router.query);
+
   // Ensure the router is giving us a photoId.. sometimes it gets delayed!
   if (!isMounted) {
     return null;
@@ -45,7 +36,7 @@ const TheHydraDetailPage: NextPageWithLayout = () => {
         <GalleryDetail
           collection={theHydraCollection}
           photoId={getPhotoIdFromRouter(router)}
-          tokenType={getTokenTypeFromRouter(router)}
+          tokenType={TokenType.Edition}
         />
       </>
     );
