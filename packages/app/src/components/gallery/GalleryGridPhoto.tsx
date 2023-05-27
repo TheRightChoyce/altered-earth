@@ -19,12 +19,27 @@ IGalleryGridPhoto) => {
   return (
     <div
       key={`${photo.id}-${type}`}
-      className="bg-slate-800 flex flex-col justify-center cursor-pointer"
+      className="gallery-grid-photo bg-slate-800 flex flex-col justify-center cursor-pointer"
     >
       <Link href={`/the-hydra/${photo.id}?type=${type}`}>
-        <div>
+        <div className="relative">
+          <div className="w-full h-64 md:h-96">
+            <img
+              className="object-cover w-full h-full transition-opacity ease-in-out duration-100"
+              src={
+                type === TokenType.Original
+                  ? photo.previewImageUri
+                  : photo.svgPreviewUri
+              }
+              alt={photo.name}
+            />
+          </div>
+          <h2 className="absolute z-10 text-2xl custom-major-mono top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center opacity-0 transition-opacity ease-in-out duration-100">
+            {photo.getNameForMajorMono()}
+          </h2>
+
           {/* Image */}
-          <div className="h-[90vw] w-[90vw] md:h-[256px] md:w-[256px] overflow-hidden relative">
+          {/* <div className="h-[90vw] w-[90vw] md:h-[256px] md:w-[256px] overflow-hidden relative object-cover">
             <img
               className="h-full w-[90vw] md:w-[256px] object-cover opacity-40"
               src={
@@ -35,10 +50,10 @@ IGalleryGridPhoto) => {
               alt={photo.name}
             />
             {/* Hover text center */}
-            <h2 className="absolute z-10 text-2xl custom-major-mono top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+          {/* <h2 className="absolute z-10 text-2xl custom-major-mono top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
               {photo.getNameForMajorMono()}
             </h2>
-          </div>
+          </div> */}
 
           {/* Price */}
           <div className="flex flex-row gap-16 justify-around p-4">

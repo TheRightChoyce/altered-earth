@@ -6,10 +6,6 @@ import React, { useState } from "react";
 import { CustomConnectButton } from "./ConnectButton";
 import { PhotoCollection } from "./PhotoCollection";
 
-interface IModalOpen {
-  open: boolean;
-}
-
 interface IModalToggle {
   open: boolean;
   toggle: () => void;
@@ -36,15 +32,59 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
 
   return (
     <>
-      <FloatingNavModal open={modalOpen} />
+      <div
+        className="hidden absolute z-40 top-4 px-4 lg:flex justify-between w-full h-16"
+        id="navbar"
+      >
+        <div className="text-left flex">
+          <div className="w-24">
+            <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
+          </div>
+          {/* <div className="pt-4">
+            <b>Collections</b>
+            <div className="relative inline-block" id="info">
+              <a href="#" className="">
+                <b>Info</b>
+              </a>
+              <div
+                className="hidden right-0 w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
+                id="info-content"
+              >
+                <div className="py-1">
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  >
+                    Option 1
+                  </a>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  >
+                    Option 2
+                  </a>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  >
+                    Option 3
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div> */}
+        </div>
+        <div className="text-right">
+          <div className="lg:w-40">
+            <CustomConnectButton connectMessage="Connect" />
+          </div>
+        </div>
+      </div>
 
-      <div className="absolute z-50 top-0 flex flex-row w-[100vw] justify-between lg:justify-start lg:w-36 h-16 lg:h-[100vh] lg:block">
+      <div className="absolute z-40 top-4 px-4 flex flex-row w-[100vw] justify-between lg:hidden">
         <AlteredEarthButton open={modalOpen} toggle={toggleModal} />
         <MenuButton open={modalOpen} toggle={toggleModal} />
-
-        <div className="hidden lg:block">{children}</div>
-
-        <TheRightChoyceFloatingButton />
+        <FloatingNavModal open={modalOpen} toggle={toggleModal} />
       </div>
     </>
   );
@@ -93,21 +133,9 @@ export const TypeNavigationButton = ({
 export const AlteredEarthButton = ({ open, toggle }: IModalToggle) => {
   return (
     <>
-      {/* <div
-        onClick={() => toggle()}
-        className={`${
-          open ? "bg-slate-800" : ""
-        } hidden h-24 px-4 lg:px-0 lg:h-32 lg:flex items-center justify-center cursor-pointer hover:animate-pulse hover:bg-slate-700`}
-      >
-        <h1 className="text-3xl lg:text-5xl custom-major-mono font-extrabold">
-          {!open && <span>Ae</span>}
-          {open && <span>x</span>}
-        </h1>
-      </div> */}
-
       <div className="flex items-center justify-center cursor-pointer">
         <Link href="/">
-          <h1 className="text-3xl lg:text-5xl custom-major-mono font-extrabold px-4 py-8">
+          <h1 className="text-3xl lg:text-5xl custom-major-mono font-extrabold">
             <span>Ae</span>
           </h1>
         </Link>
@@ -121,8 +149,8 @@ export const MenuButton = ({ open, toggle }: IModalToggle) => {
     <div
       onClick={() => toggle()}
       className={`${
-        open ? "bg-slate-800" : ""
-      } flex items-center justify-center cursor-pointer lg:hidden lg:h-28 px-4`}
+        open ? "" : ""
+      } flex items-center justify-center cursor-pointer px-4`}
     >
       <h1
         onClick={() => toggle()}
@@ -134,16 +162,19 @@ export const MenuButton = ({ open, toggle }: IModalToggle) => {
   );
 };
 
-export const FloatingNavModal = ({ open }: IModalOpen) => {
+export const FloatingNavModal = ({ open, toggle }: IModalToggle) => {
   return (
     <div
       className={`${
         open
-          ? "opacity-100 fixed w-[100vw] h-[100vh] top-16 left-0 px-4 lg:top-0 lg:left-36 lg:px-8 pt-8 z-40 bg-slate-900 backdrop-filter backdrop-blur-xl bg-opacity-90 transition-all "
-          : "opacity-0 fixed w-1 h-1 overflow-hidden transition-opacity"
+          ? "opacity-100 fixed w-[100vw] h-[100vh] top-0 left-0 px-4 pt-4 z-50 bg-slate-900 backdrop-filter backdrop-blur-xl bg-opacity-90 transition-all flex"
+          : "opacity-0 fixed overflow-hidden transition-opacity hidden"
       } ease-in-out duration-100`}
     >
-      <div className="mb-16 hidden lg:block">
+      <div className="flex flex-row justify-end">
+        <MenuButton open={open} toggle={toggle} />
+      </div>
+      <div className="mb-12 hidden lg:block">
         <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-2 custom-major-mono h-18">
           Altered eArth
         </h1>
@@ -152,14 +183,14 @@ export const FloatingNavModal = ({ open }: IModalOpen) => {
         </h2>
       </div>
 
-      <div className="mb-16">
+      <div className="mb-12">
         <h5 className="text-lg text-slate-400">Web3 Account</h5>
         <div className="lg:w-96">
           <CustomConnectButton connectMessage="Connect Web3 Wallet" />
         </div>
       </div>
 
-      <div className="mb-16">
+      <div className="mb-12">
         <h5 className="text-lg text-slate-400">Collections</h5>
         <ul>
           <li>

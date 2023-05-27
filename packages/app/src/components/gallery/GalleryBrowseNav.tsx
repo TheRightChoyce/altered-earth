@@ -46,7 +46,7 @@ const NavigationLink = ({
                 type.toLowerCase() == currentType
                   ? "text-slate-100 font-bold underline underline-offset-4"
                   : "text-slate-600 hover:text-slate-400"
-              } px-4 text-lg transition-all duration-500
+              } px-4 text-md capitalize
             `}
     >
       {type}s
@@ -63,7 +63,7 @@ export const GalleryBrowseNav = ({
   setType?: (type: TokenType) => void;
 }) => {
   return (
-    <div className="bg-slate-800 flex flex-row justify-center content-center py-4 gap-4">
+    <div className="flex flex-row justify-center content-center py-4 gap-4 bg-slate-800 w-96 m-auto">
       <NavigationLink
         type={TokenType.Original}
         currentType={currentType}

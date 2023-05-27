@@ -56,8 +56,17 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
         <NavBar />
 
         {/* Title */}
-        <div className="absolute z-10 top-[20vh] text-center flex flex-col gap-8">
-          <img src="/the-hydra/title.svg" alt="THE HYDRA" />
+        <div className="absolute z-10 top-[20vh] lg:top-[25vh] text-center flex flex-col gap-8">
+          <img
+            src="/the-hydra/title.svg"
+            alt="THE HYDRA"
+            className="lg:hidden"
+          />
+          <img
+            src="/the-hydra/title-lg.svg"
+            alt="THE HYDRA"
+            className="hidden lg:flex"
+          />
           <div className="font-medium">
             Created by:{" "}
             <span>
@@ -65,7 +74,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
                 href="https://therightchoyce.com"
                 target="_blank"
                 rel="noreferrer"
-                className="text-underline"
+                className="link"
               >
                 therightchoyce.eth
               </a>
@@ -74,7 +83,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
         </div>
 
         {/* Hero */}
-        <div className="relative w-[100vw] overflow-hidden h-[75vh]">
+        <div className="relative w-[100vw] overflow-hidden h-[75vh] lg:h-[75vh]">
           <div className={`object-cover w-full`}>
             <Image
               src="/the-hydra/previews/1024/0.jpg"
@@ -102,21 +111,23 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
       </div>
 
       {/* About */}
-      <div className="px-4 text-lg font-normal">
+      <div className="font-normal text-center m-auto max-w-[800px]">
         {collection.headline && (
-          <div className="container mb-4 tracking-wide text-md lg:text-2xl lg:mb-8 text-slate-200">
+          <div className="container mb-4 tracking-wide text-md lg:text-lg lg:mb-8 text-slate-200">
             <p>{collection.headline}</p>
           </div>
         )}
         {collection.description && (
-          <div className="container mb-4 tracking-wide text-md lg:text-xl lg:mb-8 text-slate-300">
+          <div className="container mb-4 tracking-wide text-md lg:text-lg text-slate-300">
             <p>{collection.description}</p>
           </div>
         )}
       </div>
 
       {/* Gallery navigation */}
-      <GalleryBrowseNav currentType={type} setType={changeType} />
+      <div className="mb-8">
+        <GalleryBrowseNav currentType={type} setType={changeType} />
+      </div>
 
       {/* photo gallery */}
       {loading && (
@@ -127,7 +138,7 @@ export const Gallery = ({ collection }: { collection: PhotoCollection }) => {
       {!loading && (
         <div className="px-4">
           <div>
-            <div className="grid md:grid-cols-2 xl:grid-cols-4 auto-cols-max gap-8 justify-center px-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 auto-cols-max gap-8 justify-center px-8">
               {collection.photos.map((photo: Photo) => (
                 <>
                   {type == TokenType.Original && (

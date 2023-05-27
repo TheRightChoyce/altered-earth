@@ -45,3 +45,21 @@ h6 {
         width: 768px;
     }
 }
+
+
+/* CSS */
+#navbar #info:hover #info-content {
+    display: block;
+}
+
+.link {
+    @apply underline-offset-2 underline;
+}
+
+.gallery-grid-photo:hover img {
+    @apply opacity-40;
+}
+
+.gallery-grid-photo:hover h2 {
+    @apply opacity-100;
+}
