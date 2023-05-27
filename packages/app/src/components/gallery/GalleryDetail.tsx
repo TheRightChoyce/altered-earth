@@ -2,17 +2,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
-import {
-  GalleryTypeButon,
-  NavBar,
-  NavigateNextButton,
-  NavigatePreviousButton,
-  TheHydraButton,
-} from "../NavBar";
+import { NavBar } from "../NavBar";
 import { PhotoCollection } from "../PhotoCollection";
 import { Spinner } from "../Spinner";
 import { GalleryDetailEdition } from "./GalleryDetailEdition";
@@ -28,12 +22,13 @@ const notFound = (
 export const GalleryDetail = ({
   collection,
   photoId,
+  tokenType,
 }: {
   collection: PhotoCollection;
   photoId: number;
+  tokenType: TokenType;
 }) => {
   const isMounted = useIsMounted();
-  const router = useRouter();
 
   // User wallet
   const { address } = useAccount();
@@ -50,12 +45,8 @@ export const GalleryDetail = ({
     if (photoId !== originalId) {
       _type = TokenType.Edition;
     }
-    if (router.query.type) {
-      if (router.query.type instanceof Array) {
-        _type = router.query.type[0];
-      } else {
-        _type = router.query.type;
-      }
+    if (tokenType) {
+      _type = tokenType;
     }
     return _type;
   };
@@ -73,8 +64,11 @@ export const GalleryDetail = ({
 
   if (previousPhoto != originalId) {
     setPreviousPhoto(originalId);
-    // setTokenLoaded(false);
   }
+
+  useEffect(() => {
+    setType(tokenType);
+  }, [tokenType]);
 
   if (!isMounted) {
     return (
@@ -98,7 +92,6 @@ export const GalleryDetail = ({
             originalId={originalId}
             connectedWalletAddress={address}
             onMintSuccess={onMintSuccess}
-            setType={setType}
           />
         )}
         {type === TokenType.Edition && (
@@ -108,7 +101,6 @@ export const GalleryDetail = ({
             originalId={originalId}
             connectedWalletAddress={address}
             onMintSuccess={onMintSuccess}
-            setType={setType}
           />
         )}
       </div>

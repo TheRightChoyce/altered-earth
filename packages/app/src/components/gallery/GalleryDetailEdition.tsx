@@ -1,9 +1,8 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { EditionInfoFromContract, Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
-import { ToggleTypeButton } from "./GalleryBrowseNav";
+import { TokenTypeToggleLink } from "./GalleryBrowseNav";
 import { GalleryDetailArtworkEdition } from "./GalleryDetailArtwork";
 import { GalleryDetailCollectionDescription } from "./GalleryDetailCollectionDescription";
 import { GalleryDetailEditionInfo } from "./GalleryDetailEditionInfo";
@@ -20,7 +19,6 @@ interface IGalleryDetailEdition {
   originalId: number;
   connectedWalletAddress?: string | undefined;
   onMintSuccess: (owner: string, tx: string) => void;
-  setType?: (type: TokenType) => void;
 }
 
 const mintComponentReducer = (
@@ -58,7 +56,6 @@ export const GalleryDetailEdition = ({
   originalId,
   connectedWalletAddress,
   onMintSuccess,
-  setType,
 }: IGalleryDetailEdition) => {
   const [mintState, setMintState] = useState(MintState.Unknown);
   const [tokenLoaded, setTokenLoaded] = useState(false);
@@ -117,14 +114,14 @@ export const GalleryDetailEdition = ({
             editionInfo
           )}
           {/* Type toggle button */}
-          <div className="text-center mt-16 rounded-lg border-slate-800 border-2 py-6 m-auto">
-            You are viewing the on-chain edition.
-            <br />
-            <ToggleTypeButton
+          <div className="text-center mt-16 rounded-lg border-slate-800 border-2 py-6 px-6 m-auto">
+            <div className="text-lg mb-4">
+              You are viewing the on-chain edition.
+            </div>
+            <TokenTypeToggleLink
               currentType={TokenType.Edition}
               type={TokenType.Original}
               photoId={photo.id}
-              setType={setType}
             />{" "}
             instead.
           </div>

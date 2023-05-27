@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -56,7 +57,6 @@ const NavigationLink = ({
 
 export const GalleryBrowseNav = ({
   currentType,
-  setType,
 }: {
   currentType: string;
   // setType?: Dispatch<SetStateAction<string>>;
@@ -64,21 +64,37 @@ export const GalleryBrowseNav = ({
 }) => {
   return (
     <div className="flex flex-row justify-center content-center py-4 gap-4 bg-slate-800 w-96 m-auto rounded-lg">
-      <NavigationLink
-        type={TokenType.Original}
-        currentType={currentType}
-        setType={setType}
-      />
-      <NavigationLink
-        type={TokenType.Edition}
-        currentType={currentType}
-        setType={setType}
-      />
+      <NavigationLink type={TokenType.Original} currentType={currentType} />
+      <NavigationLink type={TokenType.Edition} currentType={currentType} />
     </div>
   );
 };
 
-export const ToggleTypeButton = ({
+export const TokenTypeToggleLink = ({
+  type,
+  currentType,
+  photoId,
+}: {
+  type: TokenType;
+  currentType: TokenType;
+  photoId?: number;
+}) => {
+  let href = "/the-hydra";
+  if (photoId) {
+    href += `/${photoId}/${type.toLowerCase()}`;
+  }
+
+  return (
+    <Link href={href}>
+      <a className="link">
+        View the{" "}
+        {currentType === TokenType.Original ? "on-chain edition" : "original"}
+      </a>
+    </Link>
+  );
+};
+
+export const ToggleTypeButtonOld = ({
   type,
   currentType,
   photoId,

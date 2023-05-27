@@ -1,9 +1,8 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { Photo } from "../Photo";
 import { PhotoCollection } from "../PhotoCollection";
-import { ToggleTypeButton } from "./GalleryBrowseNav";
+import { TokenTypeToggleLink } from "./GalleryBrowseNav";
 import { GalleryDetailArtworkOriginal } from "./GalleryDetailArtwork";
 import { GalleryDetailCollectionDescription } from "./GalleryDetailCollectionDescription";
 import { GalleryDetailOriginalInfo } from "./GalleryDetailOriginalInfo";
@@ -20,7 +19,6 @@ interface IGalleryDetailOriginal {
   originalId: number;
   connectedWalletAddress?: string | undefined;
   onMintSuccess: (owner: string, tx: string) => void;
-  setType?: (type: TokenType) => void;
 }
 
 const mintComponentReducer = (
@@ -54,7 +52,6 @@ export const GalleryDetailOriginal = ({
   originalId,
   connectedWalletAddress,
   onMintSuccess,
-  setType,
 }: IGalleryDetailOriginal) => {
   // Token specific info
   const [mintState, setMintState] = useState(MintState.Unknown);
@@ -106,14 +103,12 @@ export const GalleryDetailOriginal = ({
           )}
 
           {/* Type toggle button */}
-          <div className="text-center mt-16 rounded-lg border-slate-800 border-2 py-6 m-auto">
-            You are viewing the original.
-            <br />
-            <ToggleTypeButton
+          <div className="text-center mt-16 rounded-lg border-slate-800 border-2 py-6 px-6 m-auto">
+            <div className="text-lg mb-4">You are viewing the original.</div>
+            <TokenTypeToggleLink
               currentType={TokenType.Original}
               type={TokenType.Edition}
               photoId={photo.id}
-              setType={setType}
             />{" "}
             instead.
           </div>

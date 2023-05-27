@@ -76,7 +76,7 @@ export const MintComponent = ({
           <h5 className="">
             {tokenType === TokenType.Original ? "Original" : "Edition"} Price
           </h5>
-          <h4 className="text-3xl font-bold">
+          <h4 className="text-2xl font-bold">
             {tokenType === TokenType.Original
               ? photo.price
               : photo.editionPrice}{" "}
@@ -85,7 +85,7 @@ export const MintComponent = ({
         </div>
         <div className="text-right">
           <h5 className="">Available</h5>
-          <h4 className="text-3xl font-bold">
+          <h4 className="text-2xl font-bold">
             {tokenType === TokenType.Original && "1 of 1"}
             {tokenType === TokenType.Edition && (
               <span>{tokensRemaning || 45} of 50</span>
