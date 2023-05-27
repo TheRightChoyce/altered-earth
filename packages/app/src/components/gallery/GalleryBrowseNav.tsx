@@ -63,7 +63,7 @@ export const GalleryBrowseNav = ({
   setType?: (type: TokenType) => void;
 }) => {
   return (
-    <div className="flex flex-row justify-center content-center py-4 gap-4 bg-slate-800 w-96 m-auto">
+    <div className="flex flex-row justify-center content-center py-4 gap-4 bg-slate-800 w-96 m-auto rounded-lg">
       <NavigationLink
         type={TokenType.Original}
         currentType={currentType}
@@ -116,7 +116,8 @@ export const ToggleTypeButton = ({
       aria-current="page"
       className="text-md underline underline-offset-4"
     >
-      View the {currentType === TokenType.Original ? "edition" : "original"}
+      View the{" "}
+      {currentType === TokenType.Original ? "on-chain edition" : "original"}
     </a>
   );
 };

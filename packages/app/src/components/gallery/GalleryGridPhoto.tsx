@@ -19,13 +19,13 @@ IGalleryGridPhoto) => {
   return (
     <div
       key={`${photo.id}-${type}`}
-      className="gallery-grid-photo bg-slate-800 flex flex-col justify-center cursor-pointer"
+      className="gallery-grid-photo bg-slate-800 flex flex-col justify-center cursor-pointer rounded-lg"
     >
       <Link href={`/the-hydra/${photo.id}?type=${type}`}>
         <div className="relative">
-          <div className="w-full h-64 md:h-96">
+          <div className="w-full h-64 md:h-96 ">
             <img
-              className="object-cover w-full h-full transition-opacity ease-in-out duration-100"
+              className="object-cover w-full h-full transition-opacity ease-in-out duration-100 rounded-lg"
               src={
                 type === TokenType.Original
                   ? photo.previewImageUri

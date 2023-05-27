@@ -76,20 +76,19 @@ export const GalleryDetailOriginal = ({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row-reverse lg:basis-1/2">
-        {/* Full Hero */}
-        <div className="flex flex-col items-center relative">
-          {/* Hero */}
+      <div className="flex flex-col lg:flex-row-reverse">
+        <div className="lg:basis-1/2">
+          {/* Full Hero */}
           <GalleryDetailArtworkOriginal photo={photo} />
-        </div>
-        <GalleryNav
-          collection={collection}
-          photoId={photo.id}
-          photoType={TokenType.Original}
-        />
 
+          <GalleryNav
+            collection={collection}
+            photoId={photo.id}
+            photoType={TokenType.Original}
+          />
+        </div>
         {/* content */}
-        <div className="h-full mt-8 lg:basis-1/2 lg:pl-28 lg:pr-8 lg:pt-8">
+        <div className="h-full mt-8 lg:basis-1/2 px-8">
           <GalleryDetailTokenInfo
             photo={photo}
             collection={collection}
@@ -107,7 +106,7 @@ export const GalleryDetailOriginal = ({
           )}
 
           {/* Type toggle button */}
-          <div className="text-center mt-16">
+          <div className="text-center mt-16 rounded-lg border-slate-800 border-2 py-6 m-auto">
             You are viewing the original.
             <br />
             <ToggleTypeButton
@@ -118,28 +117,17 @@ export const GalleryDetailOriginal = ({
             />{" "}
             instead.
           </div>
-
-          {/* Scroll notice */}
-          <div className="text-center mt-8 hidden lg:block">
-            <small className="block mb-2">scroll for more info</small>
-            <Image
-              src="/arrow-down.svg"
-              width={64}
-              height={64}
-              alt="Scroll for more info"
-              className="animate-pulse ease-linear"
-            />
-          </div>
         </div>
       </div>
-      <div className="flex flex-row lg:pl-44 lg:pr-8 lg:mt-16">
-        <div className="lg:flex lg:flex-row px-4 py-8">
+
+      <div className="flex flex-row lg:mt-8 lg:px-8">
+        <div className="lg:flex lg:flex-row px-4 py-8 border-t-2 lg:py-16">
+          <GalleryDetailCollectionDescription />
           <GalleryDetailOriginalInfo
             photo={photo}
             connectedWalletAddress={connectedWalletAddress}
             onMintSuccess={onMintSuccess}
           />
-          <GalleryDetailCollectionDescription />
         </div>
       </div>
     </>

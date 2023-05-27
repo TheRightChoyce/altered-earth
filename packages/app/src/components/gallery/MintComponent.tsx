@@ -70,7 +70,7 @@ export const MintComponent = ({
     );
   }
   return (
-    <div className="flex flex-col px-8 py-6 bg-slate-800 lg:rounded-lg h-48">
+    <div className="flex flex-col px-8 py-6 bg-slate-800 rounded-lg h-48">
       <div className="mb-2 flex flex-row w-full justify-between">
         <div>
           <h5 className="">

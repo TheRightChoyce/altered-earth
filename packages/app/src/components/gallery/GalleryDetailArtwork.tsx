@@ -18,7 +18,7 @@ export const GalleryDetailArtworkOriginal = ({
   children,
 }: IGalleryDetailArtworkOriginal) => {
   return (
-    <div className="relative w-[100vw] overflow-hidden h-[75vh]">
+    <div className="relative w-full overflow-hidden h-[75vh] lg:h-[100vh]">
       <div className="object-cover w-full">
         <a
           href={photo.previewImage1024Uri}
@@ -72,7 +72,7 @@ export const GalleryDetailArtworkEdition = ({
   photo,
 }: IGalleryDetailArtworkEdition) => {
   return (
-    <div className="relative w-[100vw] overflow-hidden h-[75vh]">
+    <div className="relative w-full overflow-hidden h-[75vh] lg:h-[100vh]">
       <div className="object-cover w-full">
         <a
           href={photo.svgPreviewUri}
@@ -86,14 +86,14 @@ export const GalleryDetailArtworkEdition = ({
               alt={photo.name}
               objectFit="cover"
               layout="fill"
-              className="opacity-30"
+              className="opacity-20"
             />
           </div>
-          <div className="absolute top-[18vh] right-[12.5vw] lg:top-[15vw] lg:right-[10vw] shadow-2xl">
+          <div className="absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-2xl w-[256px] h-[256px]">
             <img
               src={photo.svgPreviewUri}
               alt={photo.name}
-              className="max-w-[75vw] lg:max-w-[25vw] border-8 border-slate-200"
+              className="border-8 border-slate-200"
             />
           </div>
         </a>

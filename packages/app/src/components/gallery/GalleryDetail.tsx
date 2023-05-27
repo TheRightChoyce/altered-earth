@@ -113,31 +113,7 @@ export const GalleryDetail = ({
         )}
       </div>
       {/* Left nav bar */}
-      <NavBar>
-        <div className="lg:w-full">
-          <TheHydraButton />
-          <GalleryTypeButon
-            type={TokenType.Original}
-            currentType={type}
-            setType={setType}
-          />
-          <GalleryTypeButon
-            type={TokenType.Edition}
-            currentType={type}
-            setType={setType}
-          />
-          <NavigateNextButton
-            photoId={photoId}
-            collection={collection}
-            photoType={type}
-          />
-          <NavigatePreviousButton
-            photoId={photoId}
-            collection={collection}
-            photoType={type}
-          />
-        </div>
-      </NavBar>
+      <NavBar></NavBar>
     </>
   );
 };

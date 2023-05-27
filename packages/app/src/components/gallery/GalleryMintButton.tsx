@@ -157,7 +157,7 @@ export const GalleryMintButton = ({
   }
 
   if (!address) {
-    return <CustomConnectButton connectMessage="Dream state required" />;
+    return <CustomConnectButton connectMessage="Connect Web3 Wallet" />;
   }
 
   return (
