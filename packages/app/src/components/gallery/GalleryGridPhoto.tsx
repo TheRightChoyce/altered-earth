@@ -23,37 +23,29 @@ IGalleryGridPhoto) => {
     >
       <Link href={`/the-hydra/${type}/${photo.id}`}>
         <div className="relative">
-          <div className="w-full h-64 md:h-96 ">
-            <img
-              className="object-cover w-full h-full transition-opacity ease-in-out duration-100 rounded-lg"
-              src={
-                type === TokenType.Original
-                  ? photo.previewImageUri
-                  : photo.svgPreviewUri
-              }
-              alt={photo.name}
-            />
-          </div>
+          {/* Image */}
+          {type === TokenType.Original && (
+            <div className="w-full h-64 md:h-96">
+              <img
+                className="object-cover w-full h-full transition-opacity ease-in-out duration-100 rounded-lg"
+                src={photo.previewImageUri}
+                alt={photo.name}
+              />
+            </div>
+          )}
+          {type === TokenType.Edition && (
+            <div className="w-64 h-64 m-auto border-8 mt-8">
+              <img
+                className="object-cover w-full h-full transition-opacity ease-in-out duration-100 rounded-lg"
+                src={photo.svgPreviewUri}
+                alt={photo.name}
+              />
+            </div>
+          )}
+          {/* Caption */}
           <h2 className="absolute z-10 text-2xl custom-major-mono top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center opacity-0 transition-opacity ease-in-out duration-100">
             {photo.getNameForMajorMono()}
           </h2>
-
-          {/* Image */}
-          {/* <div className="h-[90vw] w-[90vw] md:h-[256px] md:w-[256px] overflow-hidden relative object-cover">
-            <img
-              className="h-full w-[90vw] md:w-[256px] object-cover opacity-40"
-              src={
-                type === TokenType.Original
-                  ? photo.previewImageUri
-                  : photo.svgPreviewUri
-              }
-              alt={photo.name}
-            />
-            {/* Hover text center */}
-          {/* <h2 className="absolute z-10 text-2xl custom-major-mono top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-              {photo.getNameForMajorMono()}
-            </h2>
-          </div> */}
 
           {/* Price */}
           <div className="flex flex-row gap-16 justify-around p-4">
