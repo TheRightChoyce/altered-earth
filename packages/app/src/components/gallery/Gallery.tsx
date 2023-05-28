@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
@@ -22,20 +22,8 @@ export const Gallery = ({
 }) => {
   const isMounted = useIsMounted();
   const { address } = useAccount();
-  const router = useRouter();
 
-  // The type we are viewing -- either edition or original
-  const [type, setType] = useState(tokenType);
-  const [loading, setLoading] = useState(false);
-
-  console.log(tokenType);
-
-  const changeType = (newType: TokenType) => {
-    setLoading(true);
-    setType(newType);
-    setTimeout(() => setLoading(false), 250);
-    // router.push(`/the-hydra/${newType}`, undefined, { shallow: true });
-  };
+  const [loading] = useState(false);
 
   if (!isMounted) {
     return (
@@ -108,7 +96,9 @@ export const Gallery = ({
             </div>
             <div className="flex flex-col">
               <h4 className="text-md font-medium">Available</h4>
-              <h2 className="text-4xl font-bold">50</h2>
+              <h2 className="text-4xl font-bold">
+                {collection.getNumberOfAvailableOriginals()}
+              </h2>
             </div>
           </div>
         </div>
@@ -130,7 +120,7 @@ export const Gallery = ({
 
       {/* Gallery navigation */}
       <div className="mb-8">
-        <GalleryActionNavigation currentType={type} />
+        <GalleryActionNavigation currentType={tokenType} />
         {/* <div>
           <a onClick={() => changeType(TokenType.Original)}>Original</a>
         </div>
@@ -151,7 +141,7 @@ export const Gallery = ({
             <div className="grid md:grid-cols-2 lg:grid-cols-3 auto-cols-max gap-8 justify-center px-8">
               {collection.photos.map((photo: Photo) => (
                 <>
-                  {type == TokenType.Original && (
+                  {tokenType == TokenType.Original && (
                     <GalleryGridPhoto
                       key={photo.id}
                       photo={photo}
@@ -160,7 +150,7 @@ export const Gallery = ({
                     />
                   )}
 
-                  {type == TokenType.Edition && (
+                  {tokenType == TokenType.Edition && (
                     <GalleryGridPhoto
                       key={photo.id}
                       photo={photo}

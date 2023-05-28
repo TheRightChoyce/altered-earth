@@ -1,3 +1,4 @@
+import { Alchemy, Network } from "alchemy-sdk";
 import slugify from "slugify";
 
 import { Photo } from "./Photo";
@@ -12,6 +13,7 @@ export class PhotoCollection {
   totalEditions = 2500;
   totalSupply = 2550;
   editionsPerOriginal = 50;
+  alchemy;
 
   photos = new Array<Photo>();
 
@@ -22,13 +24,29 @@ export class PhotoCollection {
     this.description = description;
 
     this.slug = slugify(this.name.toLowerCase());
+
+    this.alchemy = new Alchemy({
+      apiKey: "5xt6SDe-fhkYmhUj9oXbyzSs7NxrUyU7",
+      network: Network.ETH_GOERLI,
+    });
   }
 
   addPhoto(photo: Photo) {
     photo.previewImageUri = `/${this.slug}/previews/256/${photo.previewImage}`;
     photo.previewImage1024Uri = `/${this.slug}/previews/1024/${photo.previewImage}`;
     photo.svgPreviewUri = `/${this.slug}/svgs/${photo.svgPreview}`;
+    // photo.getOwner(this.alchemy);
     this.photos.push(photo);
+  }
+
+  getNumberOfAvailableOriginals() {
+    let counter = 0;
+
+    this.photos.forEach((photo) => {
+      counter += photo.hasOwner ? 0 : 1;
+    });
+
+    return counter;
   }
 
   /**

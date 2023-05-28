@@ -4832,8 +4832,8 @@ packages:
     resolution: {integrity: sha512-lVjqCSCIAUDZPAZIeyM125HXfNvOmYYInciphNrLrylUtKyW66meAjSPXWchKVzoIYZx69TPnAepVSSkeawoIw==}
     engines: {node: '>= 0.8'}
     dependencies:
-      debug: 3.2.7
       JSONStream: 1.3.2
+      debug: 3.2.7
       readable-stream: 1.0.34
       split-ca: 1.0.1
     transitivePeerDependencies:
@@ -5396,7 +5396,7 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.27.1
+      '@typescript-eslint/parser': 5.27.1_typescript@4.7.3
       debug: 3.2.7
       eslint-import-resolver-node: 0.3.6
       eslint-import-resolver-typescript: 2.7.1_fkfqfehjtk7sk2efaqbgxsuasa
@@ -5441,7 +5441,7 @@ packages:
       '@typescript-eslint/parser':
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.27.1
+      '@typescript-eslint/parser': 5.27.1_typescript@4.7.3
       array-includes: 3.1.5
       array.prototype.flat: 1.3.0
       debug: 2.6.9
@@ -7289,11 +7289,11 @@ packages:
       '@types/express-serve-static-core': 4.17.28
       '@types/lodash': 4.14.182
       '@types/node': 12.20.55
+      JSONStream: 1.3.5
       commander: 2.20.3
       es6-promisify: 5.0.0
       eyes: 0.1.8
       json-stringify-safe: 5.0.1
-      JSONStream: 1.3.5
       lodash: 4.17.21
       uuid: 3.4.0
     dev: false
@@ -7306,13 +7306,13 @@ packages:
       '@types/connect': 3.4.35
       '@types/node': 12.20.55
       '@types/ws': 7.4.7
+      JSONStream: 1.3.5
       commander: 2.20.3
       delay: 5.0.0
       es6-promisify: 5.0.0
       eyes: 0.1.8
       isomorphic-ws: 4.0.1_ws@7.5.6
       json-stringify-safe: 5.0.1
-      JSONStream: 1.3.5
       lodash: 4.17.21
       uuid: 8.3.2
       ws: 7.5.6
@@ -9954,7 +9954,7 @@ packages:
     dev: false
 
   /strip-hex-prefix/1.0.0:
-    resolution: {integrity: sha1-DF8VX+8RUTczd96du1iNoFUA428=}
+    resolution: {integrity: sha512-q8d4ue7JGEiVcypji1bALTos+0pWtyGlivAWyPuTkHzuTCJqrK9sWxYQZUq6Nq3cuyv3bm734IhHvHtGGURU6A==}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       is-hex-prefixed: 1.0.0

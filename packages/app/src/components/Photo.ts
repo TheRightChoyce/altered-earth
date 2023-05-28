@@ -55,6 +55,7 @@ export class Photo {
   loadingOwner = false;
   hasOwner = false;
   ownerAddress = "";
+  lastSyncDate = new Date();
 
   constructor(
     collection: string,
@@ -99,13 +100,25 @@ export class Photo {
   getEditionIndex = (tokenId: number) => {
     return (tokenId % 50) + 1;
   };
-  getOwner = (
-    alchemy: Alchemy,
-    setOwner: (owner: string | undefined) => void
-  ) => {
+  getOwner = (alchemy: Alchemy) => {
     if (this.loadingOwner) {
       return;
     }
+    // const storage = JSON.parse(
+    //   localStorage.getItem(`the-hydra-${this.id}`) || ""
+    // );
+    // if (storage) {
+    //   this.hasOwner = storage.hasOwner;
+    //   this.ownerAddress = storage.ownerAddress;
+    // }
+
+    // if (
+    //   storage &&
+    //   new Date().getTime() - storage.lastSyncDate.getTime() < 10000
+    // ) {
+    //   return;
+    // }
+
     this.loadingOwner = true;
     alchemy.nft
       .getOwnersForNft("0x918185983D656a412155964A7765FEec4384abc4", this.id)
@@ -114,17 +127,22 @@ export class Photo {
         this.ownerAddress = result.owners[0];
         this.hasOwner = true;
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
         this.ownerAddress = "";
         this.hasOwner = false;
-        // setOwner(undefined);
       })
       .finally(() => {
         this.loadingOwner = false;
-        setOwner(this.ownerAddress);
-        // setTokenLoaded(true);
-        // setLastFetch(new Date());
+        this.lastSyncDate = new Date();
+        // store this is localStorage to ease the burden
+        localStorage.setItem(
+          `the-hydra-${this.id}`,
+          JSON.stringify({
+            ownerAddress: this.ownerAddress,
+            hasOwner: this.hasOwner,
+            lastSyncDate: this.lastSyncDate,
+          })
+        );
       });
   };
 

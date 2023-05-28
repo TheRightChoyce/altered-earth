@@ -47,7 +47,7 @@ IGalleryGridPhoto) => {
             {photo.getNameForMajorMono()}
           </h2>
 
-          {/* Price */}
+          {/* Price & Info */}
           <div className="flex flex-row gap-16 justify-around p-4">
             <div className="flex flex-col align-middle">
               <h4 className="text-sm font-medium">Mint Price</h4>
@@ -58,7 +58,9 @@ IGalleryGridPhoto) => {
             <div className="flex flex-col">
               <h4 className="text-2m font-medium">Available</h4>
               <h2 className="text-2xl font-bold">
-                {type === TokenType.Edition ? "50 of 50" : "1 of 1"}
+                {type === TokenType.Edition
+                  ? "50 of 50"
+                  : `${photo.hasOwner ? "0" : "1"} of 1`}
               </h2>
             </div>
           </div>
