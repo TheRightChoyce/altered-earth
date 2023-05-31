@@ -91,7 +91,7 @@ export const GalleryDetailEdition = ({
           <GalleryNav
             collection={collection}
             photoId={photo.id}
-            photoType={TokenType.Original}
+            photoType={TokenType.Edition}
           />
         </div>
 
