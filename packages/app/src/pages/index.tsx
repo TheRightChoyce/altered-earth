@@ -15,26 +15,51 @@ const HomePage: NextPageWithLayout = () => {
   );
 
   return (
-    <div className="px-4 lg:px-0">
-      <div className="lg:basis-36">
+    <div className="flex flex-col gap-8 align-bottom">
+      {/* Full Hero */}
+      <div className="flex flex-col items-center relative mb-16">
         <NavBar />
-      </div>
 
-      <div className="mt-32 m-auto text-center mb-16">
-        <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-4 custom-major-mono">
-          Altered eArth
-        </h1>
-        <h2 className="text-lg md:text-xl lg:text-3xl mb-4">
-          Exploring the earth in unseen ways
-        </h2>
-        <h3 className="text-lg">
-          A series of artistic creations by @therightchoyce.eth
-        </h3>
+        {/* Title */}
+        <div className="absolute z-10 top-[20vh] lg:top-[25vh] text-center flex flex-col gap-8">
+          <h1 className="text-5xl leading-relaxed lg:text-7xl lg:mb-4 custom-major-mono">
+            Altered eArth
+          </h1>
+          <h2 className="text-lg md:text-xl lg:text-3xl mb-4">
+            Exploring the earth in unseen ways
+          </h2>
+          <h3 className="text-lg">
+            A series of artistic creations by{" "}
+            <span>
+              <a
+                href="https://therightchoyce.com"
+                target="_blank"
+                rel="noreferrer"
+                className="link"
+              >
+                therightchoyce.eth
+              </a>
+            </span>
+          </h3>
+        </div>
+
+        {/* Hero */}
+        <div className="relative w-[100vw] overflow-hidden h-[75vh] lg:h-[75vh] min-h-[512px]">
+          <div className={`object-cover w-full`}>
+            <Image
+              src="/altered-earth-hero.jpg"
+              alt="Altered Earth"
+              objectFit="cover"
+              layout="fill"
+              className="opacity-20"
+            />
+          </div>
+        </div>
       </div>
 
       <h2 className="text-center text-4xl lg:text-6xl mb-16">Collections:</h2>
 
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col lg:flex-row lg:px-8">
         <div className="basis-1/2 px-4">
           <Link href="/the-hydra">
             <a>
