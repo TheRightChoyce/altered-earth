@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import { useIsMounted } from "../../useIsMounted";
@@ -75,7 +74,7 @@ export const Gallery = ({
         </div>
 
         {/* Hero */}
-        <div className="relative w-[100vw] overflow-hidden h-[75vh] lg:h-[75vh]">
+        <div className="relative w-[100vw] overflow-hidden h-[75vh] lg:h-[75vh] min-h-[512px]">
           <div className={`object-cover w-full`}>
             <Image
               src="/the-hydra/previews/1024/0.jpg"
@@ -88,20 +87,50 @@ export const Gallery = ({
         </div>
 
         {/* Stats */}
-        <div className="absolute z-10 bottom-[5vh] text-center flex flex-col gap-8">
-          <div className="flex flex-row gap-16">
-            <div className="flex flex-col align-middle">
-              <h4 className="text-md font-medium">Total</h4>
-              <h2 className="text-4xl font-bold">50</h2>
-            </div>
-            <div className="flex flex-col">
-              <h4 className="text-md font-medium">Available</h4>
-              <h2 className="text-4xl font-bold">
-                {collection.getNumberOfAvailableOriginals()}
-              </h2>
+        {tokenType === TokenType.Original && (
+          <div className="absolute z-10 bottom-[5vh] text-center">
+            <div className="grid grid-cols-2 lg:grid-cols-4 bg-slate-800 lg:rounded-l-xl lg:rounded-r-xl p-4 bg-opacity-80 gap-4">
+              <div className="flex flex-col align-middle">
+                <h4 className="text-md font-medium">Originals</h4>
+                <h2 className="text-2xl font-bold">50</h2>
+              </div>
+              <div className="flex flex-col align-middle">
+                <h4 className="text-md font-medium">Type</h4>
+                <h2 className="text-2xl font-bold">1 of 1</h2>
+              </div>
+              <div className="flex flex-col align-middle">
+                <h4 className="text-md font-medium">Price</h4>
+                <h2 className="text-2xl font-bold">0.25ETH</h2>
+              </div>
+              <div className="flex flex-col align-middle">
+                <h4 className="text-md font-medium">Collection of</h4>
+                <h2 className="text-2xl font-bold">2,550</h2>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+        {tokenType === TokenType.Edition && (
+          <div className="absolute z-10 bottom-[5vh] lg:bottom-[10vh] text-center flex flex-col gap-4 lg:gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 bg-slate-800 rounded-l-xl rounded-r-xl p-4 bg-opacity-80 gap-4">
+              <div className="flex flex-col align-middle ">
+                <h4 className="text-md font-medium">Editions</h4>
+                <h2 className="text-2xl font-bold">50</h2>
+              </div>
+              <div className="flex flex-col align-middle">
+                <h4 className="text-md font-medium">Type</h4>
+                <h2 className="text-2xl font-bold">of 50</h2>
+              </div>
+              <div className="flex flex-col align-middle">
+                <h4 className="text-md font-medium">Price</h4>
+                <h2 className="text-2xl font-bold">0.05ETH</h2>
+              </div>
+              <div className="flex flex-col align-middle">
+                <h4 className="text-md font-medium">Collection of</h4>
+                <h2 className="text-2xl font-bold">2,550</h2>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* About */}
@@ -121,12 +150,6 @@ export const Gallery = ({
       {/* Gallery navigation */}
       <div className="mb-8">
         <GalleryActionNavigation currentType={tokenType} />
-        {/* <div>
-          <a onClick={() => changeType(TokenType.Original)}>Original</a>
-        </div>
-        <div>
-          <a onClick={() => changeType(TokenType.Edition)}>Edition</a>
-        </div> */}
       </div>
 
       {/* photo gallery */}

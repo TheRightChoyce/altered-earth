@@ -43,13 +43,20 @@ IGalleryGridPhoto) => {
             </div>
           )}
           {/* Caption */}
-          <h2 className="absolute z-10 text-2xl custom-major-mono top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center opacity-0 transition-opacity ease-in-out duration-100">
-            {photo.getNameForMajorMono()}
+          <h2
+            className={`absolute z-10 custom-major-mono top-1/3 -translate-y-1/3 left-1/2 -translate-x-1/2 text-center opacity-0 transition-opacity ease-in-out duration-100 ${
+              type === TokenType.Original ? "text-2xl w-64" : "text-lg w-48"
+            }`}
+          >
+            {photo.description}
           </h2>
 
           {/* Price & Info */}
-          <div className="flex flex-row gap-16 justify-around p-4">
-            <div className="flex flex-col align-middle">
+          <div className="flex flex-row gap-16 justify-around px-4 py-8">
+            <h2 className="text-2xl custom-major-mono">
+              {photo.getNameForMajorMono()}
+            </h2>
+            {/* <div className="flex flex-col align-middle">
               <h4 className="text-sm font-medium">Mint Price</h4>
               <h2 className="text-2xl font-bold">
                 {type === TokenType.Original ? photo.price : "0.05"} ETH
@@ -62,7 +69,7 @@ IGalleryGridPhoto) => {
                   ? "50 of 50"
                   : `${photo.hasOwner ? "0" : "1"} of 1`}
               </h2>
-            </div>
+            </div> */}
           </div>
         </div>
       </Link>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useState } from "react";
 import { useAccount } from "wagmi";
 
 import { Button } from "../Button";
@@ -49,18 +49,21 @@ const HomePage: NextPageWithLayout = () => {
             </a>
           </Link>
         </div>
-        <div className="px-4 text-center mt-4 lg:mt-0">
+        <div className="px-4 text-center lg:text-left mt-4 lg:mt-0">
           <Link href="/the-hydra">
             <a>
               <h2 className="text-2xl lg:text-4xl custom-major-mono mb-4">
                 000: the HydrA
               </h2>
-              <h2 className="text-lg md:text-xl lg:text-3xl mb-4">
-                Exploring the earth in unseen ways
+              <h2 className="text-md lg:text-xl mb-4">
+                The Hydra Collection explores a single tree through an altered
+                lens of deep textures and wonderful colors.
               </h2>
               <div>50 Originals as NFTs</div>
               <div className="mb-8">50 On-chain editions of 50 as NFTs</div>
-              <Button>Mint Now</Button>
+              <div className="w-64">
+                <Button>Expore Now</Button>
+              </div>
             </a>
           </Link>
         </div>

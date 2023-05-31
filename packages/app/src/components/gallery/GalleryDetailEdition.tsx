@@ -114,7 +114,7 @@ export const GalleryDetailEdition = ({
             editionInfo
           )}
           {/* Type toggle button */}
-          <div className="text-center mt-16 rounded-lg border-slate-800 border-2 py-6 px-6 m-auto">
+          <div className="text-center py-6 px-6 m-auto">
             <div className="text-lg mb-4">
               You are viewing the on-chain edition.
             </div>
@@ -129,7 +129,7 @@ export const GalleryDetailEdition = ({
       </div>
 
       <div className="flex flex-row lg:mt-8 lg:px-8">
-        <div className="lg:flex lg:flex-row px-4 py-8 border-t-2 lg:py-16">
+        <div className="lg:flex lg:flex-row px-4 py-16 border-t-2 border-slate-600">
           <GalleryDetailCollectionDescription />
           <GalleryDetailEditionInfo
             photo={photo}

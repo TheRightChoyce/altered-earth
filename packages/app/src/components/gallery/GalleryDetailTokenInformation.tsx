@@ -15,7 +15,7 @@ export const GalleryDetailTokenInfo = ({
 }: IGalleryDetailTokenInfo) => {
   return (
     <div className="text-center lg:pt-8">
-      {type === TokenType.Edition && <small>Edition of</small>}
+      {type === TokenType.Edition && <small>On-chain edition of</small>}
       <h2 className="text-5xl font-bold custom-major-mono mb-12 lg:text-7xl lg:mb-16">
         <span className="block">the</span>
         <span className="block">HydrA</span>
