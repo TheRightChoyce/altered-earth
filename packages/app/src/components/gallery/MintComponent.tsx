@@ -97,7 +97,7 @@ export const MintComponent = ({
         <GalleryMintButton
           photo={photo}
           address={connectedWalletAddress}
-          isOriginal={true}
+          isOriginal={tokenType === TokenType.Original}
           onSuccess={onMintSuccess}
           isCorrectNetwork={true}
           label={

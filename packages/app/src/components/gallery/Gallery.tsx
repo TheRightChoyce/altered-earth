@@ -82,6 +82,7 @@ export const Gallery = ({
               objectFit="cover"
               layout="fill"
               className="opacity-40"
+              priority={true}
             />
           </div>
         </div>
@@ -166,7 +167,7 @@ export const Gallery = ({
                 <>
                   {tokenType == TokenType.Original && (
                     <GalleryGridPhoto
-                      key={photo.id}
+                      key={`${photo.id}-original`}
                       photo={photo}
                       type={TokenType.Original}
                       connectedWalletAddress={address}
@@ -175,7 +176,7 @@ export const Gallery = ({
 
                   {tokenType == TokenType.Edition && (
                     <GalleryGridPhoto
-                      key={photo.id}
+                      key={`${photo.id}-edition`}
                       photo={photo}
                       type={TokenType.Edition}
                       connectedWalletAddress={address}

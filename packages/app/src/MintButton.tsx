@@ -42,7 +42,7 @@ export const MintButton = ({
         : await contract.editionsMintPrice();
 
       try {
-        onProgress(`Minting token #${id}…`);
+        onProgress(`Reality alteration initiated for token #${id}…`);
 
         const tx = await promiseNotify(
           isOriginal
@@ -85,11 +85,10 @@ export const MintButton = ({
             toast.update(toastId, {
               isLoading: false,
               type: "success",
-              render: `Minted!`,
+              render: `Reality alteration complete. You have now commenced an on-chain dream state`,
               autoClose: 5000,
               closeButton: true,
             });
-            console.log(receipt);
             if (onSuccess) {
               onSuccess(receipt.from, receipt.transactionHash);
             }

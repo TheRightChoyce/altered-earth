@@ -64,6 +64,11 @@ export const GalleryDetailOriginal = ({
     );
   }, [owner, connectedWalletAddress, tokenLoaded]);
 
+  const mintSuccessHandler = (owner: string, tx: string) => {
+    setOwner(owner);
+    onMintSuccess(owner, tx);
+  };
+
   // Use and watch the owner of this token
   photo?.getOwnerFromContract(
     setOwner,
@@ -99,7 +104,7 @@ export const GalleryDetailOriginal = ({
             photo,
             owner,
             connectedWalletAddress,
-            onMintSuccess
+            mintSuccessHandler
           )}
 
           {/* Type toggle button */}
@@ -121,7 +126,7 @@ export const GalleryDetailOriginal = ({
           <GalleryDetailOriginalInfo
             photo={photo}
             connectedWalletAddress={connectedWalletAddress}
-            onMintSuccess={onMintSuccess}
+            onMintSuccess={mintSuccessHandler}
           />
         </div>
       </div>

@@ -27,7 +27,8 @@ const mintComponentReducer = (
   owner: string | undefined,
   connectedWalletAddress: string | undefined,
   onMintSuccess: (owner: string, tx: string) => void,
-  editionInfo: EditionInfoFromContract | undefined
+  editionInfo: EditionInfoFromContract | undefined,
+  tokensRemaning: number
 ) => {
   let loading = false;
 
@@ -36,6 +37,8 @@ const mintComponentReducer = (
       loading = true;
       break;
   }
+
+  console.log("mintComponentReducer", editionInfo);
   return (
     <MintComponentEdition
       photo={photo}
@@ -43,9 +46,7 @@ const mintComponentReducer = (
       onMintSuccess={onMintSuccess}
       loading={loading}
       owner={owner}
-      tokensRemaning={
-        editionInfo ? editionInfo?.maxPerOriginal - editionInfo?.minted - 5 : 45
-      }
+      tokensRemaning={tokensRemaning}
     />
   );
 };
@@ -62,6 +63,27 @@ export const GalleryDetailEdition = ({
   const [editionInfo, setEditionInfo] = useState<
     EditionInfoFromContract | undefined
   >(undefined);
+  const [tokensRemaning, setTokensRemaining] = useState(45);
+
+  const mintSuccessHandler = (owner: string, tx: string) => {
+    setTokensRemaining(tokensRemaning - 1);
+
+    const updatedEditionInfo =
+      editionInfo || new EditionInfoFromContract(undefined);
+    updatedEditionInfo.minted++;
+    updatedEditionInfo.nextId++;
+    updatedEditionInfo.soldOut = updatedEditionInfo.minted >= 45;
+
+    setEditionInfo(updatedEditionInfo);
+
+    onMintSuccess(owner, tx);
+  };
+
+  useEffect(() => {
+    if (editionInfo) {
+      setTokensRemaining(editionInfo?.maxPerOriginal - editionInfo?.minted - 5);
+    }
+  }, [editionInfo, setTokensRemaining]);
 
   useEffect(() => {
     setMintState(
@@ -110,8 +132,9 @@ export const GalleryDetailEdition = ({
             photo,
             undefined,
             connectedWalletAddress,
-            onMintSuccess,
-            editionInfo
+            mintSuccessHandler,
+            editionInfo,
+            tokensRemaning
           )}
           {/* Type toggle button */}
           <div className="text-center py-6 px-6 m-auto">

@@ -52,6 +52,7 @@ const HomePage: NextPageWithLayout = () => {
               objectFit="cover"
               layout="fill"
               className="opacity-20"
+              priority={true}
             />
           </div>
         </div>
@@ -69,7 +70,6 @@ const HomePage: NextPageWithLayout = () => {
                 layout="intrinsic"
                 width={512}
                 height={512}
-                priority={true}
               />
             </a>
           </Link>
@@ -86,7 +86,7 @@ const HomePage: NextPageWithLayout = () => {
               </h2>
               <div>50 Originals as NFTs</div>
               <div className="mb-8">50 On-chain editions of 50 as NFTs</div>
-              <div className="w-64 m-auto">
+              <div className="w-64 m-auto lg:m-0">
                 <Button>Expore Now</Button>
               </div>
             </a>

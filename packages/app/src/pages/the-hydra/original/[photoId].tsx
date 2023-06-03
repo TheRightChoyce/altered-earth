@@ -34,8 +34,6 @@ const TheHydraDetailPage: NextPageWithLayout = () => {
   const router = useRouter();
   const isMounted = useIsMounted();
 
-  console.log("type", router.query);
-
   // Ensure the router is giving us a photoId.. sometimes it gets delayed!
   if (!isMounted) {
     return null;
