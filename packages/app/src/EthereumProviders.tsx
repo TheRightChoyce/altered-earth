@@ -22,6 +22,8 @@ const targetChains = [mainnet, goerli].filter(
 
 // For development purposes / we're using a local network
 if (targetChainId === foundry.id) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   targetChains.push(foundry);
 }
 export const { chains, provider, webSocketProvider } = configureChains(
