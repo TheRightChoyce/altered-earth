@@ -75,7 +75,7 @@ export const NavBar = ({ children }: { children?: React.ReactNode }) => {
           </div> */}
         </div>
         <div className="text-right">
-          <div className="lg:w-40">
+          <div className="lg:w-64">
             <CustomConnectButton connectMessage="Connect" />
           </div>
         </div>
