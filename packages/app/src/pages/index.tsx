@@ -69,7 +69,7 @@ const HomePage: NextPageWithLayout = () => {
                 layout="intrinsic"
                 width={512}
                 height={512}
-                sizes={"100vw"}
+                priority={true}
               />
             </a>
           </Link>
@@ -86,7 +86,7 @@ const HomePage: NextPageWithLayout = () => {
               </h2>
               <div>50 Originals as NFTs</div>
               <div className="mb-8">50 On-chain editions of 50 as NFTs</div>
-              <div className="w-64">
+              <div className="w-64 m-auto">
                 <Button>Expore Now</Button>
               </div>
             </a>
